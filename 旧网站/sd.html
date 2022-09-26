@@ -1,0 +1,101 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+<link href="CSS/1901.css" rel="stylesheet" type="text/css">
+<link href="SpryAssets/SpryValidationTextField.css" rel="stylesheet" type="text/css">
+<link href="SpryAssets/SpryValidationTextarea.css" rel="stylesheet" type="text/css">
+<link href="SpryAssets/SpryValidationPassword.css" rel="stylesheet" type="text/css">
+<link href="SpryAssets/SpryValidationConfirm.css" rel="stylesheet" type="text/css">
+<script src="SpryAssets/SpryValidationTextField.js" type="text/javascript"></script>
+<script src="SpryAssets/SpryValidationTextarea.js" type="text/javascript"></script>
+<script src="SpryAssets/SpryValidationPassword.js" type="text/javascript"></script>
+<script src="SpryAssets/SpryValidationConfirm.js" type="text/javascript"></script>
+</head>
+
+<body>
+<table width="610" height="565" border="1">
+  <caption>
+    填写信息
+  </caption>
+  <tr>
+    <th width="92" class="a-1" scope="col">姓名:</th>
+    <th width="400" class="a-2" scope="col"><form name="form1" method="post" action="">
+      <span id="sprytextfield1">
+        <label for="1"></label>
+        <input type="text" name="1" id="1">
+        <span class="textfieldRequiredMsg">需要提供一个值。</span></span>
+    </form></th>
+  </tr>
+  <tr>
+    <td class="a-1">性别：</td>
+    <td><form name="form2" method="post" action="">
+      <input type="radio" name="radio" id="12" value="男">
+      <label for="12"></label>
+    男 
+    <input type="radio" name="radio" id="13" value="女">
+    <label for="13"></label>
+    女
+    </form></td>
+  </tr>
+  <tr>
+    <td class="a-1">留言：</td>
+    <td><form name="form3" method="post" action="">
+      <span id="sprytextarea1">
+        <label for="14"></label>
+        <textarea name="12" id="14" cols="45" rows="5"></textarea>
+        <span class="textareaRequiredMsg">需要提供一个值。</span></span>
+    </form></td>
+  </tr>
+  <tr>
+    <td class="a-1">个人图片：</td>
+    <td><form name="form4" enctype="multipart/form-data" method="post" action="">
+      <label for="15"></label>
+      <input type="file" name="13" id="15">
+    </form></td>
+  </tr>
+  <tr>
+    <td class="a-1">邮箱号：</td>
+    <td><form name="form5" method="post" action="">
+      <span id="sprytextfield2">
+        <label for="16"></label>
+        <input type="text" name="14" id="16">
+        <span class="textfieldRequiredMsg">需要提供一个值。</span></span>
+      <p>
+        <label>
+          <input name="14" type="radio" id="RadioGroup1_0" value="qq" checked>
+          qq</label>
+        <br>
+        <label>
+          <input type="radio" name="14" value="com" id="RadioGroup1_1">
+          com</label>
+        <br>
+      </p>
+    </form></td>
+  </tr>
+</table>
+<p>&nbsp; </p>
+<form name="form6" method="post" action="">
+  <span id="sprypassword1">
+    <label for="9"></label>
+    <input type="password" name="9" id="9">
+    <span class="passwordRequiredMsg">需要输入一个值。</span></span>
+  <p><span id="spryconfirm1">
+    <label for="9"></label>
+    <input type="password" name="9" id="9">
+    <span class="confirmRequiredMsg">需要输入一个值。</span><span class="confirmInvalidMsg">这些值不匹配。</span></span></p>
+  <p>
+    <input name="9" type="submit" class="passwordInvalidStrengthState" id="9" value="         重新填写         ">
+  </p>
+</form>
+<p>&nbsp; </p>
+<script type="text/javascript">
+var sprytextfield1 = new Spry.Widget.ValidationTextField("sprytextfield1");
+var sprytextarea1 = new Spry.Widget.ValidationTextarea("sprytextarea1");
+var sprytextfield2 = new Spry.Widget.ValidationTextField("sprytextfield2");
+var sprypassword1 = new Spry.Widget.ValidationPassword("sprypassword1");
+var spryconfirm1 = new Spry.Widget.ValidationConfirm("spryconfirm1", "9");
+</script>
+</body>
+</html>
