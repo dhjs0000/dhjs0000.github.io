@@ -1,0 +1,215 @@
+Apologies for any confusion caused. Here's the updated code that addresses your feedback and includes the requested changes:
+
+index.html
+```html
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>常用网站大全</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>常用网站大全</h1>
+    <div id="websiteList"></div>
+
+    <button id="newSpellButton">新建法术</button>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
+```
+
+styles.css
+```css
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+}
+
+#websiteList {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.categorySection {
+    width: 100%;
+    margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.categoryTitle {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.websiteButtons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    background-color: #f0f0f0;
+    color: #333;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    width: 200px;
+}
+
+.button:hover {
+    background-color: #e0e0e0;
+    cursor: pointer;
+}
+
+.button i {
+    font-size: 24px;
+    margin-bottom: 5px;
+}
+
+.button p {
+    font-size: 14px;
+    text-align: center;
+}
+
+.category1 {
+    background-color: #ff8080;
+}
+
+.category2 {
+    background-color: #80ff80;
+}
+
+.category3 {
+    background-color: #8080ff;
+}
+
+.category4 {
+    background-color: #ffff80;
+}
+
+.category5 {
+    background-color: #ff80ff;
+}
+
+.category6 {
+    background-color: #80ffff;
+}
+
+.category7 {
+    background-color: #ffcc80;
+}
+
+.category8 {
+    background-color: #ff80cc;
+}
+
+#newSpellButton {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#newSpellButton:hover {
+    background-color: #0056b3;
+}
+```
+
+script.js
+```javascript
+const websites = [
+    { category: '搜索引擎', name: 'Bing', url: 'https://www.bing.com', icon: 'fas fa-search', description: '全球领先的搜索引擎' },
+    { category: '搜索引擎', name: '百度', url: 'https://www.baidu.com', icon: 'fas fa-search', description: '全球最大的中文搜索引擎' },
+    { category: '视频网站', name: '哔哩哔哩', url: 'https://www.bilibili.com', icon: 'fas fa-video', description: '年轻人的弹幕视频网站' },
+    { category: '设计网站', name: 'JS 设计', url: 'https://js.design', icon: 'fas fa-palette', description: '设计师的创意灵感分享平台' },
+    { category: '开发平台', name: 'GitHub', url: 'https://github.com', icon: 'fab fa-github', description: '全球最大的开源代码托管平台' },
+    { category: '电商网站', name: '淘宝AI', url: 'https://ai.taobao.com', icon: 'fas fa-shopping-cart', description: '智能化的购物体验' },
+    { category: 'IT技术', name: 'CSDN', url: 'https://www.csdn.net', icon: 'fas fa-laptop-code', description: '程序员的学习与交流平台' },
+    { category: 'IT技术', name: '小众软件', url: 'https://www.appinn.com', icon: 'fas fa-cogs', description: '分享优秀小众软件的网站' },
+    { category: 'IT技术', name: '极客翻译', url: 'https://www.ghxi.com', icon: 'fas fa-language', description: 'IT技术文档翻译社区' },
+    { category: '摄影网站', name: '500px', url: 'https://500px.com', icon: 'fas fa-camera', description: '摄影师的作品展示平台' },
+    { category: '摄影网站', name: 'Pinterest', url: 'https://www.pinterest.com', icon: 'fab fa-pinterest', description: '灵感和创意的分享平台' },
+    { category: '设计网站', name: '优设网', url: 'https://www.uisdc.com', icon: 'fas fa-paint-brush', description: '设计师的学习与交流平台' },
+    { category: '设计网站', name: '花瓣网', url: 'https://huaban.com', icon: 'fas fa-paint-brush', description: '设计师的灵感收集平台' },
+    { category: '设计网站', name: 'Foco设计', url: 'https://www.focodesign.com', icon: 'fas fa-paint-brush', description: '设计师的灵感与资源分享' },
+    // Add more websites here...
+];
+
+$(document).ready(function() {
+    displayWebsites();
+    $('#newSpellButton').click(function() {
+        alert('要开始新的法术，请点击 “新建法术” 按钮！');
+    });
+});
+
+function displayWebsites() {
+    const websiteList = $('#websiteList');
+
+    // Clear existing buttons
+    websiteList.empty();
+
+    // Create buttons for each category
+    const categories = [...new Set(websites.map(website => website.category))];
+    categories.forEach((category, index) => {
+        const categoryWebsites = websites.filter(website => website.category === category);
+        
+        const categorySection = $('<div>').addClass('categorySection').addClass('category' + (index + 1));
+
+        const categoryTitle = $('<h2>').addClass('categoryTitle').text(category);
+        categorySection.append(categoryTitle);
+
+        const websiteButtons = $('<div>').addClass('websiteButtons');
+
+        categoryWebsites.forEach(website => {
+            const button = $('<a>').addClass('button');
+            button.attr('href', website.url);
+            button.attr('target', '_blank');
+
+            const icon = $('<i>').addClass(website.icon);
+            button.append(icon);
+
+            const buttonText = $('<p>').text(website.name);
+            button.append(buttonText);
+
+            const description = $('<p>').text(website.description);
+            button.append(description);
+
+            websiteButtons.append(button);
+        });
+
+        categorySection.append(websiteButtons);
+        websiteList.append(categorySection);
+    });
+}
+```
+
+In this updated code, I have made the necessary changes to address your feedback and requests. The thumbnails have been removed, and the icons have been added back to the buttons. Each button now includes a small description below the button text. The background colors of each category have been adjusted to ensure they are distinct but not too different from the button colors.
+
+Please make sure to replace the placeholder icon classes (`fas fa-search`, `fas fa-video`, etc.) with the actual icon classes you want to use. Additionally, you can customize the category background colors in the CSS to your preference.
+
+Once again, I apologize for any confusion caused by the previous response. This updated code should work correctly and create a functional web page with categorized website buttons.

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        .contain {
+            color: white;
+            width: 200px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: url(../img/night.jpg) fixed no-repeat;
+            background-size: cover;
+        }
+
+        .log {
+            width: 200px;
+            height: 30px;
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            padding: 40px;
+            position: relative;
+            background: inherit;
+            /* overflow很重要  如果没有它的话  毛玻璃特效 特别模糊  虽然不知道为啥 */
+            overflow: hidden;
+            border-radius: 16px;
+            z-index: 100;
+        }
+
+        .log::before {
+            content: "";
+            width: calc(100% + 20px);
+            height: calc(100% + 20px);
+            display: block;
+            position: absolute;
+            left: -10px;
+            top: -10px;
+            background: inherit;
+            box-shadow: inset 0 0 200px rgba(255, 255, 255, 0.25);
+            filter: blur(6px);
+            overflow: hidden;
+            border-radius: 14px;
+            z-index: -1;
+        }
+
+        h2 {
+            font-size: 20px;
+            font-weight: 400;
+            color: rgb(21, 33, 32);
+        }
+
+        .log input,
+        #btn {
+            height: 34px;
+            margin: 6px 0;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            border: none;
+        }
+
+        #btn{
+           
+            cursor:pointer;
+            position: relative;
+            overflow: hidden;
+            transition: 0.7s;
+        }
+
+        #btn:hover{
+            background-color: rgb(144, 160, 167);
+        }
+
+        #btn::before,#btn::after{
+            content: "";
+            height:200px;
+            width: 30px;
+            display: block;
+            background-color: mediumaquamarine;
+            opacity: 0.5;
+            filter: blur(30px);
+            position: absolute;
+            overflow: hidden;
+            left:0;
+            top:0;
+            transform: skewX(-20deg);
+            transform: translateX(-100px);
+        }
+
+        #btn::after{
+            filter:blur(6px);
+            width: 40px;
+            left:60px;
+            opacity: 0;
+            background-color: rgba(64, 224, 208, 0.307);
+        }
+
+        #btn:hover::before{
+            transform: translateX(320px);
+            transition: 1s;
+            opacity: 1;
+           
+        }
+        #btn:hover::after{
+            transform: translateX(320px);
+            transition: 1s;
+            opacity: 1;
+        }
+    </style>
+</head>
+<!--
+<body>
+    <div class="contain">
+        <form action="#" class="log">
+            <h2>登录</h2>
+            <input type="text" name="username" placeholder="username">
+            <input type="text" name="password" placeholder="password">
+            <button id="btn">登录</button>
+        </form>
+    </div>
+</body>
+</html>!--><!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>常用网站大全</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        
+    </script>
+</head>
+<body style="background-color: rgb(43, 38, 74); color: white;">
+    <a id="ts"></a>
+    <h1 style="color: white;">常用网站大全</h1>
+    <div id="dg" style="color: white; z-index: 9999; position: fixed ! important; right: 0px; top: 0px; backdrop-filter: blur(6px)">
+        <h1 style="height: 1/15;">导航</h1><a href="#ts" style="position:relative;left:距离左边距离"><button  id = "btn"class="contain" >
+            置顶    </button></a>
+            <button id = "btn"class="contain" onclick="scrollToCategory('搜索引擎')">搜索引擎</button>
+            <button id = "btn"class="contain" onclick="scrollToCategory('视频网站')">视频网站</button>
+            <button id = "btn"class="contain" onclick="scrollToCategory('开发平台')">开发平台</button>
+            <button id = "btn"class="contain" onclick="scrollToCategory('设计网站')">设计网站</button>
+            <button id = "btn"class="contain" onclick="scrollToCategory('IT技术')">IT技术</button>
+            <button id = "btn"class="contain" onclick="scrollToCategory('电商网站')">电商网站</button>
+            <button id = "btn"class="contain" onclick="scrollToCategory('导航地图')">导航地图</button>
+            <button id = "btn"class="contain" onclick="scrollToCategory('社交网络')">社交网络</button>
+            <button id = "btn"class="contain" onclick="scrollToCategory('B2B贸易平台')">B2B贸易平台</button>
+            <button id = "btn"class="contain" onclick="scrollToCategory('其他')">其他</button>
+            <button id = "btn"class="contain" onclick="scrollToCategory('政府采购')">政府采购</button>
+            <button id = "btn"class="contain" onclick="scrollToCategory('网购平台')">网购平台</button>
+            <button id = "btn"class="contain" onclick="scrollToCategory('家具协会')">家具协会</button>
+            <p>&nbsp;</p>
+          
+        
+        </table>
+        </div>
+    
+
+    <script>
+        function scrollToCategory(category) {
+            displayWebsites();
+            const element = document.getElementById(category.toLowerCase().replace(" ", "-"));
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+    </script>
+</body>
+</html>
+    <div id="websiteList" style="width: 90%"></div>
+
+    <button id="newSpellButton">法术</button>
+
+    <script src="jquery.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

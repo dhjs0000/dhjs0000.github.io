@@ -1,0 +1,173 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+}
+
+#websiteList {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.categorySection {
+    width: 100%;
+    margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.categoryTitle {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.websiteButtons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.hongd {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    background-color: #f0f0f0;
+    color: #333;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    width: 200px;
+    height: 43px;
+    
+}
+.hongd:hover {
+    background-color: #e0e0e0;
+    cursor: pointer;
+}
+
+.hongd i {
+    font-size: 24px;
+    margin-bottom: 5px;
+}
+
+.hongd p {
+    font-size: 14px;
+    text-align: center;
+}
+.button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    background-color: #f0f0f0;
+    color: #333;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    width: 200px;
+}
+
+.button:hover {
+    background-color: #e0e0e0;
+    cursor: pointer;
+}
+
+.button i {
+    font-size: 24px;
+    margin-bottom: 5px;
+}
+
+.button p {
+    font-size: 14px;
+    text-align: center;
+}
+
+.category1 {
+    background-color: #ff8080;
+}
+
+.category2 {
+    background-color: #80ff80;
+}
+
+.category3 {
+    background-color: #8080ff;
+}
+
+.category4 {
+    background-color: #ffff80;
+}
+
+.category5 {
+    background-color: #ff80ff;
+}
+
+.category6 {
+    background-color: #80ffff;
+}
+
+.category7 {
+    background-color: #ffcc80;
+}
+
+.category8 {
+    background-color: #ff80cc;
+}
+
+.category9 {
+    background-color: #ff8080;
+}
+
+.category10 {
+    background-color: #80ff80;
+}
+
+.category11 {
+    background-color: #8080ff;
+}
+
+.category12 {
+    background-color: #ffff80;
+}
+
+.category13 {
+    background-color: #ff80ff;
+}
+
+.category14 {
+    background-color: #80ffff;
+}
+
+.category15 {
+    background-color: #ffcc80;
+}
+
+.category16 {
+    background-color: #ff80cc;
+}
+
+#newSpellButton {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#newSpellButton:hover {
+    background-color: #0056b3;
+}
