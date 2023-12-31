@@ -16,7 +16,7 @@ function startCountdown() {
     var seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
 
     // 在页面上显示倒计时
-    document.getElementById("countdown").innerHTML = (seconds + 2) + "秒 ";
+    document.getElementById("countdown").innerHTML = "<h1>" + (seconds + 2) + "秒 </h1>";
 
     // 如果倒计时结束，跳转到zy.html
     if (timeLeft < 0) {
