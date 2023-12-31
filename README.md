@@ -1,16 +1,17 @@
 # dhjs0000.github.io
 [网站地址](https://dhjs0000.github.io "这个网站的地址")
+
 | 文件名 | 更新时间 | 更新内容 |
 | --- | --- | --- |
-| index.html | 1小时前 | 更新了index.html文件，添加了一些新的HTML元素和内容。 |
-| index.html | 6个月前 | 更新了index.html文件，修改了一些HTML元素和内容。 |
-| index.html | 去年 | 上传了index.html文件。 |
-| zy.html | 1小时前 | 更新了zy.html文件。 |
-| zy.html | 2小时前 | 在zy.html文件中添加了Microsoft Clarity跟踪器的脚本。 |
-| zy.html | 3天前 | 更新了zy.html文件，修改了`<title>`元素的内容为"资源网站"。 |
-| zy.html | 5个月前 | 更新了zy.html文件，修改了一些HTML元素和内容。 |
-| zy.html | 去年 | 上传了zy.html文件。 |
-| web.js | 1小时前 | 创建了web.js文件，并添加了一些JavaScript代码。 |
+| index.html | 2023/12/3 下午3点 | 更新了index.html文件，添加了一些新的HTML元素和内容。 |
+| index.html | 2023/6 | 更新了index.html文件，修改了一些HTML元素和内容。 |
+| index.html | 2022年 | 上传了index.html文件。 |
+| zy.html | 2023/12/3 下午3点 | 更新了zy.html文件。 |
+| zy.html | 2023/12/3 下午2点 | 在zy.html文件中添加了Microsoft Clarity跟踪器的脚本。 |
+| zy.html | 2023/12/1 | 更新了zy.html文件，修改了`<title>`元素的内容为"资源网站"。 |
+| zy.html | 2023/7 | 更新了zy.html文件，修改了一些HTML元素和内容。 |
+| zy.html | 2022年 | 上传了zy.html文件。 |
+| web.js | 2023/12/3 下午3点 | 创建了web.js文件，并添加了一些JavaScript代码。 |
 
 # 详细信息
 ## 1.1更新
