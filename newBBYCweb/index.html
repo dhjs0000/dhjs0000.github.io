@@ -1,6 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-cn">
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+  <title>BBYC主页</title>
 <style>
 body, html {
   margin: 0;
@@ -14,7 +17,7 @@ body, html {
   margin: 0;
   display: flex;
   justify-content: space-around;
-  background-color: #f2f2f2;
+  background-color: #437272;
   padding: 10px;
   position: relative;
 }
@@ -22,6 +25,7 @@ body, html {
 .nav-item {
   list-style-type: none;
   padding: 10px;
+  color: white;
   cursor: pointer;
 }
 
@@ -35,7 +39,7 @@ body, html {
   left: 0;
   width: 0;
   height: 1mm;
-  background: blue;
+  background: #82a7a7;
   border-radius: 1mm;
   transition: all 0.5s ease;
 }
@@ -54,59 +58,60 @@ iframe {
   <li class="nav-item current" data-url="home.html">首页</li>
   <li class="nav-item" data-url="about.html">关于我们</li>
   <li class="nav-item" data-url="contact.html">联系我们</li>
-  <div class="nav-line"></div>
+  <li><div class="nav-line"></div></li> <!--下面那条线-->
 </ul>
 
-<iframe id="content-frame" src="home.html"></iframe>
+<iframe id="content-frame" src="home.html" title="mainPage"></iframe>
 
 <script>
-var navbar = document.querySelector('.navbar');
-var line = document.querySelector('.nav-line');
-var frame = document.querySelector('#content-frame');
-var items = Array.from(document.querySelectorAll('.nav-item'));
+  var navbar = document.querySelector('.navbar');
+  var line = document.querySelector('.nav-line');
+  var frame = document.querySelector('#content-frame');
+  var items = Array.from(document.querySelectorAll('.nav-item'));
 
-items.forEach(function(item, index) {
-  item.addEventListener('mouseover', function() {
-    line.style.width = item.offsetWidth + 'px';
-    line.style.left = item.offsetLeft + 'px';
-    line.style.transition = 'all 0.5s ease';
-    window.history.pushState(null, null, document.URL);
+  // 鼠标悬停时，改变导航线的位置
+  items.forEach(function(item, index) {
+    item.addEventListener('mouseover', function() {
+      line.style.width = item.offsetWidth + 'px';
+      line.style.left = item.offsetLeft + 'px';
+      line.style.transition = 'all 0.5s ease';
+      window.history.pushState(null, null, document.URL);
+      window.addEventListener('popstate', function () {
+      window.history.pushState(null, null, document.URL);
+  });
+    });
+
+    item.addEventListener('mouseout', function() {
+      var activeItem = document.querySelector('.nav-item.current');
+      line.style.width = activeItem.offsetWidth + 'px';
+      line.style.left = activeItem.offsetLeft + 'px';
+      line.style.transition = 'all 0.5s ease';
+      window.history.pushState(null, null, document.URL);
+      window.addEventListener('popstate', function () {
+      window.history.pushState(null, null, document.URL);
+  });
+
+    });
+
+    item.addEventListener('click', function() {
+      var current = document.querySelector('.nav-item.current');
+      if (current) {
+        current.classList.remove('current');
+      }
+      item.classList.add('current');
+      frame.src = item.dataset.url;
+      window.history.pushState(null, null, document.URL);
     window.addEventListener('popstate', function () {
     window.history.pushState(null, null, document.URL);
-});
   });
 
-  item.addEventListener('mouseout', function() {
-    var activeItem = document.querySelector('.nav-item.current');
-    line.style.width = activeItem.offsetWidth + 'px';
-    line.style.left = activeItem.offsetLeft + 'px';
-    line.style.transition = 'all 0.5s ease';
-    window.history.pushState(null, null, document.URL);
-    window.addEventListener('popstate', function () {
-    window.history.pushState(null, null, document.URL);
-});
-
+    });
   });
 
-  item.addEventListener('click', function() {
-    var current = document.querySelector('.nav-item.current');
-    if (current) {
-      current.classList.remove('current');
-    }
-    item.classList.add('current');
-    frame.src = item.dataset.url;
-    window.history.pushState(null, null, document.URL);
-  window.addEventListener('popstate', function () {
-  window.history.pushState(null, null, document.URL);
-});
-
-  });
-});
-
-// 初始化线段位置
-var activeItem = document.querySelector('.nav-item.current');
-line.style.width = activeItem.offsetWidth + 'px';
-line.style.left = activeItem.offsetLeft + 'px';
+  // 初始化线段位置
+  var activeItem = document.querySelector('.nav-item.current');
+  line.style.width = activeItem.offsetWidth + 'px';
+  line.style.left = activeItem.offsetLeft + 'px';
 </script>
 
 </body>

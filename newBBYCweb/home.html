@@ -1,32 +1,142 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-cn">
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <title>HOME for iframe</title>
+
+    <script src="script.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
 <style>
 body {
-  background-color: #ffffff31; /* 调整网页的背景颜色 */
+  background-color:#2f4f4f;
 }
+
 
 @keyframes mymove {
-  0% {left: 0px; opacity: 0;}
-  100% {left: 200px; opacity: 1;}
+  0% {left: -400px; opacity: 0;}
+  100% {left: 0px; opacity: 1;}
 }
-
-#myDIV {
+@keyframes textopa {
+  0% {left: 35%;opacity: 0;}
+  75% {left: 55%;opacity: 0;}
+  88% {left: 58%;opacity: 0;}
+  90% {left: 59%;opacity: 0.5;}
+  100% {left: 60%;opacity: 1;}
+}
+@keyframes mymove2 {
+  0% {left: -400px; opacity: 0;}
+  75% {left: -400px; opacity: 0;}
+  100% {left: 0px; opacity: 1;}
+}
+#titleDIV {
+  position: fixed;
+    white-space: nowrap;
+  overflow-x: auto;
+    overflow: visible;
+    border-top-left-radius: 0px;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  border-bottom-left-radius: 0px;
   position: absolute; /* div的最左边贴紧网页的左边 */
-  width: 300px; /* 调整div的宽度 */
-  height: 300px; /* 调整div的高度，使div成为正方形 */
-  background-color: #ADD8E6; /* 设置一个舒服的颜色 */
+  width: 50px; /* 调整div的宽度 */
+  height: 100%; /* 调整div的高度，使div成为正方形 */
+  background-color: #82a7a7; /* 设置一个舒服的颜色 */
+  font-size: 72px; /* 调整字体大小 */
+  color: white; /* 文字颜色改为白色 */
+  font-family: "黑体"; /* 字体改为黑体 */
+  animation: mymove2 5s forwards;
+}
+#titleDIV2 {
+    white-space: nowrap;
+  overflow-x: auto;
+    overflow: visible;
+    border-top-left-radius: 0px;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  border-bottom-left-radius: 0px;
+  position: absolute; /* div的最左边贴紧网页的左边 */
+  width: 50px; /* 调整div的宽度 */
+  height: 100%; /* 调整div的高度，使div成为正方形 */
+  background-color: #82a7a7; /* 设置一个舒服的颜色 */
   font-size: 72px; /* 调整字体大小 */
   color: white; /* 文字颜色改为白色 */
   font-family: "黑体"; /* 字体改为黑体 */
   animation: mymove 5s forwards;
 }
+#mainDIV {
+    border-radius: 10px;
+    position: absolute;
+            left: 0;
+            top: 15%;
+            width: 20%;
+            height: 40%;
+            opacity: 0;
+            transition: left 2s, opacity 2s;
+    background-color: #727243;
+    font-family: "黑体";
+}
+
+    button {
+  background: #7881ff;
+  border: 0;
+  border-radius: 5px;
+  padding: 10px 30px 10px 20px;
+  color: white;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
 </style>
 </head>
 <body>
+    <div id="titleDIV" style="position: fixed;">
+        <p>BBYC</p>
+        <div id="menu" style="font-size: 64px; position: fixed;">
+            <p><a href="推荐.html" class="menu-item">推荐</a></p>
+            <p><a href="最新.html" class="menu-item">最新</a></p>
+            <p><a href="全部.html" class="menu-item">全部</a></p>
+        </div>
+    </div>
+    <div id="titleDIV2" style="width: 200px; height: auto;position: fixed;">
+        <p>BBYC</p>
+    </div>
 
-
-<div id="myDIV">Hello World!</div>
-
+<div id="mainDIV" style="background-color:#727243">test</div>
+<script>
+     window.onload = function() {
+            var box = document.getElementById('mainDIV');
+            box.style.left = '60%';
+            box.style.opacity = '1';
+        };
+</script>
+<p> &nbsp;</p>
+<p> &nbsp;</p>
+<p> &nbsp;</p>
+<p> &nbsp;</p>
+<p> &nbsp;</p>
+<p> &nbsp;</p>
+<p> &nbsp;</p>
+<p> &nbsp;</p>
+<p> &nbsp;</p>
+<p> &nbsp;</p>
+<p> &nbsp;</p>
+<p> &nbsp;</p>
+<p> &nbsp;</p>
+<p> &nbsp;</p>
+<p> &nbsp;</p>
+<p> &nbsp;</p>
+<p> &nbsp;</p>
+<p> &nbsp;</p>
+<p> &nbsp;</p>
+<p> &nbsp;</p>
+<p> &nbsp;</p>
+<p> &nbsp;</p>
+<p> &nbsp;</p>
+<p> &nbsp;</p>
+<p> &nbsp;</p>
+<p> &nbsp;</p>
+<p> &nbsp;</p>
+<div style="top:50px">     56</div>
 </body>
 </html>
