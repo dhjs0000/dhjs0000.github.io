@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+  <title>BBYC主页</title>
+<style>
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden; /* 禁用滚动 */
+  font-family: Arial, sans-serif;
+}
+
+.navbar {
+  margin: 0;
+  display: flex;
+  justify-content: space-around;
+  background-color: rgba(75,75,75);
+  padding: 10px;
+  position: relative;
+}
+
+.nav-item {
+  list-style-type: none;
+  padding: 10px;
+  color: white;
+  cursor: pointer;
+}
+
+.nav-item.current {
+  cursor: default;
+}
+
+.nav-line {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1mm;
+  background: #1E90FF;
+  border-radius: 1mm;
+  transition: all 0.5s ease;
+}
+
+iframe {
+  display: block;
+  width: 100%;
+  height: calc(100% - 50px); /* 减去导航栏的高度 */
+  border: none; /* 去除边框 */
+}
+</style>
+</head>
+<body>
+
+<ul class="navbar">
+  <li class="nav-item current" data-url="home.html">首页</li>
+  <li class="nav-item" data-url="about.html">关于我们</li>
+  <li class="nav-item" data-url="contact.html">联系我们</li>
+  <li><div class="nav-line"></div></li> <!--下面那条线-->
+</ul>
+
+<iframe id="content-frame" src="home.html" title="mainPage"></iframe>
+
+<script>
+  var navbar = document.querySelector('.navbar');
+  var line = document.querySelector('.nav-line');
+  var frame = document.querySelector('#content-frame');
+  var items = Array.from(document.querySelectorAll('.nav-item'));
+
+  // 鼠标悬停时，改变导航线的位置
+  items.forEach(function(item, index) {
+    item.addEventListener('mouseover', function() {
+      line.style.width = item.offsetWidth + 'px';
+      line.style.left = item.offsetLeft + 'px';
+      line.style.transition = 'all 0.5s ease';
+      window.history.pushState(null, null, document.URL);
+      window.addEventListener('popstate', function () {
+      window.history.pushState(null, null, document.URL);
+  });
+    });
+
+    item.addEventListener('mouseout', function() {
+      var activeItem = document.querySelector('.nav-item.current');
+      line.style.width = activeItem.offsetWidth + 'px';
+      line.style.left = activeItem.offsetLeft + 'px';
+      line.style.transition = 'all 0.5s ease';
+      window.history.pushState(null, null, document.URL);
+      window.addEventListener('popstate', function () {
+      window.history.pushState(null, null, document.URL);
+  });
+
+    });
+
+    item.addEventListener('click', function() {
+      var current = document.querySelector('.nav-item.current');
+      if (current) {
+        current.classList.remove('current');
+      }
+      item.classList.add('current');
+      frame.src = item.dataset.url;
+      window.history.pushState(null, null, document.URL);
+    window.addEventListener('popstate', function () {
+    window.history.pushState(null, null, document.URL);
+  });
+
+    });
+  });
+
+  // 初始化线段位置
+  var activeItem = document.querySelector('.nav-item.current');
+  line.style.width = activeItem.offsetWidth + 'px';
+  line.style.left = activeItem.offsetLeft + 'px';
+</script>
+
+</body>
+</html>
