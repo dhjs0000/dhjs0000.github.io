@@ -21,7 +21,7 @@ function startCountdown() {
     // 如果倒计时结束，跳转到zy.html
     if (timeLeft < 0) {
       clearInterval(countdownFunction);
-      window.location.href = "zy.html";
+      window.location.href = ".\\newBBYCweb\\index.html";
     }
   }, 1000);
 }
