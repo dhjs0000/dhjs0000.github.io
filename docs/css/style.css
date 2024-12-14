@@ -18,6 +18,7 @@ body {
     font-family: 'Inter', sans-serif;
     line-height: 1.6;
     color: var(--text-color);
+    animation: fadeIn 0.3s ease-in;
 }
 
 .container {
@@ -431,4 +432,24 @@ body {
 .docs-link:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+}
+
+.version-info {
+    font-size: 0.875rem;
+    color: var(--gray-200);
+    margin-top: 0.5rem;
+}
+
+.version-info a {
+    color: var(--secondary-color);
+    text-decoration: none;
+}
+
+.version-info a:hover {
+    text-decoration: underline;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }

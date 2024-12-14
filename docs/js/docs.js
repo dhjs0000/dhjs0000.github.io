@@ -3,7 +3,12 @@ function copyCode(button) {
     const codeBlock = button.closest('.code-block');
     const code = codeBlock.querySelector('code').textContent;
     
-    navigator.clipboard.writeText(code).then(() => {
+    // 移除多余的空行和缩进
+    const formattedCode = code.trim().split('\n')
+        .map(line => line.trimRight())
+        .join('\n');
+    
+    navigator.clipboard.writeText(formattedCode).then(() => {
         const originalText = button.textContent;
         button.textContent = '已复制!';
         button.style.background = 'rgba(74, 222, 128, 0.2)';

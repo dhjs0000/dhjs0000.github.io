@@ -304,3 +304,14 @@ code.language-bash {
     flex: 1;
     overflow-y: auto;
 } 
+
+.progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--primary-color);
+    z-index: 1000;
+    transition: width 0.2s;
+} 
