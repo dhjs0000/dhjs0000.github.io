@@ -1,0 +1,448 @@
+:root {
+    --primary-color: #4f46e5;
+    --secondary-color: #818cf8;
+    --text-color: #1f2937;
+    --bg-color: #ffffff;
+    --gray-100: #f3f4f6;
+    --gray-200: #e5e7eb;
+    --gray-800: #1f2937;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    min-height: 100vh;
+}
+
+.docs-nav {
+    background: var(--gray-100);
+    padding: 1.5rem;
+    border-right: 1px solid var(--gray-200);
+    position: fixed;
+    width: 300px;
+    height: 100vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.nav-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: var(--text-color);
+    font-weight: 600;
+    font-size: 1.25rem;
+}
+
+.logo-icon {
+    font-size: 1.2rem;
+    color: var(--primary-color);
+}
+
+.search-container {
+    position: sticky;
+    top: 0;
+    background: var(--gray-100);
+    padding: 1rem 0;
+    margin: 0 -1.5rem;
+    padding: 1rem 1.5rem;
+    z-index: 10;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.search-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-icon {
+    position: absolute;
+    left: 0.75rem;
+    color: var(--gray-800);
+    opacity: 0.5;
+}
+
+.search-input {
+    width: 100%;
+    padding: 0.75rem;
+    padding-left: 2.5rem;
+    border: 1px solid var(--gray-200);
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+}
+
+.menu-section {
+    margin-bottom: 2rem;
+}
+
+.menu-section h3 {
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    color: var(--gray-800);
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+}
+
+.menu-section ul {
+    list-style: none;
+}
+
+.menu-section a {
+    display: block;
+    padding: 0.5rem;
+    color: var(--text-color);
+    text-decoration: none;
+    border-radius: 0.25rem;
+    transition: all 0.2s;
+    font-size: 0.9rem;
+}
+
+.menu-section a:hover {
+    background: var(--gray-200);
+    color: var(--primary-color);
+}
+
+.docs-content {
+    padding: 2rem;
+    margin-left: 300px;
+    flex: 1;
+}
+
+.content-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.content-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    color: var(--gray-800);
+}
+
+h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: var(--gray-800);
+}
+
+ol {
+    padding-left: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+li {
+    margin-bottom: 0.5rem;
+}
+
+@media (max-width: 768px) {
+    body {
+        grid-template-columns: 1fr;
+    }
+
+    .docs-nav {
+        position: static;
+        width: 100%;
+        height: auto;
+        margin-bottom: 2rem;
+    }
+
+    .docs-content {
+        margin-left: 0;
+        width: 100%;
+    }
+} 
+
+.note {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: var(--gray-100);
+    border-radius: 0.5rem;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+}
+
+.note.warning {
+    background: #fff7ed;
+    color: #9a3412;
+}
+
+.note-icon {
+    font-size: 1.2rem;
+}
+
+.code-block {
+    background: var(--gray-800);
+    border-radius: 0.5rem;
+    overflow: hidden;
+    margin: 1rem 0;
+}
+
+.code-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background: rgba(255,255,255,0.1);
+    color: white;
+}
+
+.copy-btn {
+    padding: 0.25rem 0.75rem;
+    background: rgba(255,255,255,0.1);
+    border: none;
+    border-radius: 0.25rem;
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.copy-btn:hover {
+    background: rgba(255,255,255,0.2);
+}
+
+.mt-4 {
+    margin-top: 1rem;
+} 
+
+/* 代码高亮样式 */
+.code-block pre {
+    margin: 0;
+    padding: 1.5rem;
+}
+
+.code-block code {
+    color: #e5e7eb;  /* 浅灰色作为本文本颜色 */
+    font-family: 'Fira Code', monospace;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+/* BCC语言特定的语法高亮 */
+.token.comment {
+    color: #6B7280;
+}
+
+.token.keyword {
+    color: #60A5FA;
+}
+
+.token.string {
+    color: #34D399;
+}
+
+.token.number {
+    color: #F87171;
+}
+
+.token.function {
+    color: #A78BFA;
+}
+
+.token.operator {
+    color: #F472B6;
+}
+
+.token.boolean {
+    color: #F87171;
+}
+
+.token.punctuation {
+    color: #9CA3AF;
+}
+
+/* 命令行代码样式 */
+code.language-bash {
+    color: #10b981;  /* 终端命令使用亮绿色 */
+}
+
+/* 代码块内的滚动条样式 */
+.code-block pre::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.code-block pre::-webkit-scrollbar-track {
+    background: rgba(255,255,255,0.1);
+    border-radius: 4px;
+}
+
+.code-block pre::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.2);
+    border-radius: 4px;
+}
+
+.code-block pre::-webkit-scrollbar-thumb:hover {
+    background: rgba(255,255,255,0.3);
+} 
+
+.menu-group {
+    flex: 1;
+    overflow-y: auto;
+} 
+
+.progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--primary-color);
+    z-index: 1000;
+    transition: width 0.2s ease;
+} 
+
+/* 进度条样式 */
+.progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--primary-color);
+    z-index: 1000;
+    transition: width 0.2s ease;
+}
+
+/* 代码块动画 */
+.code-animate {
+    animation: slideIn 0.5s ease forwards;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* 代码行动画 */
+.code-line {
+    display: block;
+    opacity: 0;
+    animation: fadeIn 0.5s ease forwards;
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
+}
+
+/* 搜索框动画 */
+.search-container {
+    transition: transform 0.3s ease;
+}
+
+.search-focus {
+    transform: scale(1.02);
+}
+
+.search-focus .search-box {
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+/* 目录项动画 */
+.menu-item-animate {
+    opacity: 0;
+    animation: slideInRight 0.5s ease forwards;
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* 笔记卡片悬停效果 */
+.note {
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.note::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(
+        600px circle at var(--mouse-x) var(--mouse-y),
+        rgba(79, 70, 229, 0.1),
+        transparent 40%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.note:hover {
+    transform: translateY(-2px);
+}
+
+.note:hover::before {
+    opacity: 1;
+}
+
+/* 代码复制按钮动画 */
+.copy-btn {
+    transition: all 0.3s ease;
+}
+
+.copy-btn:hover {
+    background: rgba(255, 255, 255, 0.2) !important;
+    transform: translateY(-1px);
+}
+
+/* 滚动条美化 */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--gray-100);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--gray-300);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--gray-400);
+} 

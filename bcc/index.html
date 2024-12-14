@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="BCC 是一个简单、优雅、现代的编程语言。提供清晰的语法、强大的代码块功能和模块化支持。">
+    <meta name="keywords" content="BCC, 编程语言, 代码块, 模块化, 开源">
+    <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+    <title>BCC Programming Language</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-tomorrow.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">BCC</div>
+            <div class="nav-links">
+                <a href="#features">特性</a>
+                <a href="#docs">文档</a>
+                <a href="#examples">示例</a>
+                <a href="https://github.com/dhjs0000/bcc" class="github-link">GitHub</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="container">
+            <h1>BCC Programming Language</h1>
+            <p class="subtitle">简单、优雅、现代的编程语言 / Simple, Elegant, Modern Programming Language</p>
+            <div class="cta-buttons">
+                <a href="#get-started" class="btn btn-primary">开始使用</a>
+                <a href="#docs" class="btn btn-secondary">查看文档</a>
+            </div>
+        </div>
+    </header>
+
+    <section id="features" class="features">
+        <div class="container">
+            <h2>核心特性 / Core Features</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🎨</div>
+                    <h3>简洁的语法</h3>
+                    <p>清晰直观的语法设计，易于学习和使用</p>
+                    <pre><code class="language-bcc">
+x = 5
+if(x > 3) {
+    print("Hello, BCC!")
+}
+                    </code></pre>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔧</div>
+                    <h3>函数支持</h3>
+                    <p>支持公共和私有函数定义</p>
+                    <pre><code class="language-bcc">
+def public add(x, y) {
+    return x + y
+}
+                    </code></pre>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📦</div>
+                    <h3>代码块</h3>
+                    <p>强大的代码块功能</p>
+                    <pre><code class="language-bcc">
+forEach {
+    print("Inside block")
+}
+                    </code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="docs" class="docs">
+        <div class="container">
+            <h2>文档 / Documentation</h2>
+            <div class="docs-header">
+                <h3>简略文档</h3>
+                <a href="./docs.html" class="docs-link">
+                    <span class="docs-icon">📚</span>
+                    完整文档
+                </a>
+            </div>
+            <div class="docs-grid">
+                <div class="docs-nav">
+                    <h3>目录</h3>
+                    <ul>
+                        <li><a href="#basic-syntax">基本语法</a></li>
+                        <li><a href="#control-flow">控制流</a></li>
+                        <li><a href="#functions">函数</a></li>
+                        <li><a href="#modules">模块系统</a></li>
+                        <li><a href="#code-blocks">代码块</a></li>
+                    </ul>
+                </div>
+                <div class="docs-content">
+                    <article id="basic-syntax">
+                        <h3>基本语法</h3>
+                        <div class="code-example">
+                            <pre><code class="language-bcc">
+// 变量赋值
+x = 5
+y = "Hello"
+
+// 算术运算
+sum = x + 10
+product = x * 2
+
+// 打印
+print("结果是: ")
+printnln(sum)  // 不换行打印
+                            </code></pre>
+                        </div>
+                    </article>
+                    
+                    <article id="control-flow">
+                        <h3>控制流</h3>
+                        <div class="code-example">
+                            <pre><code class="language-bcc">
+// if 语句
+if(x > 0) {
+    print("x是正数")
+}
+
+// while 循环
+while(x < 10) {
+    print(x)
+    x = x + 1
+}
+
+// for 循环
+for(i = 0, i < 5, i = i + 1) {
+    print(i)
+}
+                            </code></pre>
+                        </div>
+                    </article>
+                    
+                    <article id="functions">
+                        <h3>函数</h3>
+                        <div class="code-example">
+                            <pre><code class="language-bcc">
+// 公共函数定义
+def public add(x, y) {
+    return x + y
+}
+
+// 私有函数定义
+def private helper() {
+    print("辅助函数")
+}
+
+// 带代码块参数的函数
+def public forEach(block: BCC.Codeblock) {
+    block.execute()
+}
+                            </code></pre>
+                        </div>
+                    </article>
+                    
+                    <article id="modules">
+                        <h3>模块系统</h3>
+                        <div class="code-example">
+                            <pre><code class="language-bcc">
+// 导入模块
+import "basicDef.bcm"
+
+// 使用模块中的函数
+result = max(5, 3)
+print(result)
+                            </code></pre>
+                        </div>
+                    </article>
+                    
+                    <article id="code-blocks">
+                        <h3>代码块</h3>
+                        <div class="code-example">
+                            <pre><code class="language-bcc">
+// 基本代码块
+forEach {
+    print("代码块内容")
+}
+
+// 带条件的代码块
+while(x < 3) {
+    print(x)
+    x = x + 1
+}
+                            </code></pre>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="examples" class="examples">
+        <div class="container">
+            <h2>示例 / Examples</h2>
+            <div class="examples-grid">
+                <div class="example-card">
+                    <div class="card-content">
+                        <h3>基础计算器</h3>
+                        <div class="code-example">
+                            <pre><code class="language-bcc">
+def public add(x, y) {
+    return x + y
+}
+
+def public multiply(x, y) {
+    return x * y
+}
+
+result = add(5, multiply(3, 2))
+print("结果: ")
+print(result)
+                            </code></pre>
+                        </div>
+                        <button data-example="calculator" class="btn btn-secondary run-example">运行示例</button>
+                        <div id="calculator-output" class="example-output"></div>
+                    </div>
+                </div>
+                
+                <div class="example-card">
+                    <h3>代码块示例</h3>
+                    <div class="code-example">
+                        <pre><code class="language-bcc">
+forEach {
+    print("第一行")
+    print("第二行")
+    print("第三行")
+}
+                        </code></pre>
+                    </div>
+                    <button data-example="codeblock" class="btn btn-secondary run-example">运行示例</button>
+                    <div id="codeblock-output" class="example-output"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="get-started" class="get-started">
+        <div class="container">
+            <h2>快速开始 / Quick Start</h2>
+            <div class="installation-steps">
+                <div class="step">
+                    <span class="step-number">1</span>
+                    <h3>下载 BCC</h3>
+                    <p>下载并解压 BCC 压缩包</p>
+                    <a href="https://github.com/dhjs0000/bcc/releases/latest" class="btn btn-primary download-btn">
+                        <span class="download-icon">⭳</span>
+                        下载最新版本
+                    </a>
+                </div>
+                <div class="step">
+                    <span class="step-number">2</span>
+                    <h3>安装 VSCode 扩展</h3>
+                    <p>在 VSCode 扩展市场搜索 "BCC"</p>
+                    <p>或者下载对应的vsix文件</p>
+                </div>
+                <div class="step">
+                    <span class="step-number">3</span>
+                    <h3>创建文件</h3>
+                    <p>创建 .bcs 文件开始编码</p>
+                </div>
+                <div class="step">
+                    <span class="step-number">4</span>
+                    <h3>运行程序</h3>
+                    <p>使用 BCC 解释器运行代码</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>BCC</h4>
+                    <p>简单而强大的编程语言</p>
+                    <a href="./docs.html" class="docs-button">
+                        <span class="docs-icon">📚</span>
+                        文档
+                    </a>
+                </div>
+                <div class="footer-section">
+                    <h4>链接</h4>
+                    <a href="#features">特性</a>
+                    <a href="#docs">文档</a>
+                    <a href="#examples">示例</a>
+                </div>
+                <div class="footer-section">
+                    <h4>社区</h4>
+                    <a href="https://github.com/dhjs0000/bcc">GitHub</a>
+                    <a href="https://github.com/dhjs0000/bcc/discussions">讨论</a>
+                    <a href="https://github.com/dhjs0000/bcc/issues">问题反馈</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 BCC Programming Language. All rights reserved.</p>
+                <p class="version-info">当前版本：v1.0.0 | <a href="https://github.com/dhjs0000/bcc/releases">更新日志</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-javascript.min.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html> 
