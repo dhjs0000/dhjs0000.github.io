@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blender-VMT | Blender版本管理工具</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_8d5l8fzk5b87iudi.css">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.css">
+    <style>
+        /* 添加模态框样式 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            position: relative;
+            background-color: #fff;
+            margin: 15% auto;
+            padding: 20px;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 10px;
+            font-size: 28px;
+            cursor: pointer;
+        }
+
+        .download-link {
+            display: block;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .download-note {
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="particles-js" class="particles-container"></div>
+    <header>
+        <nav>
+            <div class="logo">Blender-VMT</div>
+            <ul>
+                <li><a href="#features">功能</a></li>
+                <li><a href="#download">下载</a></li>
+                <li><a href="#docs">文档</a></li>
+                <li><a href="https://github.com/dhjs0000/Blender-VMT" target="_blank">GitHub</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content" data-aos="fade-up">
+                <h1 class="glowing-text neon-text">轻松管理您的 Blender 版本</h1>
+                <p class="typing-text">简单、高效的 Blender 版本管理解决方案</p>
+                <div class="hero-features" data-aos="fade-up" data-aos-delay="200">
+                    <span class="feature-badge">✓ 一键切换版本</span>
+                    <span class="feature-badge">✓ 自动下载安装</span>
+                    <span class="feature-badge">✓ 配置文件备份</span>
+                    <span class="feature-badge">✓ 插件管理</span>
+                </div>
+                <a href="#download" class="cta-button pulse-button" data-aos="zoom-in" data-aos-delay="400">立即下载</a>
+            </div>
+            <div class="hero-background"></div>
+            <div class="light-beam"></div>
+        </section>
+
+        <section id="features">
+            <h2 class="section-title" data-aos="fade-down">核心功能</h2>
+            <div class="features-grid">
+                <div class="feature-card tilt-card hover-glow" data-aos="zoom-in-up" data-aos-delay="100">
+                    <i class="iconfont icon-switch"></i>
+                    <h3 class="gradient-text">快速切换版本</h3>
+                    <p>一键切换不同版本的 Blender，无需手动寻找安装目录</p>
+                </div>
+                <div class="feature-card tilt-card hover-glow" data-aos="zoom-in-up" data-aos-delay="200">
+                    <i class="iconfont icon-download"></i>
+                    <h3 class="gradient-text">版本下载管理</h3>
+                    <p>从官方源自动下载并安装，支持自定义下载源</p>
+                </div>
+                <div class="feature-card tilt-card hover-glow" data-aos="zoom-in-up" data-aos-delay="300">
+                    <i class="iconfont icon-settings"></i>
+                    <h3 class="gradient-text">配置文件管理</h3>
+                    <p>独立管理每个版本的配置文件，支持备份还原</p>
+                </div>
+                <div class="feature-card tilt-card hover-glow" data-aos="zoom-in-up" data-aos-delay="400">
+                    <i class="iconfont icon-plugin"></i>
+                    <h3 class="gradient-text">插件管理</h3>
+                    <p>轻松管理不同版本的插件，支持一键启用禁用</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="showcase">
+            <h2 data-aos="fade-down">软件界面</h2>
+            <div class="showcase-container">
+                <div class="showcase-image tilt-effect" data-aos="fade-right" data-tilt>
+                    <img src="images/interface.jpg" alt="Blender-VMT 界面预览" class="interface-preview">
+                </div>
+                <div class="showcase-text" data-aos="fade-left">
+                    <h3>简洁直观的界面设计</h3>
+                    <ul>
+                        <li>清晰的版本列表显示</li>
+                        <li>直观的操作按钮布局</li>
+                        <li>便捷的版本切换功能</li>
+                        <li>完整的路径信息展示</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="download">
+            <h2>下载</h2>
+            <div class="download-options">
+                <a href="#" class="download-button" onclick="openModal(); return false;">Windows</a>
+            </div>
+        </section>
+
+        <section id="docs">
+            <h2 data-aos="fade-down">使用文档</h2>
+            <div class="docs-container">
+                <div class="doc-section" data-aos="flip-left" data-aos-delay="100">
+                    <h3>基础功能</h3>
+                    <div class="doc-content">
+                        <h4>1. 版本管理</h4>
+                        <ul>
+                            <li>添加版本：点击"添加"按钮，选择 Blender 可执行文件</li>
+                            <li>下载版本：点击"下载"按钮，从官方源下载并自动安装</li>
+                            <li>删除版本：选中要删除的版本，点击"删除"按钮</li>
+                            <li>卸载版本：选中要卸载的版本，点击"卸载"按钮（会删除文件）</li>
+                        </ul>
+
+                        <h4>2. 版本切换</h4>
+                        <ul>
+                            <li>选择要启动的版本</li>
+                            <li>点击"启动"按钮即可运行对应版本</li>
+                        </ul>
+
+                        <h4>3. 配置管理</h4>
+                        <ul>
+                            <li>每个版本的配置文件独立保存</li>
+                            <li>支持备份/还原配置文件</li>
+                            <li>可以导入/导出配置文件</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="doc-section" data-aos="flip-right" data-aos-delay="200">
+                    <h3>高级功能</h3>
+                    <div class="doc-content">
+                        <h4>1. 插件管理</h4>
+                        <ul>
+                            <li>支持为每个版本单独安装/卸载插件</li>
+                            <li>可以启用/禁用已安装的插件</li>
+                            <li>支持 .py 和 .zip 格式的插件安装</li>
+                        </ul>
+
+                        <h4>2. 备份功能</h4>
+                        <ul>
+                            <li>支持对整个 Blender 版本进行备份</li>
+                            <li>可以随时还原到之前的备份点</li>
+                            <li>支持导入/导出备份文件</li>
+                        </ul>
+
+                        <h4>3. 自定义设置</h4>
+                        <ul>
+                            <li>可自定义下载源地址</li>
+                            <li>支持设置默认安装目录</li>
+                            <li>可选择深色/浅色主题</li>
+                            <li>支持中文/英文界面切换</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 添加模态框 -->
+    <div id="downloadModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h3>选择下载方式</h3>
+            <a href="https://github.com/dhjs0000/Blender-VMT/releases" class="download-link" target="_blank">
+                GitHub 下载
+            </a>
+            <a href="https://bbyc.lanzoue.com/b00rnfzgha" class="download-link" target="_blank">
+                蓝奏云下载
+                <div class="download-note">提取密码：VMT</div>
+            </a>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>关于项目</h4>
+                <p>Blender-VMT 是一个开源的 Blender 版本管理工具，旨在简化多版本 Blender 的管理和使用。</p>
+            </div>
+            <div class="footer-section">
+                <h4>快速链接</h4>
+                <ul>
+                    <li><a href="#features">功能</a></li>
+                    <li><a href="#download">下载</a></li>
+                    <li><a href="#docs">文档</a></li>
+                    <li><a href="https://github.com/dhjs0000/Blender-VMT" target="_blank">GitHub</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>联系方式</h4>
+                <ul>
+                    <li><a href="https://space.bilibili.com/430218185" target="_blank">哔哩哔哩</a></li>
+                    <li><a href="https://github.com/dhjs0000" target="_blank">GitHub</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 Blender-VMT. 基于 GPL-3.0 许可证开源。</p>
+        </div>
+    </footer>
+
+    <!-- 添加 JavaScript -->
+    <script>
+        function openModal() {
+            document.getElementById('downloadModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('downloadModal').style.display = 'none';
+        }
+
+        // 点击模态框外部关闭
+        window.onclick = function(event) {
+            var modal = document.getElementById('downloadModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js"></script>
+    <script>
+        // 初始化 AOS
+        AOS.init({
+            duration: 1000,
+            once: true
+        });
+
+        // 初始化粒子效果
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 80 },
+                color: { value: '#ff5f1f' },
+                shape: { type: 'circle' },
+                opacity: { value: 0.5 },
+                size: { value: 3 },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: '#ff5f1f',
+                    opacity: 0.4,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 3
+                }
+            }
+        });
+
+        // 添加打字机效果
+        const text = document.querySelector('.typing-text');
+        const originalText = text.textContent;
+        text.textContent = '';
+        let i = 0;
+
+        function typeWriter() {
+            if (i < originalText.length) {
+                text.textContent += originalText.charAt(i);
+                i++;
+                setTimeout(typeWriter, 50);
+            }
+        }
+
+        // 当页面加载完成后开始打字效果
+        window.addEventListener('load', typeWriter);
+
+        // 初始化倾斜效果
+        VanillaTilt.init(document.querySelectorAll(".tilt-effect"), {
+            max: 15,  // 最大倾斜角度
+            speed: 400,  // 过渡速度
+            glare: true,  // 启用光晕效果
+            "max-glare": 0.5,  // 最大光晕强度
+            scale: 1.05,  // 悬浮时的缩放比例
+            gyroscope: true  // 启用陀螺仪支持（移动设备）
+        });
+    </script>
+</body>
+</html> 
