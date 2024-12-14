@@ -46,3 +46,73 @@ document.getElementById('searchInput').addEventListener('input', function(e) {
         });
     }
 }); 
+
+// 添加代码块动画效果
+document.querySelectorAll('.code-block').forEach(block => {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                block.classList.add('code-animate');
+                observer.unobserve(block);
+            }
+        });
+    }, { threshold: 0.2 });
+    
+    observer.observe(block);
+});
+
+// 添加平滑滚动进度条
+const createProgressBar = () => {
+    const bar = document.createElement('div');
+    bar.className = 'progress-bar';
+    document.body.appendChild(bar);
+    
+    window.addEventListener('scroll', () => {
+        const winScroll = document.documentElement.scrollTop;
+        const height = document.documentElement.scrollHeight - window.innerHeight;
+        const scrolled = (winScroll / height) * 100;
+        bar.style.width = scrolled + '%';
+    });
+};
+
+createProgressBar();
+
+// 添加目录项动画
+document.querySelectorAll('.menu-section a').forEach((link, index) => {
+    link.style.animationDelay = `${index * 0.1}s`;
+    link.classList.add('menu-item-animate');
+});
+
+// 添加搜索框动画效果
+const searchContainer = document.getElementById('searchContainer');
+const searchInput = document.getElementById('searchInput');
+
+searchInput.addEventListener('focus', () => {
+    searchContainer.classList.add('search-focus');
+});
+
+searchInput.addEventListener('blur', () => {
+    searchContainer.classList.remove('search-focus');
+});
+
+// 添加代码高亮动画
+document.querySelectorAll('pre code').forEach(block => {
+    block.innerHTML = block.innerHTML
+        .split('\n')
+        .map((line, index) => 
+            `<span class="code-line" style="animation-delay: ${index * 0.1}s">${line}</span>`
+        )
+        .join('\n');
+});
+
+// 添加笔记卡片悬停效果
+document.querySelectorAll('.note').forEach(note => {
+    note.addEventListener('mousemove', (e) => {
+        const rect = note.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        note.style.setProperty('--mouse-x', `${x}px`);
+        note.style.setProperty('--mouse-y', `${y}px`);
+    });
+});

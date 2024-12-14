@@ -313,5 +313,136 @@ code.language-bash {
     height: 2px;
     background: var(--primary-color);
     z-index: 1000;
-    transition: width 0.2s;
+    transition: width 0.2s ease;
+} 
+
+/* 进度条样式 */
+.progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--primary-color);
+    z-index: 1000;
+    transition: width 0.2s ease;
+}
+
+/* 代码块动画 */
+.code-animate {
+    animation: slideIn 0.5s ease forwards;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* 代码行动画 */
+.code-line {
+    display: block;
+    opacity: 0;
+    animation: fadeIn 0.5s ease forwards;
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
+}
+
+/* 搜索框动画 */
+.search-container {
+    transition: transform 0.3s ease;
+}
+
+.search-focus {
+    transform: scale(1.02);
+}
+
+.search-focus .search-box {
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+/* 目录项动画 */
+.menu-item-animate {
+    opacity: 0;
+    animation: slideInRight 0.5s ease forwards;
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* 笔记卡片悬停效果 */
+.note {
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.note::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(
+        600px circle at var(--mouse-x) var(--mouse-y),
+        rgba(79, 70, 229, 0.1),
+        transparent 40%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.note:hover {
+    transform: translateY(-2px);
+}
+
+.note:hover::before {
+    opacity: 1;
+}
+
+/* 代码复制按钮动画 */
+.copy-btn {
+    transition: all 0.3s ease;
+}
+
+.copy-btn:hover {
+    background: rgba(255, 255, 255, 0.2) !important;
+    transform: translateY(-1px);
+}
+
+/* 滚动条美化 */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--gray-100);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--gray-300);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--gray-400);
 } 
