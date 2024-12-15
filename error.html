@@ -1,0 +1,206 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>连接错误</title>
+<style>
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: #222;
+  color: #eee;
+}
+
+.error-container {
+  background-color: rgba(75,75,75,0.5);
+  border-radius: 20px;
+  padding: 40px;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  max-width: 500px;
+  width: 90%;
+}
+
+h1 {
+  font-size: 120px;
+  margin: 0;
+  color: #7881ff;
+  line-height: 1;
+}
+
+h3 {
+  font-size: 24px;
+  margin: 20px 0;
+  font-weight: 500;
+}
+
+.error-message {
+  font-size: 16px;
+  color: #aaa;
+  margin: 10px 0 20px;
+}
+
+.feedback-link {
+  display: inline-block;
+  background: #7881ff;
+  color: white;
+  text-decoration: none;
+  padding: 12px 24px;
+  border-radius: 5px;
+  font-weight: 500;
+  transition: background 0.2s;
+  margin: 10px;
+}
+
+.feedback-link:hover {
+  background: #5f55af;
+}
+
+.details-btn {
+  background: transparent;
+  border: 1px solid #7881ff;
+  color: #7881ff;
+  padding: 12px 24px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin: 10px;
+}
+
+.details-btn:hover {
+  background: rgba(120,129,255,0.1);
+}
+
+.error-details {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+  text-align: left;
+  margin-top: 20px;
+  color: #aaa;
+}
+
+.error-details.show {
+  max-height: 500px;
+}
+
+.error-details p {
+  margin: 10px 0;
+  font-size: 14px;
+}
+
+.error-details code {
+  display: block;
+  background: rgba(0,0,0,0.2);
+  padding: 10px;
+  border-radius: 5px;
+  margin: 10px 0;
+  font-family: monospace;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.error-container {
+  animation: fadeIn 0.5s ease-out;
+}
+</style>
+</head>
+
+<body>
+  <div class="error-container">
+    <h1 id="errorCode">Error</h1>
+    <h3 id="errorTitle"></h3>
+    <p class="error-message" id="errorDesc"></p>
+    
+    <div>
+      <a href="mailto:3110197220@qq.com" class="feedback-link">反馈问题</a>
+      <button class="details-btn" onclick="toggleDetails()">查看详细信息</button>
+    </div>
+    
+    <div class="error-details" id="errorDetails">
+      <p><strong>错误代码:</strong> <span id="errorCodeDetails"></span></p>
+      <p><strong>请求URL:</strong> <code id="requestUrl"></code></p>
+      <p><strong>错误时间:</strong> <code id="errorTime"></code></p>
+      <p><strong>浏览器信息:</strong> <code id="userAgent"></code></p>
+      <p id="errorHelp"></p>
+    </div>
+  </div>
+
+  <script>
+    // 错误代码配置
+    const errorTypes = {
+      400: {
+        title: '错误请求',
+        desc: '服务器无法理解您的请求',
+        help: '请检查您的请求格式是否正确。'
+      },
+      401: {
+        title: '未授权访问',
+        desc: '您需要登录后才能访问此页面',
+        help: '请先登录您的账号后再试。'
+      },
+      403: {
+        title: '访问被禁止',
+        desc: '您没有权限访问此页面',
+        help: '如果您认为这是一个错误，请联系网站管理员。'
+      },
+      404: {
+        title: '页面未找到',
+        desc: '您访问的页面不存在',
+        help: '如果您是通过链接访问此页面，请确认链接是否正确。如果您是手动输入URL，请检查拼写是否正确。'
+      },
+      408: {
+        title: '请求超时',
+        desc: '服务器等待请求时超时',
+        help: '请检查您的网络连接并重试。'
+      }
+    };
+
+    // 获取错误代码
+    function getErrorCode() {
+      // 从URL获取错误代码,如果没有则默认404
+      const params = new URLSearchParams(window.location.search);
+      return params.get('code') || '404';
+    }
+
+    // 初始化页面
+    function initErrorPage() {
+      const code = getErrorCode();
+      const errorInfo = errorTypes[code] || errorTypes['404'];
+      
+      document.getElementById('errorCode').textContent = code;
+      document.getElementById('errorTitle').textContent = errorInfo.title;
+      document.getElementById('errorDesc').textContent = errorInfo.desc;
+      document.getElementById('errorCodeDetails').textContent = `${code} ${errorInfo.title}`;
+      document.getElementById('errorHelp').textContent = errorInfo.help;
+      
+      document.getElementById('requestUrl').textContent = window.location.href;
+      document.getElementById('errorTime').textContent = new Date().toLocaleString();
+      document.getElementById('userAgent').textContent = navigator.userAgent;
+    }
+
+    function toggleDetails() {
+      const details = document.getElementById('errorDetails');
+      details.classList.toggle('show');
+    }
+
+    // 页面加载时初始化
+    window.onload = initErrorPage;
+  </script>
+</body>
+</html> 

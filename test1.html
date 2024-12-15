@@ -4,111 +4,69 @@
 <meta charset="utf-8">
 <title>DW1</title>
 
-<style type="text/css">
-/*CSS样式*/
-	.tou {
-	font-size: 36px;
-	width: 100%;
-	background-color: #FFEBCD;
-	color: black;
-	
-	
-	}
-body {
-	background-color: #777777;
-	margin-left: 25%;
-	margin-top: 50px;
-	margin-right: 25%;
-	margin-bottom: 50px;
+<style>
+.tou {
+  font-size: 24px;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  margin-bottom: 20px;
 }
-	.zt {
-		font-size: 100px;
-		color: white;
-	}
-	
-#send-btn{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
+
+body {
+  background-color: #f5f5f5;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.content-block {
+  background: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
 }
 
 button {
   background: #5f55af;
-  border: 0;
-  border-radius: 5px;
-  padding: 10px 30px 10px 20px;
   color: white;
-  text-transform: uppercase;
-  font-weight: bold;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
 }
 
-button svg {
-  display: inline-block;
-  vertical-align: middle;
-  padding-right: 5px;
+button:hover {
+  background: #4a4298;
 }
 
-button:hover svg {
-  animation: fly 2s ease 1;
+/* 代码块样式 */
+pre {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 4px;
+  overflow-x: auto;
 }
 
-@keyframes fly {
-  0% {
-    transform: translateX(0%);
-  }
-
-  50% {
-    transform: translateX(300%);
-  }
-
-  100% {
-    transform: translateX(0);
-  }
-}
-
-
-#send-btn{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-}
-
-div {
+/* 返回顶部按钮 */
+#back-to-top {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 99;
   background: #5f55af;
-  border: 0;
-  border-radius: 5px;
-  padding: 10px 30px 10px 20px;
   color: white;
-  text-transform: uppercase;
-  font-weight: bold;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  display: none;
 }
-
-div {
-  display: inline-block;
-  vertical-align: middle;
-  padding-right: 5px;
-}
-
-div:hover svg {
-  animation: fly 2s ease 1;
-}
-
-@keyframes fly {
-  0% {
-    transform: translateX(0%);
-  }
-
-  50% {
-    transform: translateX(300%);
-  }
-
-  100% {
-    transform: translateX(0);
-  }
-}
-
 </style>
 <link href="1.css" rel="stylesheet" type="text/css">
 <style type="text/css">
@@ -178,14 +136,14 @@ user-select: none;
     &#9679; 其次，与<a href="https://baike.baidu.com/item/MATLAB/263035" ><u>MATLAB</u></a>相比，Python是一门更易学、更严谨的程序设计语言。它能让用户编写出更易读、易维护的代码。 <br>
     &#9679; 最后，<a href="https://baike.baidu.com/item/MATLAB/263035" ><u>MATLAB</u></a>主要专注于工程和科学计算。然而即使在计算领域，也经常会遇到文件管理、<a href="https://baike.baidu.com/item/%E7%95%8C%E9%9D%A2%E8%AE%BE%E8%AE%A1" ><u>界面设计</u></a>、<a href="https://baike.baidu.com/item/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1" ><u>网络通信</u></a>等各种需求。而Python有着丰富的扩展库，可以轻易完成各种高级任务，开发者可以用Python实现完整应用程序所需的各种功能。 <br>
     <a name="3-3" ></a><a name="sub21087_3_3" ></a><a name="3_3" ></a><a name="设计定位" ></a>设计定位 <br>
-    Python的设计哲学是&ldquo;优雅&rdquo;、&ldquo;明确&rdquo;、&ldquo;简单&rdquo;。因此，<a href="https://baike.baidu.com/item/Perl%E8%AF%AD%E8%A8%80/1346108" ><u>Perl语言</u></a>中&ldquo;总是有多种方法来做同一件事&rdquo;的理念在Python开发者中通常是难以忍受的。Python开发者的哲学是&ldquo;用一种方法，最好是只有一种方法来做一件事&rdquo;。在设计Python语言时，如果面临多种选择，Python开发者一般会拒绝花俏的语法，而选择明确的没有或者很少有歧义的语法。由于这种设计观念的差异，Python源代码通常被认为比Perl具备更好的可读性，并且能够支撑大规模的软件开发。这些准则被称为Python格言。在Python<a href="https://baike.baidu.com/item/%E8%A7%A3%E9%87%8A%E5%99%A8" ><u>解释器</u></a>内运行import this可以获得完整的列表。 <br>
+    Python的设计哲学是&ldquo;优雅&rdquo;、&ldquo;明确&rdquo;、&ldquo;简单&rdquo;。因此，<a href="https://baike.baidu.com/item/Perl%E8%AF%AD%E8%A8%80/1346108" ><u>Perl语言</u></a>中&ldquo;总是有多种方法来做同一件事&rdquo;的理念��Python开发者中通常是难以忍受的。Python开发者的哲学是&ldquo;用一种方法，最好是只有一种方法来做一件事&rdquo;。在设计Python语言时，如果面临多种选择，Python开发者一般会拒绝花俏的语法，而选择明确的没有或者很少有歧义的语法。由于这种设计观念的差异，Python源代码通常被认为比Perl具备更好的可读性，并且能够支撑大规模的软件开发。这些准则被称为Python格言。在Python<a href="https://baike.baidu.com/item/%E8%A7%A3%E9%87%8A%E5%99%A8" ><u>解释器</u></a>内运行import this可以获得完整的列表。 <br>
     Python开发人员尽量避开不成熟或者不重要的优化。一些针对非重要部位的加快运行速度的补丁通常不会被合并到Python内。所以很多人认为Python很慢。不过，根据二八定律，大多数程序对速度要求不高。在某些对运行速度要求很高的情况，Python设计师倾向于使用<a href="https://baike.baidu.com/item/JIT" ><u>JIT</u></a>技术，或者用使用<a href="https://baike.baidu.com/item/C/7252092" ><u>C</u></a>/<a href="https://baike.baidu.com/item/C%2B%2B/99272" ><u>C++</u></a>语言改写这部分程序。可用的JIT技术是<a href="https://baike.baidu.com/item/PyPy" ><u>PyPy</u></a>。 <br>
     Python是完全<a href="https://baike.baidu.com/item/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/2262089" ><u>面向对象</u></a>的语言。<a href="https://baike.baidu.com/item/%E5%87%BD%E6%95%B0/18686609" ><u>函数</u></a>、模块、数字、<a href="https://baike.baidu.com/item/%E5%AD%97%E7%AC%A6%E4%B8%B2/1017763" ><u>字符串</u></a>都是对象。并且完全支持继承、重载、派生、多继承，有益于增强源代码的复用性。Python支持重载运算符和动态类型。相对于<a href="https://baike.baidu.com/item/Lisp/22083" ><u>Lisp</u></a>这种传统的函数式编程语言，Python对函数式设计只提供了有限的支持。有两个标准库(functools, itertools)提供了<a href="https://baike.baidu.com/item/Haskell" ><u>Haskell</u></a>和Standard ML中久经考验的函数式程序设计工具。 <br>
-    虽然Python可能被粗略地分类为&ldquo;<a href="https://baike.baidu.com/item/%E8%84%9A%E6%9C%AC%E8%AF%AD%E8%A8%80" ><u>脚本语言</u></a>&rdquo;（script language），但实际上一些大规模软件开发计划例如<a href="https://baike.baidu.com/item/Zope" ><u>Zope</u></a>、<a href="https://baike.baidu.com/item/Mnet" ><u>Mnet</u></a>及<a href="https://baike.baidu.com/item/BitTorrent/142795" ><u>BitTorrent</u></a>，<a href="https://baike.baidu.com/item/Google/86964" ><u>Google</u></a>也广泛地使用它。Python的支持者较喜欢称它为一种高级动态编程语言，原因是&ldquo;脚本语言&rdquo;泛指仅作简单程序设计任务的语言，如shellscript、<a href="https://baike.baidu.com/item/VBScript" ><u>VBScript</u></a>等只能处理简单任务的编程语言，并不能与Python相提并论。 <br>
-    Python本身被设计为可扩充的。并非所有的特性和功能都集成到语言核心。Python提供了丰富的<a href="https://baike.baidu.com/item/API/10154" ><u>API</u></a>和工具，以便程序员能够轻松地使用<a href="https://baike.baidu.com/item/C%E8%AF%AD%E8%A8%80/105958" ><u>C语言</u></a>、<a href="https://baike.baidu.com/item/C%2B%2B/99272" ><u>C++</u></a>、Cython来编写扩充模块。Python编译器本身也可以被集成到其它需要脚本语言的程序内。因此，很多人还把Python作为一种&ldquo;胶水语言&rdquo;（glue language）使用。使用Python将其他语言编写的程序进行集成和封装。在Google内部的很多项目，例如Google Engine使用C++编写性能要求极高的部分，然后用Python或Java/Go调用相应的模块。《<a href="https://baike.baidu.com/item/Python%E6%8A%80%E6%9C%AF%E6%89%8B%E5%86%8C" ><u>Python技术手册</u></a>》的作者<a href="https://baike.baidu.com/item/%E9%A9%AC%E7%89%B9%E5%88%A9" ><u>马特利</u></a>（Alex Martelli）说：&ldquo;这很难讲，不过，2004 年，Python 已在<a href="https://baike.baidu.com/item/Google" ><u>Google</u></a>&nbsp;内部使用，Google 召募许多 Python 高手，但在这之前就已决定使用Python，他们的目的是 Python where we can, C++ where we must，在操控硬件的场合使用<a href="https://baike.baidu.com/item/C%2B%2B/99272" ><u>C++</u></a>，在快速开发时候使用 Python。&rdquo; <br>
+    虽然Python可能被粗略地分类为&ldquo;<a href="https://baike.baidu.com/item/%E8%84%9A%E6%9C%AC%E8%AF%AD%E8%A8%80" ><u>脚本语言</u></a>&rdquo;（script language），但实际上一些大规模软件开发计划例如<a href="https://baike.baidu.com/item/Zope" ><u>Zope</u></a>、<a href="https://baike.baidu.com/item/Mnet" ><u>Mnet</u></a>及<a href="https://baike.baidu.com/item/BitTorrent/142795" ><u>BitTorrent</u></a>，<a href="https://baike.baidu.com/item/Google/86964" ><u>Google</u></a>也广泛地使用它。Python的支持者���喜欢称它为一种高级动态编程语言，原因是&ldquo;脚本语言&rdquo;泛指仅作简单程序设计任务的语言，如shellscript、<a href="https://baike.baidu.com/item/VBScript" ><u>VBScript</u></a>等只能处理简单任务的编程语言，并不能与Python相提并论。 <br>
+    Python本身被设计为可扩充的。并非所有的特性和功能都集成到语言核心。Python提供了丰富的<a href="https://baike.baidu.com/item/API/10154" ><u>API</u></a>和工具，以便程序员能够轻松地使用<a href="https://baike.baidu.com/item/C%E8%AF%AD%E8%A8%80/105958" ><u>C语言</u></a>、<a href="https://baike.baidu.com/item/C%2B%2B/99272" ><u>C++</u></a>、Cython来编写扩充模块。Python编译器本身也可以被集成到其它需要脚本语言的程序内。因此，很多人还把Python作为一种&ldquo;胶水语言&rdquo;（glue language）使用。使用Python将其他语言编写的程序进行集成和封装。在Google内部的很多项目，例如Google Engine使用C++编写性能要求极高的部分，然后用Python或Java/Go调用相应的模块。《<a href="https://baike.baidu.com/item/Python%E6%8A%80%E6%9C%AF%E6%89%8B%E5%86%8C" ><u>Python技术手册</u></a>》的作者<a href="https://baike.baidu.com/item/%E9%A9%AC%E7%89%B9%E5%88%A9" ><u>马特利</u></a>（Alex Martelli）说：&ldquo;��很难讲，不过，2004 年，Python 已在<a href="https://baike.baidu.com/item/Google" ><u>Google</u></a>&nbsp;内部使用，Google 召募许多 Python 高手，但在这之前就已决定使用Python，他们的目的是 Python where we can, C++ where we must，在操控硬件的场合使��<a href="https://baike.baidu.com/item/C%2B%2B/99272" ><u>C++</u></a>，在快速开发时候使用 Python。&rdquo; <br>
     <a name="sub21087_3_4" ></a><a name="3-4" ></a><a name="3_4" ></a><a name="执行" ></a>执行 <br>
     <img width="220" height="147" src="test1_wpsF9C7.tmp.jpg" >Python <br>
-    Python在执行时，首先会将.py文件中的<a href="https://baike.baidu.com/item/%E6%BA%90%E4%BB%A3%E7%A0%81/3969" ><u>源代码</u></a>编译成Python的byte code（字节码），然后再由Python Virtual Machine（Python<a href="https://baike.baidu.com/item/%E8%99%9A%E6%8B%9F%E6%9C%BA" ><u>虚拟机</u></a>）来执行这些编译好的byte code。这种机制的基本思想跟Java，.NET是一致的。然而，Python Virtual Machine与Java或.NET的Virtual Machine不同的是，Python的Virtual Machine是一种更高级的Virtual Machine。这里的高级并不是通常意义上的高级，不是说Python的Virtual Machine比Java或.NET的功能更强大，而是说和Java 或.NET相比，Python的Virtual Machine距离真实机器的距离更远。或者可以这么说，Python的Virtual Machine是一种抽象层次更高的Virtual Machine。基于C的Python编译出的<a href="https://baike.baidu.com/item/%E5%AD%97%E8%8A%82%E7%A0%81" ><u>字节码</u></a>文件，通常是.pyc格式。除此之外，Python还可以以交互模式运行，比如主流操作系统Unix/<a href="https://baike.baidu.com/item/Linux/27050" ><u>Linux</u></a>、Mac、Windows都可以直接在命令模式下直接运行Python交互环境。直接下达操作指令即可实现交互操作。 <br>
+    Python在执行时，首先会将.py文件中的<a href="https://baike.baidu.com/item/%E6%BA%90%E4%BB%A3%E7%A0%81/3969" ><u>源代码</u></a>编译成Python的byte code（字节码），然后再由Python Virtual Machine（Python<a href="https://baike.baidu.com/item/%E8%99%9A%E6%8B%9F%E6%9C%BA" ><u>虚拟机</u></a>）来执行这些编译好的byte code。这种机制的基本思想跟Java，.NET是一致的。然而，Python Virtual Machine与Java或.NET的Virtual Machine不同的是，Python的Virtual Machine是一种更高级的Virtual Machine。这里的高级并不是通常意义上的高级，不是说Python的Virtual Machine比Java或.NET的功能更强大，而是说和Java 或.NET相比，Python的Virtual Machine距离真实机器的距离更远。或者可以这么说，Python的Virtual Machine是一种抽象层次更高的Virtual Machine。基于C的Python编译出的<a href="https://baike.baidu.com/item/%E5%AD%97%E8%8A%82%E7%A0%81" ><u>字节码</u></a>文件，通常是.pyc格式。除此之外，Python还可���以交互模式运行，比如主流操作系统Unix/<a href="https://baike.baidu.com/item/Linux/27050" ><u>Linux</u></a>、Mac、Windows都可以直接在命令模式下直接运行Python交互环境。直接下达操作指令即可实现交互操作。 <br>
     <a name="sub21087_4" ></a><a name="基本语法" ></a><a name="4" ></a>基本语法 <br>
     <img width="220" height="119" src="test1_wpsF9C8.tmp.png" >Python <br>
     Python的设计目标之一是让代码具备高度的可阅读性。它设计时尽量使用其它语言经常使用的标点符号和英文单字，让代码看起来整洁美观。它不像其他的静态语言如C、Pascal那样需要重复书写声明语句，也不像它们的语法那样经常有特殊情况和意外。 <br>
@@ -249,7 +207,7 @@ user-select: none;
         5 </p></td>
     </tr>
   </table>
-  <p >Python使用y if cond else x表示条件表达式。意思是当cond为真时，表达式的值为y，否则表达式的值为x。相当于C++和Java里的cond?y:x。 <br>
+  <p >Python使用y if cond else x表示条件表达式。意思是当cond为真时，表达式的值为y，否则表达式的值���x。相当于C++和Java里的cond?y:x。 <br>
     Python区分列表(list)和元组(tuple)两种类型。list的写法是[1,2,3]，而tuple的写法是(1,2,3)。可以改变list中的元素，而不能改变tuple。在某些情况下，tuple的括号可以省略。tuple对于赋值语句有特殊的处理。因此，可以同时赋值给多个变量，比如： </p>
   <table border="0" cellspacing="0" >
     <tr >
@@ -266,7 +224,7 @@ user-select: none;
       <td width="762" valign="center" ><p >&gt;&gt;&gt;&nbsp;x,&nbsp;y=y,&nbsp;x&nbsp;#最终结果：y=1,&nbsp;x=2 </p></td>
     </tr>
   </table>
-  <p >Python使用'(单引号)和"(双引号)来表示字符串。与Perl、Unix Shell语言或者Ruby、Groovy等语言不一样，两种符号作用相同。一般地，如果字符串中出现了双引号，就使用单引号来表示字符串;反之则使用双引号。如果都没有出现，就依个人喜好选择。出现在字符串中的\(反斜杠)被解释为特殊字符，比如\n表示换行符。表达式前加r指示Python不解释字符串中出现的\。这种写法通常用于编写正则表达式或者Windows文件路径。 <br>
+  <p >Python使用'(单引号)和"(双引号)来表示字符串。与Perl、Unix Shell语言或者Ruby、Groovy等语言不一样，两种符号作用相同。一般地，如果字符串中出现了双引号，就使用单引号来表示字符串;反之则使用双引号。如果都没有出现，就依个人喜好选择。出现在字符串中的\(反斜杠)被解释为特���字符，比如\n表示换行符。表达式前加r指示Python不解释字符串中出现的\。这种写法通常用于编写正则表达式或者Windows文件路径。 <br>
     Python支持列表切割(list slices)，可以取得完整列表的一部分。支持切割操作的类型有str, bytes, list, tuple等。它的语法是...[left:right]或者...[left:right:stride]。假定nums变量的值是[1, 3, 5, 7, 8, 13, 20]，那么下面几个语句为真： <br>
     nums[2:5] == [5, 7, 8] 从下标为2的元素切割到下标为5的元素，但不包含下标为5的元素。 <br>
     nums[1:] == [3, 5, 7, 8, 13, 20] 切割到最后一个元素。 <br>

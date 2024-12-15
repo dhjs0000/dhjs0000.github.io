@@ -1,0 +1,25 @@
+# 站点设置
+title: BBYC
+description: BBYC官方网站
+url: https://dhjs0000.github.io
+baseurl: ""
+
+# GitHub Pages 配置
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default
+
+# 错误页面配置
+error_page_404: /404.html
+error_page_403: /403.html
+error_page_500: /500.html
+
+# 其他设置
+markdown: kramdown
+exclude:
+  - README.md
+  - .gitignore
+  - Gemfile
+  - Gemfile.lock

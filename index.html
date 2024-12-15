@@ -1,14 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
 <head>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BBYC - 开源技术社区</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: linear-gradient(135deg, #1e1e2e 0%, #2d2d44 100%);
+            color: #eee;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+        
+        .notice {
+            background: rgba(255, 243, 205, 0.1);
+            border: 1px solid rgba(255, 238, 186, 0.2);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            color: #ffd700;
+            max-width: 600px;
+        }
+        
+        .countdown {
+            font-size: 24px;
+            margin: 20px 0;
+            color: #7881ff;
+        }
+        
+        .cancel-button {
+            background: #7881ff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .cancel-button:hover {
+            background: #5f55af;
+            transform: translateY(-2px);
+        }
+    </style>
 </head>
 <body>
-<p>注意，请使用非纯净版的Microsoft windows系统进行登录！</p>
-<p>原因：【+】按钮会调出windows邮件</p>
-  <div style="background-color: red"><p style="Colcr: white">我们通过使用 Microsoft Clarity 来了解您如何使用我们的网站来改进我们的产品和广告。使用我们的网站，即表示您同意我们和 Microsoft 可以收集和使用这些数据。</p></div>
- <p>我们与 Microsoft Clarity 和 Microsoft Advertising 合作，通过行为度量、热图和会话重放来捕获您使用和与我们的网站互动的方式，以改进和推广我们的产品/服务。使用第一方和第三方 cookie 和其他跟踪技术来捕获网站使用数据，以确定产品/服务和在线活动的受欢迎程度。此外，我们还使用此信息进行网站优化、欺诈/安全目的和广告。有关 Microsoft 如何收集和使用您的数据的更多信息，请访问<a href="https://privacy.microsoft.com/privacystatement" data-linktype="external">Microsoft Privacy Statement</a></p>
- <script src="web.js"></script>
- <h3><p>重定向倒计时</p></h3>
-<p id="countdown"></p>
-<button onclick="cancelCountdown()">取消</button>
+    <div class="notice">
+        <p>注意，请使用非纯净版的Microsoft windows系统进行登录！</p>
+        <p>原因：【+】按钮会调出windows邮件</p>
+    </div>
+    
+    <h3>重定向倒计时</h3>
+    <div id="countdown" class="countdown"></div>
+    <button onclick="cancelCountdown()" class="cancel-button">取消</button>
 
+    <script>
+        let timeLeft = 5;
+        let countdownTimer;
+
+        function updateCountdown() {
+            const countdownElement = document.getElementById('countdown');
+            countdownElement.textContent = timeLeft + ' 秒后跳转到主页';
+            
+            if (timeLeft <= 0) {
+                clearInterval(countdownTimer);
+                window.location.href = 'newBBYCweb/home.html';
+            }
+            timeLeft--;
+        }
+
+        function cancelCountdown() {
+            clearInterval(countdownTimer);
+            document.getElementById('countdown').textContent = '跳转已取消';
+        }
+
+        // 开始倒计时
+        updateCountdown();
+        countdownTimer = setInterval(updateCountdown, 1000);
+    </script>
 </body>
+</html>
