@@ -1,0 +1,53 @@
+name: Test Backend Service
+
+on:
+  push:
+    paths:
+      - 'newBBYCweb/server/**'
+    branches:
+      - main
+  pull_request:
+    paths:
+      - 'newBBYCweb/server/**'
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      mongodb:
+        image: mongo:latest
+        ports:
+          - 27017:27017
+
+    strategy:
+      matrix:
+        node-version: [16.x, 18.x]
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: newBBYCweb/server/package.json
+
+      - name: Install Dependencies
+        working-directory: newBBYCweb/server
+        run: npm ci
+
+      - name: Create env file
+        working-directory: newBBYCweb/server
+        run: |
+          echo "PORT=3000" >> .env
+          echo "MONGODB_URI=mongodb://localhost:27017/bbyc-test" >> .env
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET || 'test-secret' }}" >> .env
+          echo "JWT_EXPIRE=1h" >> .env
+
+      - name: Run Tests
+        working-directory: newBBYCweb/server
+        run: npm test 
