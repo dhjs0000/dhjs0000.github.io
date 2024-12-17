@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BBYC 文档中心</title>
+    <script type="text/javascript">
+        (function(c,l,a,r,i,t,y){
+            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        })(window, document, "clarity", "script", "pe969al7w9");
+    </script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* 文档页面特定样式 */
+        .docs-container {
+            display: flex;
+            height: calc(100vh - 60px);
+            margin-top: 60px;
+        }
+
+        /* 顶部导航栏 */
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: var(--nav-bg);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .top-nav-container {
+            display: flex;
+            align-items: center;
+            height: 100%;
+            padding: 0 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .top-nav-links {
+            display: flex;
+            gap: 20px;
+            margin-left: 40px;
+        }
+
+        .top-nav-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .top-nav-links a:hover {
+            background: var(--hover-bg);
+        }
+
+        .top-nav-links a.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* 左侧导航栏 */
+        .side-nav {
+            width: 300px;
+            background: var(--card-bg);
+            border-right: 1px solid var(--border-color);
+            overflow-y: auto;
+            padding: 20px;
+            flex-shrink: 0;
+        }
+
+        .side-nav-section {
+            margin-bottom: 20px;
+        }
+
+        .side-nav-section h3 {
+            color: var(--primary-color);
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .side-nav-links {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .side-nav-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .side-nav-links a:hover {
+            background: var(--hover-bg);
+        }
+
+        .side-nav-links a.active {
+            background: var(--hover-bg);
+            color: var(--primary-color);
+        }
+
+        /* 主内容区域 */
+        .main-content {
+            flex-grow: 1;
+            padding: 40px;
+            overflow-y: auto;
+            background: var(--bg-color);
+        }
+
+        .content-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .side-nav {
+                position: fixed;
+                left: -300px;
+                top: 60px;
+                bottom: 0;
+                transition: left 0.3s ease;
+                z-index: 999;
+            }
+
+            .side-nav.active {
+                left: 0;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+        }
+
+        /* 移动端菜单按钮 */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            margin-right: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <nav class="top-nav">
+        <div class="top-nav-container">
+            <button class="menu-toggle" aria-label="菜单">
+                <i class="fas fa-bars"></i>
+            </button>
+            <a href="/" class="logo">BBYC</a>
+            <div class="top-nav-links">
+                <a href="home.html">首页</a>
+                <a href="bar.html">产品</a>
+                <a href="docs.html" class="active">文档</a>
+                <a href="about.html">关于</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 文档容器 -->
+    <div class="docs-container">
+        <!-- 左侧导航栏 -->
+        <nav class="side-nav">
+            <div class="side-nav-section">
+                <h3>入门指南</h3>
+                <div class="side-nav-links">
+                    <a href="#quick-start" class="active">快速开始</a>
+                    <a href="#installation">安装说明</a>
+                    <a href="#basic-concepts">基本概念</a>
+                </div>
+            </div>
+            <div class="side-nav-section">
+                <h3>BCC语言</h3>
+                <div class="side-nav-links">
+                    <a href="#bcc-intro">语言介绍</a>
+                    <a href="#bcc-syntax">语法指南</a>
+                    <a href="#bcc-examples">示例代码</a>
+                </div>
+            </div>
+            <div class="side-nav-section">
+                <h3>Blender-VMT</h3>
+                <div class="side-nav-links">
+                    <a href="#vmt-intro">工具介绍</a>
+                    <a href="#vmt-usage">使用指南</a>
+                    <a href="#vmt-examples">使用示例</a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- 主内容区域 -->
+        <main class="main-content">
+            <div class="content-container">
+                <h1>快速开始</h1>
+                <p>欢迎使用 BBYC 开发文档。本文档将帮助您快速了解和使用我们的产品。</p>
+                
+                <h2>文档特点</h2>
+                <ul>
+                    <li>清晰的结构和导航</li>
+                    <li>详细的示例���说明</li>
+                    <li>完整的 API 参考</li>
+                    <li>丰富的最佳实践</li>
+                </ul>
+
+                <h2>开始使用</h2>
+                <p>选择左侧导航栏中的主题，开始您的学习之旅。如果您是新手，建议从"入门指南"开始阅读。</p>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // 移动端菜单切换
+        document.querySelector('.menu-toggle').addEventListener('click', () => {
+            document.querySelector('.side-nav').classList.toggle('active');
+        });
+
+        // 点击内容区域时关闭移动端菜单
+        document.querySelector('.main-content').addEventListener('click', () => {
+            if (window.innerWidth <= 768) {
+                document.querySelector('.side-nav').classList.remove('active');
+            }
+        });
+
+        // 左侧导航链接点击事件
+        document.querySelectorAll('.side-nav-links a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                // 移除所有活动状态
+                document.querySelectorAll('.side-nav-links a').forEach(a => {
+                    a.classList.remove('active');
+                });
+                // 添加活动状态到被点击的链接
+                e.target.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html> 
