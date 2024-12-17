@@ -243,10 +243,39 @@ function initPageLoader() {
     });
 }
 
+// 懒加载功能
+function initLazyLoading() {
+    const lazyLoadOptions = {
+        root: null,
+        rootMargin: '50px',
+        threshold: 0.1
+    };
+
+    const lazyLoadObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const element = entry.target;
+                element.classList.add('visible');
+                observer.unobserve(element);
+            }
+        });
+    }, lazyLoadOptions);
+
+    // 获取所有需要懒加载的元素
+    const lazyLoadElements = document.querySelectorAll('.lazy-load');
+    lazyLoadElements.forEach(element => {
+        // 初始状态隐藏
+        element.classList.remove('visible');
+        // 添加观察
+        lazyLoadObserver.observe(element);
+    });
+}
+
 // 页面加载完成后初始化所有功能
 document.addEventListener('DOMContentLoaded', () => {
     initThemeToggle();
     initMobileMenu();
     initNavigation();
     initPageLoader();
+    initLazyLoading();
 });
