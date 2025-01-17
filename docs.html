@@ -21,51 +21,6 @@
             margin-top: 60px;
         }
 
-        /* 顶部导航栏 */
-        .top-nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 60px;
-            background: var(--nav-bg);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .top-nav-container {
-            display: flex;
-            align-items: center;
-            height: 100%;
-            padding: 0 20px;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .top-nav-links {
-            display: flex;
-            gap: 20px;
-            margin-left: 40px;
-        }
-
-        .top-nav-links a {
-            color: var(--text-color);
-            text-decoration: none;
-            padding: 8px 16px;
-            border-radius: 4px;
-            transition: all 0.3s ease;
-        }
-
-        .top-nav-links a:hover {
-            background: var(--hover-bg);
-        }
-
-        .top-nav-links a.active {
-            background: var(--primary-color);
-            color: white;
-        }
-
         /* 左侧导航栏 */
         .side-nav {
             width: 300px;
@@ -145,7 +100,7 @@
             margin: 0 auto;
         }
 
-        /* 快速主页卡片样式 */
+        /* 快速卡片样式 */
         .quick-cards {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -180,56 +135,93 @@
             opacity: 0.8;
         }
 
-        /* 响应式设计 */
-        @media (max-width: 768px) {
-            .side-nav {
-                position: fixed;
-                left: -300px;
-                top: 60px;
-                bottom: 0;
-                transition: left 0.3s ease;
-                z-index: 999;
-            }
-
-            .side-nav.active {
-                left: 0;
-            }
-
-            .menu-toggle {
-                display: block;
-            }
-
-            .quick-cards {
-                grid-template-columns: 1fr;
-            }
+        /* 代码块样式 */
+        pre {
+            background: var(--code-bg);
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
         }
 
-        /* 移动端菜单按钮 */
-        .menu-toggle {
-            display: none;
-            background: none;
-            border: none;
+        code {
+            font-family: 'Consolas', monospace;
+            color: var(--code-color);
+        }
+
+        /* 文档内容样式 */
+        .doc-section {
+            margin-bottom: 40px;
+        }
+
+        .doc-section h2 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .doc-section h3 {
             color: var(--text-color);
-            font-size: 1.5rem;
-            cursor: pointer;
-            padding: 0.5rem;
-            margin-right: 1rem;
+            margin: 25px 0 15px;
+        }
+
+        .doc-section p {
+            line-height: 1.6;
+            margin: 15px 0;
+        }
+
+        .doc-section ul {
+            padding-left: 20px;
+            margin: 15px 0;
+        }
+
+        .doc-section li {
+            margin: 8px 0;
+            line-height: 1.5;
+        }
+
+        /* 示例代码框 */
+        .code-example {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .code-example .code-header {
+            padding: 10px 15px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .code-example pre {
+            margin: 0;
+            border-radius: 0 0 8px 8px;
         }
     </style>
 </head>
 <body>
-    <!-- 顶部导航栏 -->
-    <nav class="top-nav">
-        <div class="top-nav-container">
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="home.html" class="logo">BBYC</a>
             <button class="menu-toggle" aria-label="菜单">
                 <i class="fas fa-bars"></i>
             </button>
-            <a href="/" class="logo">BBYC</a>
-            <div class="top-nav-links">
+            <div class="nav-links">
                 <a href="home.html">首页</a>
-                <a href="bar.html">产品</a>
                 <a href="docs.html" class="active">文档</a>
-                <a href="about.html">关于</a>
+                <a href="downloads.html">下载</a>
+                <a href="tools.html">工具</a>
+                <a href="blog.html">博客</a>
+                <a href="questions.html">问答</a>
+                <button id="theme-toggle" class="theme-toggle" aria-label="切换主题">
+                    <i class="fas fa-sun"></i>
+                    <i class="fas fa-moon"></i>
+                </button>
             </div>
         </div>
     </nav>
@@ -274,17 +266,6 @@
                         <li><a href="#vmt-plugins" class="menu-item">插件开发</a></li>
                     </ul>
                 </li>
-                <li>
-                    <div class="menu-item">
-                        <span class="toggle-icon"><i class="fas fa-chevron-right"></i></span>
-                        <span>API 参考</span>
-                    </div>
-                    <ul class="submenu">
-                        <li><a href="#api-overview" class="menu-item">API 概览</a></li>
-                        <li><a href="#api-auth" class="menu-item">认证授权</a></li>
-                        <li><a href="#api-endpoints" class="menu-item">接口列表</a></li>
-                    </ul>
-                </li>
             </ul>
         </nav>
 
@@ -301,7 +282,7 @@
                     </div>
                     <div class="quick-card">
                         <h3><i class="fas fa-book"></i> 开发指南</h3>
-                        <p>详细的开发文档，包含完整的 API 参考和最佳实践。</p>
+                        <p>详细的开发文档，包含完整的使用说明和最佳实践。</p>
                     </div>
                     <div class="quick-card">
                         <h3><i class="fas fa-code"></i> 示例代码</h3>
@@ -312,20 +293,41 @@
                         <p>解答使用过程中的常见问题和技术难点。</p>
                     </div>
                 </div>
-
-                <h2>文档特点</h2>
-                <ul>
-                    <li>清晰的结构和导航</li>
-                    <li>详细的示例和说明</li>
-                    <li>完整的 API 参考</li>
-                    <li>丰富的最佳实践</li>
-                </ul>
-
-                <h2>开始使用</h2>
-                <p>选择左侧导航栏中的主题，开始您的学习之旅。如果您是新手，建议从"快速开始"部分开始阅读。</p>
             </div>
+            <p>不想搞了~~~</p>
         </main>
     </div>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-links">
+                <div class="footer-section">
+                    <h3>项目</h3>
+                    <a href="https://dhjs0000.github.io/bccWeb/">BCC语言</a>
+                    <a href="https://dhjs0000.github.io/Blender-VMT-Remastered/">Blender-VMT-Remastered</a>
+                </div>
+                <div class="footer-section">
+                    <h3>资源</h3>
+                    <a href="downloads.html">软件下载</a>
+                    <a href="tools.html">开发工具</a>
+                </div>
+                <div class="footer-section">
+                    <h3>社区</h3>
+                    <a href="blog.html">技术博客</a>
+                    <a href="questions.html">问答</a>
+                </div>
+                <div class="footer-section">
+                    <h3>关于</h3>
+                    <a href="team.html">团队</a>
+                    <a href="contact.html">联系我们</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2025 BBYC. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
 
     <script>
         // 移动端菜单切换

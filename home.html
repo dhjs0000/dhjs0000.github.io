@@ -15,26 +15,20 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <!-- 页面加载动画 -->
-    <div class="page-loader">
-        <div class="loader"></div>
-    </div>
-    
     <!-- 导航栏 -->
     <nav class="navbar">
         <div class="nav-container">
-            <a href="/" class="logo">BBYC</a>
+            <a href="home.html" class="logo">BBYC</a>
             <button class="menu-toggle" aria-label="菜单">
                 <i class="fas fa-bars"></i>
             </button>
             <div class="nav-links">
-                <a href="#hero">首页</a>
-                <a href="#features">特性</a>
-                <a href="#core-features">核心功能</a>
-                <a href="#stats">统计</a>
-                <a href="#news">动态</a>
+                <a href="home.html" class="active">首页</a>
                 <a href="docs.html">文档</a>
-                <a href="#" class="login-btn" title="用户系统正在开发中，敬请期待">敬请期待</a>
+                <a href="downloads.html">下载</a>
+                <a href="tools.html">工具</a>
+                <a href="blog.html">博客</a>
+                <a href="questions.html">问答</a>
                 <button id="theme-toggle" class="theme-toggle" aria-label="切换主题">
                     <i class="fas fa-sun"></i>
                     <i class="fas fa-moon"></i>
@@ -49,7 +43,7 @@
         <div id="hero" class="hero">
             <h1>简单，优雅，现代的开源技术社区</h1>
             <div class="button-group">
-                <a href="#features" class="button" title="查看我们的主要项目">开始探索</a>
+                <a href="downloads.html" class="button" title="查看我们的主要项目">开始探索</a>
                 <a href="#core-features" class="button outline" title="了解更多核心功能">了解更多</a>
             </div>
         </div>
@@ -62,13 +56,14 @@
                 <a href="https://dhjs0000.github.io/bccWeb/" class="button" target="_blank">访问项目</a>
             </div>
             <div class="feature-card fade-in lazy-load">
-                <h2>Blender-VMT</h2>
+                <h2>Blender-VMT-Remastered</h2>
                 <p>专业的Blender版本管理工具(Version Management Tools)，让项目版本控制更轻松。</p>
                 <a href="https://dhjs0000.github.io/Blender-VMT/" class="button" target="_blank">访问项目</a>
             </div>
             <div class="feature-card fade-in lazy-load">
-                <h2>资源中心</h2>
-                <p>丰富的开发资源，助力您的项目开发。</p>
+                <h2>网站大全</h2>
+                <p>网站大全，包含各种网站，欢迎访问</p>
+                <a href="https://dhjs0000.github.io/24/index.html" class="button" target="_blank">访问项目</a>
             </div>
         </div>
 
@@ -145,19 +140,14 @@
             </div>
             <div class="news-list">
                 <article class="news-item fade-in lazy-load">
-                    <h3>BBYC社区正式上线</h3>
-                    <div class="date">2023年12月15日</div>
-                    <p>欢迎来到BBYC开源技术社区！我们致力于为开发者提供优质的技术交流平台。</p>
+                    <h3><a href="blog/1.html" style="color: #fff; text-decoration: none; background-color: #7881ff; border-radius: 5px; padding: 2px 5px; margin-right: 5px; display: inline-block;">(blog #1)</a>招人，将pyBCC移植到C++</h3>
+                    <div class="date">2025年1月17日</div>
+                    <p>为了提高运行效率，将pyBCC移植到C++，以此获得更高的运行效率和更好的开发体验。我并不擅长C++，所以需要一个擅长C++的人来帮助我。</p>
                 </article>
                 <article class="news-item fade-in lazy-load">
-                    <h3>BCC编程语言发布新版本</h3>
-                    <div class="date">2023年12月14日</div>
-                    <p>BCC编程语言发布最新版本，带来更多强特性和性能优化。</p>
-                </article>
-                <article class="news-item fade-in lazy-load">
-                    <h3>社区项目招募贡献者</h3>
-                    <div class="date">2023年12月13日</div>
-                    <p>我们正在寻找对开源项目感兴趣的开发者，一起参与社区建设。</p>
+                    <h3><a href="blog/2.html" style="color: #fff; text-decoration: none; background-color: #7881ff; border-radius: 5px; padding: 2px 5px; margin-right: 5px; display: inline-block;">(blog #2)</a>Blender-VMT-Remastered打包问题如何解决</h3>
+                    <div class="date">2025年1月17日</div>
+                    <p>最近在开发Blender-VMT-Remastered时遇到了一个严重问题：打开打包后的exe文件会导致进程无限复制，造成系统卡死。</p>
                 </article>
             </div>
         </section>
@@ -179,26 +169,26 @@
                 <div class="footer-section">
                     <h3>项目</h3>
                     <a href="https://dhjs0000.github.io/bccWeb/">BCC语言</a>
-                    <a href="https://dhjs0000.github.io/Blender-VMT/">Blender-VMT</a>
+                    <a href="https://dhjs0000.github.io/Blender-VMT">Blender-VMT-Remastered</a>
                 </div>
                 <div class="footer-section">
                     <h3>资源</h3>
-                    <a href="/downloads">软件下载</a>
-                    <a href="/tools">开发工具</a>
+                    <a href="downloads.html">软件下载</a>
+                    <a href="tools.html">开发工具</a>
                 </div>
                 <div class="footer-section">
                     <h3>社区</h3>
-                    <a href="/blog">技术博客</a>
-                    <a href="/questions">问答</a>
+                    <a href="blog.html">技术博客</a>
+                    <a href="questions.html">问答</a>
                 </div>
                 <div class="footer-section">
                     <h3>关于</h3>
-                    <a href="/team">团队</a>
-                    <a href="/contact">联系我们</a>
+                    <a href="team.html">团队</a>
+                    <a href="contact.html">联系我们</a>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>© 2024 BBYC. All rights reserved.</p>
+                <p>© 2025 BBYC. All rights reserved.</p>
             </div>
         </div>
     </footer>

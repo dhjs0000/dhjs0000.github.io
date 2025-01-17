@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>技术博客 - BBYC</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="blog/blog-style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .blog-list {
+            display: grid;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .blog-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .blog-card h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .blog-card .meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: var(--text-color);
+            opacity: 0.8;
+        }
+
+        .blog-card .excerpt {
+            margin: 1rem 0;
+            line-height: 1.6;
+        }
+
+        .blog-card .read-more {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: gap 0.3s ease;
+        }
+
+        .blog-card .read-more:hover {
+            gap: 0.75rem;
+        }
+
+        .categories {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .category {
+            background: rgba(var(--primary-color-rgb), 0.1);
+            color: var(--primary-color);
+            padding: 0.25rem 0.75rem;
+            border-radius: 100px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="home.html" class="logo">BBYC</a>
+            <button class="menu-toggle" aria-label="菜单">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="nav-links">
+                <a href="home.html">首页</a>
+                <a href="docs.html">文档</a>
+                <a href="downloads.html">下载</a>
+                <a href="tools.html">工具</a>
+                <a href="blog.html" class="active">博客</a>
+                <a href="questions.html">问答</a>
+                <button id="theme-toggle" class="theme-toggle" aria-label="切换主题">
+                    <i class="fas fa-sun"></i>
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要内容区 -->
+    <main class="content">
+        <h1 class="page-title">技术博客</h1>
+        <div class="blog-list">
+            <!-- 博客文章2 -->
+            <article class="blog-card">
+                <h2>
+                    <span class="post-badge" style="background-color: #7881ff; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.9rem; margin-right: 0.5rem;">blog #2</span>
+                    Blender-VMT-Remastered打包问题解决方案
+                </h2>
+                <div class="meta">
+                    <span><i class="far fa-calendar-alt"></i> 2025-01-17</span>
+                    <span><i class="fas fa-tag"></i> Blender-VMT-Remastered</span>
+                    <span><i class="fas fa-user"></i> dhjs0000</span>
+                </div>
+                <p class="excerpt">最近在使用Blender-VMT-Remastered时遇到了一个严重问题：打开打包后的exe文件会导致进程无限复制，造成系统卡死。本文将分析这个问题的原因并提供解决方案。</p>
+                <div class="categories">
+                    <span class="category">问题解决</span>
+                    <span class="category">PyInstaller</span>
+                </div>
+                <a href="blog/2.html" class="read-more">
+                    阅读全文 <i class="fas fa-arrow-right"></i>
+                </a>
+            </article>
+
+            <!-- 博客文章1 -->
+            <article class="blog-card">
+                <h2>
+                    <span class="post-badge" style="background-color: #7881ff; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.9rem; margin-right: 0.5rem;">blog #1</span>
+                    招人，将pyBCC移植到C++
+                </h2>
+                <div class="meta">
+                    <span><i class="far fa-calendar-alt"></i> 2025-01-17</span>
+                    <span><i class="fas fa-tag"></i> BCC</span>
+                    <span><i class="fas fa-user"></i> dhjs0000</span>
+                </div>
+                <p class="excerpt">为了提高运行效率，将pyBCC移植到C++，以此获得更高的运行效率和更好的开发体验。我并不擅长C++，所以需要一个擅长C++的人来帮助我。</p>
+                <div class="categories">
+                    <span class="category">招聘</span>
+                    <span class="category">C++</span>
+                </div>
+                <a href="blog/1.html" class="read-more">
+                    阅读全文 <i class="fas fa-arrow-right"></i>
+                </a>
+            </article>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-links">
+                <div class="footer-section">
+                    <h3>项目</h3>
+                    <a href="https://dhjs0000.github.io/bccWeb/">BCC语言</a>
+                    <a href="https://dhjs0000.github.io/Blender-VMT-Remastered/">Blender-VMT-Remastered</a>
+                </div>
+                <div class="footer-section">
+                    <h3>资源</h3>
+                    <a href="downloads.html">软件下载</a>
+                    <a href="tools.html">开发工具</a>
+                </div>
+                <div class="footer-section">
+                    <h3>社区</h3>
+                    <a href="blog.html">技术博客</a>
+                    <a href="questions.html">问答</a>
+                </div>
+                <div class="footer-section">
+                    <h3>关于</h3>
+                    <a href="team.html">团队</a>
+                    <a href="contact.html">联系我们</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2025 BBYC. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html> 

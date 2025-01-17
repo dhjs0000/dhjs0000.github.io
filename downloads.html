@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>软件下载 - BBYC</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.2.0/github-markdown.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="home.html" class="logo">BBYC</a>
+            <button class="menu-toggle" aria-label="菜单">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="nav-links">
+                <a href="home.html">首页</a>
+                <a href="docs.html">文档</a>
+                <a href="downloads.html" class="active">下载</a>
+                <a href="tools.html">工具</a>
+                <a href="blog.html">博客</a>
+                <a href="questions.html">问答</a>
+                <button id="theme-toggle" class="theme-toggle" aria-label="切换主题">
+                    <i class="fas fa-sun"></i>
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要内容区 -->
+    <main class="content">
+        <h1 class="page-title">软件下载</h1>
+        
+        <div class="features">
+            <!-- BCC 下载部分 -->
+            <div class="feature-card fade-in lazy-load" id="bcc-card">
+                <h2>BCC编程语言</h2>
+                <p>简单，优雅，现代的编程语言，为开发者提供更好的编程体验。</p>
+                <div class="version-info">
+                    <div class="version-tag">
+                        <i class="fas fa-code-branch"></i> 
+                        <span id="bcc-version">加载中...</span>
+                    </div>
+                    <div class="release-date">
+                        <i class="far fa-calendar-alt"></i> 
+                        <span id="bcc-date">加载中...</span>
+                    </div>
+                </div>
+                <ul class="features-list">
+                    <li><i class="fas fa-check"></i> 简单易用的语法</li>
+                    <li><i class="fas fa-check"></i> 强大的编程功能</li>
+                    <li><i class="fas fa-check"></i> 完整的开发工具链</li>
+                </ul>
+                <div class="release-notes" id="bcc-notes">
+                    <h3>更新说明</h3>
+                    <p>加载中...</p>
+                </div>
+                <div class="button-group">
+                    <a href="#" id="bcc-download" class="button" target="_blank">
+                        <i class="fas fa-download"></i> 下载中...
+                    </a>
+                    <a href="docs.html#bcc" class="button outline">
+                        <i class="fas fa-book"></i> 文档
+                    </a>
+                </div>
+            </div>
+
+            <!-- Blender-VMT 下载部分 -->
+            <div class="feature-card fade-in lazy-load" id="vmt-card">
+                <h2>Blender-VMT-Remastered</h2>
+                <p>专业的Blender版本管理工具，让项目版本控制更轻松。</p>
+                <div class="version-info">
+                    <div class="version-tag">
+                        <i class="fas fa-code-branch"></i> 
+                        <span id="vmt-version">加载中...</span>
+                    </div>
+                    <div class="release-date">
+                        <i class="far fa-calendar-alt"></i> 
+                        <span id="vmt-date">加载中...</span>
+                    </div>
+                </div>
+                <ul class="features-list">
+                    <li><i class="fas fa-check"></i> 高效的版本管理</li>
+                    <li><i class="fas fa-check"></i> 直观的用户界面</li>
+                    <li><i class="fas fa-check"></i> 完整的项目追踪</li>
+                </ul>
+                <div class="release-notes" id="vmt-notes">
+                    <h3>更新说明</h3>
+                    <p>加载中...</p>
+                </div>
+                <div class="button-group">
+                    <a href="#" id="vmt-download" class="button" target="_blank">
+                        <i class="fas fa-download"></i> 下载中...
+                    </a>
+                    <a href="docs.html#blender-vmt" class="button outline">
+                        <i class="fas fa-book"></i> 文档
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-links">
+                <div class="footer-section">
+                    <h3>项目</h3>
+                    <a href="https://dhjs0000.github.io/bccWeb/">BCC语言</a>
+                    <a href="https://dhjs0000.github.io/Blender-VMT-Remastered/">Blender-VMT-Remastered</a>
+                </div>
+                <div class="footer-section">
+                    <h3>资源</h3>
+                    <a href="downloads.html">软件下载</a>
+                    <a href="tools.html">开发工具</a>
+                </div>
+                <div class="footer-section">
+                    <h3>社区</h3>
+                    <a href="blog.html">技术博客</a>
+                    <a href="questions.html">问答</a>
+                </div>
+                <div class="footer-section">
+                    <h3>关于</h3>
+                    <a href="team.html">团队</a>
+                    <a href="contact.html">联系我们</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2025 BBYC. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="config.js"></script>
+    <script>
+        // GitHub API 配置
+        const repos = {
+            bcc: {
+                owner: 'dhjs0000',
+                repo: 'bccWeb',
+                fallback: {
+                    version: '获取失败，请前往Github查看',
+                    date: '获取失败，请前往Github查看',
+                    notes: '获取失败，请前往Github查看'
+                }
+            },
+            vmt: {
+                owner: 'dhjs0000',
+                repo: 'Blender-VMT-Remastered',
+                fallback: {
+                    version: '获取失败，请前往Github查看',
+                    date: '获取失败，请前往Github查看',
+                    notes: '获取失败，请前往Github查看'
+                }
+            }
+        };
+
+        // 格式化日期
+        function formatDate(dateString) {
+            try {
+                const date = new Date(dateString);
+                return date.toLocaleDateString('zh-CN', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+            } catch (error) {
+                return dateString;
+            }
+        }
+
+        // 使用备用数据
+        function useFallbackData(cardId, fallbackData) {
+            document.getElementById(`${cardId}-version`).textContent = fallbackData.version;
+            document.getElementById(`${cardId}-date`).textContent = fallbackData.date;
+            document.getElementById(`${cardId}-notes`).innerHTML = `
+                <h3>更新说明</h3>
+                <p>${fallbackData.notes}</p>
+            `;
+            const downloadBtn = document.getElementById(`${cardId}-download`);
+            downloadBtn.href = `https://github.com/${repos[cardId].owner}/${repos[cardId].repo}/releases`;
+            downloadBtn.innerHTML = `<i class="fas fa-download"></i> 在 GitHub 下载`;
+        }
+
+        // 获取最新版本信息
+        async function getLatestRelease(owner, repo, cardId) {
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 5000); // 5秒超时
+
+                const headers = {
+                    'Accept': 'application/vnd.github.v3+json'
+                };
+
+                // 如果配置了 GitHub Token，则添加到请求头中
+                if (typeof config !== 'undefined' && config.githubToken) {
+                    headers.Authorization = `token ${config.githubToken}`;
+                }
+
+                const response = await fetch(
+                    `https://api.github.com/repos/${owner}/${repo}/releases/latest`,
+                    {
+                        headers,
+                        signal: controller.signal
+                    }
+                );
+
+                clearTimeout(timeoutId);
+
+                if (!response.ok) {
+                    // 检查是否是因为 API 限制导致的错误
+                    if (response.status === 403) {
+                        const rateLimitResponse = await fetch('https://api.github.com/rate_limit', { headers });
+                        const rateLimit = await rateLimitResponse.json();
+                        console.error('API Rate Limit:', rateLimit);
+                    }
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                // 更新版本信息
+                document.getElementById(`${cardId}-version`).textContent = data.tag_name || '暂无版本信息';
+                document.getElementById(`${cardId}-date`).textContent = formatDate(data.published_at) || '暂无发布日期';
+                
+                // 格式化更新说明
+                const notes = data.body ? marked.parse(data.body) : '暂无更新说明';
+                document.getElementById(`${cardId}-notes`).innerHTML = `
+                    <h3>更新说明</h3>
+                    <div class="markdown-body">${notes}</div>
+                `;
+                
+                // 更新下载按钮
+                const downloadBtn = document.getElementById(`${cardId}-download`);
+                if (data.assets && data.assets.length > 0) {
+                    downloadBtn.href = data.assets[0].browser_download_url;
+                    downloadBtn.innerHTML = `<i class="fas fa-download"></i> 下载 ${data.tag_name}`;
+                } else {
+                    downloadBtn.href = data.html_url;
+                    downloadBtn.innerHTML = `<i class="fas fa-download"></i> 在 GitHub 下载`;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                // 使用备用数据
+                useFallbackData(cardId, repos[cardId].fallback);
+            }
+        }
+
+        // 页面加载时获取版本信息
+        window.addEventListener('DOMContentLoaded', () => {
+            ['bcc', 'vmt'].forEach(cardId => {
+                const repo = repos[cardId];
+                getLatestRelease(repo.owner, repo.repo, cardId);
+            });
+        });
+    </script>
+</body>
+</html> 

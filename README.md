@@ -40,7 +40,7 @@ newBBYCweb/
 └── README.md             # 项目文档
 ```
 
-## ���发规范
+## 开发规范
 
 ### HTML规范
 
@@ -203,7 +203,7 @@ npm run build
 
 ## 贡献指南
 
-欢迎贡献代码，��：
+欢迎贡献代码，请：
 
 1. Fork 项目
 2. 创建特性分支
@@ -212,7 +212,7 @@ npm run build
 
 ## 版权信息
 
-Copyright © 2024 BBYC. All rights reserved.
+Copyright © 2025 BBYC. All rights reserved.
 
 ## 更新日志
 
