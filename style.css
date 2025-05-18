@@ -786,3 +786,379 @@ body.loaded .content {
 .fade-in.lazy-load.visible {
     animation: fadeIn 0.6s ease-out forwards;
 }
+
+/* 新增服务器页面样式 */
+.server-page {
+    padding: 2rem 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.version-badges {
+    margin: 1rem 0;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.version-java, .version-bedrock {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: bold;
+}
+
+.version-java {
+    background: #5382a1;
+    color: white;
+}
+
+.version-bedrock {
+    background: #20c997;
+    color: white;
+}
+
+.server-header {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 1rem;
+}
+
+.status-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+}
+
+.status-indicator.online { background: #28a745; }
+.status-indicator.preparing { background: #ffc107; }
+
+.railway-map .route {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.8rem;
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    margin: 0.5rem 0;
+}
+
+.progress-bar {
+    flex-grow: 1;
+    height: 8px;
+    background: #e9ecef;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-bar .progress {
+    height: 100%;
+    background: var(--primary-color);
+    transition: width 0.3s ease;
+}
+
+.rule-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.step {
+    text-align: center;
+    padding: 1rem;
+    background: var(--bg-secondary);
+    border-radius: 8px;
+}
+
+.step-icon {
+    width: 40px;
+    height: 40px;
+    background: var(--primary-color);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 0.5rem;
+}
+
+/* 铁路路线状态 */
+.route.planned {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px dashed var(--border-color);
+}
+
+.route.planned i {
+    color: #6c757d;
+}
+
+.route-info {
+    flex-grow: 1;
+    display: flex;
+    /* 在原有铁路样式基础上修改 */
+    .route-header {
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+    }
+    
+    .route-name {
+        font-weight: 600;
+        font-size: 1.1em;
+        color: var(--primary-color);
+    }
+    
+    .route-meta {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.9em;
+        color: var(--text-color-secondary);
+    }
+    
+    .sep {
+        opacity: 0.6;
+    }
+    
+    .blocks {
+        font-family: monospace;
+        background: rgba(255,255,255,0.1);
+        padding: 0.2rem 0.5rem;
+        border-radius: 4px;
+    }
+    
+    .route-status {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-top: 0.5rem;
+    }
+    
+    .planned-badge {
+        background: #6c757d;
+        color: white;
+        padding: 0.3rem 0.8rem;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.85em;
+    }
+    
+    .eta {
+        color: var(--text-color-secondary);
+        font-size: 0.85em;
+        font-style: italic;
+    }
+    
+    /* 移动端优化 */
+    @media (max-width: 768px) {
+        .route-meta {
+            flex-wrap: wrap;
+            gap: 0.3rem;
+        }
+        
+        .route-status {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+        
+        .blocks {
+            font-size: 0.8em;
+        }
+    }
+}
+/* 路线气泡样式 */
+.route-bubble {
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    border: 2px solid var(--border-color);
+    width: 100%;
+}
+
+.route-marker {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 1rem;
+}
+
+.route-phase {
+    background: #6c757d;
+    color: white;
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.85em;
+}
+
+.route-title {
+    color: var(--primary-color);
+    margin: 0 0 1rem;
+    font-size: 1.3em;
+}
+
+.route-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 1rem;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.05);
+}
+
+.stat-item.highlight {
+    background: var(--primary-color);
+    color: white;
+}
+
+.stat-value {
+    display: block;
+    font-size: 1.4em;
+    font-weight: bold;
+    margin: 0.5rem 0;
+}
+
+.stat-label {
+    font-size: 0.9em;
+    opacity: 0.9;
+}
+
+.route-timeline {
+    border-left: 2px solid var(--border-color);
+    padding-left: 1.5rem;
+    margin-left: 0.8rem;
+}
+
+.timeline-item {
+    position: relative;
+    padding: 0.5rem 0;
+}
+
+.timeline-marker {
+    position: absolute;
+    left: -1.05rem;
+    top: 1rem;
+    width: 12px;
+    height: 12px;
+    background: var(--primary-color);
+    border-radius: 50%;
+    border: 2px solid var(--bg-color);
+}
+
+.timeline-data {
+    display: block;
+    color: var(--primary-color);
+    font-weight: 500;
+    margin-top: 0.3rem;
+}
+
+/* 移动端优化 */
+@media (max-width: 768px) {
+    .route-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .stat-value {
+        font-size: 1.2em;
+    }
+    
+    .route-title {
+        font-size: 1.1em;
+    }
+}
+
+/* 状态颜色系统 */
+.route.completed .route-phase { background: #28a745; }
+.route.in-progress .route-phase { background: #ffc107; color: #333; }
+.route.planned .route-phase { background: #6c757d; }
+
+/* 进度条优化 */
+.progress-bar {
+    height: 10px;
+    border-radius: 5px;
+    background: rgba(255,255,255,0.1);
+}
+
+.progress-bar .progress {
+    background: linear-gradient(90deg, var(--primary-color), #20c997);
+    border-radius: 5px;
+    transition: all 0.5s ease;
+}
+
+/* 统计项动态效果 */
+.stat-item {
+    transition: transform 0.3s ease;
+}
+
+.stat-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* 全局气泡样式 */
+.server-bubble, .rule-bubble {
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    border: 2px solid var(--border-color);
+}
+
+/* 服务器状态标识 */
+.status-badge {
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.85em;
+    margin-left: auto;
+}
+.status-badge.online { background: #28a745; }
+.status-badge.preparing { background: #ffc107; }
+
+/* 详情网格布局 */
+.server-detail-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.detail-item {
+    padding: 1rem;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.05);
+}
+
+/* 规则步骤优化 */
+.rule-steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+}
+
+.step-card {
+    padding: 1.2rem;
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    transition: transform 0.3s ease;
+}
+
+.step-card:hover {
+    transform: translateY(-5px);
+}
+
+.step-phase {
+    display: block;
+    color: var(--primary-color);
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}

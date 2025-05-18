@@ -75,3 +75,29 @@ document.addEventListener('DOMContentLoaded', function() {
         observer.observe(element);
     });
 });
+
+// 新增倒计时功能
+window.onload = function() {
+    const countDownDate = new Date("2026-05-01").getTime();
+    
+    const updateCountdown = function() {
+        const now = new Date().getTime();
+        const timeLeft = countDownDate - now;
+        
+        const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+        
+        document.getElementById("countdown").innerHTML = 
+            `${days}天 ${hours}小时 ${minutes}分钟 ${seconds}秒`;
+        
+        if(timeLeft < 0) {
+            clearInterval(countdownInterval);
+            document.getElementById("countdown").innerHTML = "已开服！";
+        }
+    };
+    
+    updateCountdown();
+    const countdownInterval = setInterval(updateCountdown, 1000);
+};
