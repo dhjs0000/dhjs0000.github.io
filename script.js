@@ -10,6 +10,18 @@ document.addEventListener('DOMContentLoaded', function() {
             menuToggle.classList.toggle('active');
         });
     }
+    
+    // 移动端项目下拉菜单切换
+    const projectDropdown = document.querySelector('.project-dropdown');
+    if (projectDropdown) {
+        const projectLink = projectDropdown.querySelector('a');
+        projectLink.addEventListener('click', function(e) {
+            if (window.innerWidth <= 768) {
+                e.preventDefault();
+                projectDropdown.classList.toggle('active');
+            }
+        });
+    }
 
     // 主题切换
     const themeToggle = document.getElementById('theme-toggle');
@@ -19,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme) {
         body.classList.add(savedTheme);
-        if (savedTheme === 'dark-theme') {
+        if (themeToggle && savedTheme === 'dark-theme') {
             themeToggle.classList.add('dark');
         }
     }
@@ -79,25 +91,29 @@ document.addEventListener('DOMContentLoaded', function() {
 // 新增倒计时功能
 window.onload = function() {
     const countDownDate = new Date("2026-05-01").getTime();
+    const countdownElement = document.getElementById("countdown");
     
-    const updateCountdown = function() {
-        const now = new Date().getTime();
-        const timeLeft = countDownDate - now;
+    // 只有当countdown元素存在时，才执行倒计时功能
+    if (countdownElement) {
+        const updateCountdown = function() {
+            const now = new Date().getTime();
+            const timeLeft = countDownDate - now;
+            
+            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+            
+            countdownElement.innerHTML = 
+                `${days}天 ${hours}小时 ${minutes}分钟 ${seconds}秒`;
+            
+            if(timeLeft < 0) {
+                clearInterval(countdownInterval);
+                countdownElement.innerHTML = "已开服！";
+            }
+        };
         
-        const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-        
-        document.getElementById("countdown").innerHTML = 
-            `${days}天 ${hours}小时 ${minutes}分钟 ${seconds}秒`;
-        
-        if(timeLeft < 0) {
-            clearInterval(countdownInterval);
-            document.getElementById("countdown").innerHTML = "已开服！";
-        }
-    };
-    
-    updateCountdown();
-    const countdownInterval = setInterval(updateCountdown, 1000);
+        updateCountdown();
+        const countdownInterval = setInterval(updateCountdown, 1000);
+    }
 };

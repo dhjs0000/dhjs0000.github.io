@@ -1,110 +1,320 @@
 <!doctype html>
-<html><head>
-<meta charset="utf-8">
-<title>AMA军事</title>
-<link href="1.css" rel="stylesheet" type="text/css">
-<link rel="shortcut icon" href="AMA.ico">
-<meta name=“Description” content="AMA军事官方网站（虚构）" />
-<meta name=“Keywords” content=“dhjs0000,AMA官方,AMA,” />
-<style type="text/css">
-body {
-	margin-left: 25%;
-	margin-top: 50px;
-	margin-right: 25%;
-	margin-bottom: 50px;
-}
-#send-btn{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-}
-
-button {
-  background: #5f55af;
-  border: 0;
-  border-radius: 5px;
-  padding: 10px 30px 10px 20px;
-  color: white;
-  text-transform: uppercase;
-  font-weight: bold;
-}
-	#oser{
-		font-size:24px;
-	}
-button svg {
-  display: inline-block;
-  vertical-align: middle;
-  padding-right: 5px;
-}
-
-button:hover svg {
-  animation: fly 2s ease 1;
-}
-
-@keyframes fly {
-  0% {
-    transform: translateX(0%);
-  }
-
-  50% {
-    transform: translateX(300%);
-  }
-
-  100% {
-    transform: translateX(0);
-  }
-}
-
-#send-btn{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-}
-body{font-weight:bold;}
-body{font-weight:400;}
-NES {
-  background: #5f55af;
-  border: 0;
-  border-radius: 5px;
-  padding: 10px 30px 10px 20px;
-  color: white;
-  text-transform: uppercase;
-  font-weight: bold;
-}
-
-NES {
-  display: inline-block;
-  vertical-align: middle;
-  padding-right: 5px;
-}
-
-div:hover svg {
-  animation: fly 2s ease 1;
-}
-
-@keyframes fly {
-  0% {
-    transform: translateX(0%);
-  }
-
-  50% {
-    transform: translateX(300%);
-  }
-
-  100% {
-    transform: translateX(0);
-  }
-}
-
-
-</style>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <title>AMA军事</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="AMA.ico">
+    <meta name="Description" content="AMA军事官方网站（虚构）" />
+    <meta name="Keywords" content="dhjs0000,AMA官方,AMA,军事装备" />
+    <style type="text/css">
+        :root {
+            --primary-color: #5f55af;
+            --secondary-color: #4a4482;
+            --bg-color: #f0f2f5;
+            --text-color: #333;
+            --header-bg: #2F4F4F;
+            --card-bg: #ffffff;
+            --accent-color: #6CA6CD;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background-color: var(--header-bg);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo h1 {
+            font-size: 28px;
+            font-weight: bold;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 20px;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        nav ul li a:hover {
+            color: var(--accent-color);
+        }
+        
+        .hero {
+            background: linear-gradient(rgba(47, 79, 79, 0.8), rgba(47, 79, 79, 0.9)), url('background.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            padding: 80px 20px;
+        }
+        
+        .hero h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+        
+        .hero p {
+            font-size: 18px;
+            max-width: 800px;
+            margin: 0 auto 30px;
+        }
+        
+        .products {
+            padding: 60px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .section-title h2 {
+            font-size: 32px;
+            color: var(--header-bg);
+        }
+        
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-content {
+            padding: 20px;
+        }
+        
+        .card h3 {
+            color: var(--header-bg);
+            margin-bottom: 15px;
+        }
+        
+        .card p {
+            margin-bottom: 20px;
+            color: #666;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        
+        .btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+        
+        .btn svg {
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 5px;
+            width: 16px;
+            height: 16px;
+        }
+        
+        .btn:hover svg {
+            animation: fly 1s ease 1;
+        }
+        
+        @keyframes fly {
+            0% { transform: translateX(0); }
+            50% { transform: translateX(5px); }
+            100% { transform: translateX(0); }
+        }
+        
+        footer {
+            background-color: var(--header-bg);
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+        }
+        
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .footer-links {
+            margin: 15px 0;
+        }
+        
+        .footer-links a {
+            color: white;
+            margin: 0 10px;
+            text-decoration: none;
+        }
+        
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+            }
+            
+            nav ul {
+                margin-top: 15px;
+            }
+            
+            nav ul li {
+                margin: 0 10px;
+            }
+            
+            .hero h2 {
+                font-size: 28px;
+            }
+            
+            .hero p {
+                font-size: 16px;
+            }
+            
+            .cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
-	<body style="background-color: #2F4F4F">
-		
-		<p><h1>AMA官方网站</h1></p>
-		<div style="background-color: #6CA6CD"><h4>AMA Ladies MK4 Precision Battery Rail Rifle</h4>
-		<p><a href="AMAK.html"><button>打开</button></a></p></div>
-	</body>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <h1>AMA军事</h1>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#">首页</a></li>
+                        <li><a href="#">产品</a></li>
+                        <li><a href="#">技术</a></li>
+                        <li><a href="#">关于我们</a></li>
+                        <li><a href="#">联系方式</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+    
+    <section class="hero">
+        <div class="container">
+            <h2>先进军事装备解决方案</h2>
+            <p>AMA军事致力于提供高精度、高可靠性的军事装备，为国防安全保驾护航</p>
+        </div>
+    </section>
+    
+    <section class="products">
+        <div class="container">
+            <div class="section-title">
+                <h2>精选产品</h2>
+            </div>
+            <div class="cards">
+                <div class="card">
+                    <div class="card-content">
+                        <h3>AMA Ladies MK4 Precision Battery Rail Rifle</h3>
+                        <p>高精度电池供能轨道步枪，采用最新技术，具有卓越的精准度和可靠性。</p>
+                        <a href="AMAK.html" class="btn">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+                                <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            查看详情
+                        </a>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-content">
+                        <h3>AMA Tactical Defense System</h3>
+                        <p>先进的战术防御系统，集成多种传感器和火力控制系统，为部队提供全方位防护。</p>
+                        <a href="#" class="btn">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+                                <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            查看详情
+                        </a>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-content">
+                        <h3>AMA Scout Drone Series</h3>
+                        <p>轻量化侦察无人机，搭载高清图像系统和先进的AI识别技术，适用于各种战场环境。</p>
+                        <a href="#" class="btn">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+                                <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            查看详情
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p>© 2023 AMA军事 版权所有</p>
+                <div class="footer-links">
+                    <a href="#">隐私政策</a>
+                    <a href="#">使用条款</a>
+                    <a href="#">联系我们</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
 </html>
