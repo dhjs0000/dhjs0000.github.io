@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MSVR MC中央管理组发布处</title>
+    <link rel="stylesheet" href="style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav-container">
+            <div class="logo">MSVR <span style="color: var(--secondary-color);">MC</span></div>
+            <ul class="nav-menu">
+                <li><a href="#home">首页</a></li>
+                <li><a href="#announcements">公告</a></li>
+                <li><a href="#resources">资源</a></li>
+                <li><a href="#contact">联系我们</a></li>
+                <li><a href="../home.html" style="display: flex; align-items: center; gap: 5px; background-color: #e74c3c; color: white; padding: 8px 15px; border-radius: 20px; transition: all 0.3s ease;"><i class="fas fa-home"></i> 返回BBYC主页</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="home" class="hero-section">
+            <div class="hero-content">
+                <h1>欢迎来到MSVR MC中央管理组</h1>
+                <p>为玩家提供优质的游戏体验和管理服务</p>
+                <a href="#resources" class="hero-cta">浏览资源</a>
+            </div>
+        </section>
+
+        <section id="announcements" class="content-section">
+            <div class="section-header">
+                <h2>最新公告</h2>
+                <p>了解服务器的最新动态和重要通知</p>
+            </div>
+            <div class="announcements-grid">
+                <div class="announcement-card">
+                    <h3>服务器停服维护</h3>
+                    <p>我们将进行长期停服维护。感谢您的理解与支持！</p>
+                    <span class="date">2025-07-16</span>
+                </div>
+                <div class="announcement-card">
+                    <h3>新版本上线</h3>
+                    <p>最新的BE游戏版本已经发布，Minecraft 1.21.44.01，找到对应版本下载以体验全新内容！</p>
+                    <span class="date">2024-11-07</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="resources" class="content-section">
+            <div class="section-header">
+                <h2>重要资源</h2>
+                <p>获取服务器相关的重要文件和资源</p>
+            </div>
+            <div class="resources-grid">
+                <div class="resource-card">
+                    <div class="resource-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <h3>MSVR MC法律</h3>
+                    <p>了解服务器的法律</p>
+                    <a href="Viewer.html" class="button">立即查看</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="content-section">
+            <div class="section-header">
+                <h2>联系我们</h2>
+                <p>有任何问题或建议？请随时与我们取得联系</p>
+            </div>
+            <div class="contact-section-bg">
+                <div class="contact-container">
+                    <form class="contact-form">
+                        <input type="text" placeholder="您的名字" required>
+                        <input type="email" placeholder="电子邮箱" required>
+                        <select>
+                            <option value="" disabled selected>请选择问题类型</option>
+                            <option value="support">技术支持</option>
+                            <option value="feedback">意见反馈</option>
+                            <option value="report">举报问题</option>
+                            <option value="other">其他</option>
+                        </select>
+                        <textarea placeholder="请输入您的留言" required></textarea>
+                        <button type="submit" class="button">发送消息</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>关于我们</h4>
+                <p>MSVR MC中央管理组致力于为玩家提供最佳的游戏体验，创建和谐、有序的游戏环境。</p>
+                <div class="social-icons">
+                    <a href="#" class="social-icon"><i class="fab fa-discord"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-weixin"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-qq"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-bilibili"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h4>快速链接</h4>
+                <ul>
+                    <li><a href="#home">首页</a></li>
+                    <li><a href="#announcements">公告</a></li>
+                    <li><a href="#resources">资源</a></li>
+                    <li><a href="#contact">联系我们</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>服务器信息</h4>
+                <p>服务器地址：mc.msvrserver.com</p>
+                <p>游戏版本：1.20.4</p>
+                <p>在线时间：不定</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 MSVR MC中央管理组. 保留所有权利。</p>
+        </div>
+    </footer>
+</body>
+</html>
