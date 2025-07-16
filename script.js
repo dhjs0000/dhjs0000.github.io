@@ -1,5 +1,44 @@
 // 等待 DOM 加载完成
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
+    // 加载导航栏
+    const navPlaceholder = document.getElementById('nav-placeholder');
+    if (navPlaceholder) {
+        try {
+            // 获取当前页面相对于根目录的路径级别
+            const pathDepth = window.location.pathname.split('/').length - 2;
+            const navPath = pathDepth > 0 ? '../'.repeat(pathDepth) + 'nav.html' : 'nav.html';
+            
+            const response = await fetch(navPath);
+            const content = await response.text();
+            
+            // 根据页面深度调整导航链接
+            let modifiedContent = content;
+            if (pathDepth > 0) {
+                const prefix = '../'.repeat(pathDepth);
+                modifiedContent = content.replace(/href="([^"]+\.html)"/g, (match, p1) => {
+                    if (!p1.startsWith('http')) {
+                        return `href="${prefix}${p1}"`;
+                    }
+                    return match;
+                });
+            }
+            
+            navPlaceholder.innerHTML = modifiedContent;
+            
+            // 设置当前页面的导航链接为激活状态
+            const currentPage = window.location.pathname.split('/').pop() || 'home.html';
+            const navLinks = document.querySelectorAll('.nav-links a');
+            navLinks.forEach(link => {
+                const href = link.getAttribute('href');
+                if (href && href.endsWith(currentPage)) {
+                    link.classList.add('active');
+                }
+            });
+        } catch (error) {
+            console.error('加载导航栏失败:', error);
+        }
+    }
+
     // 移动端菜单切换
     const menuToggle = document.querySelector('.menu-toggle');
     const navLinks = document.querySelector('.nav-links');
