@@ -835,6 +835,7 @@ body.loaded .content {
 
 .status-indicator.online { background: #28a745; }
 .status-indicator.preparing { background: #ffc107; }
+.status-indicator.offline { background: rgb(255, 61, 61);}
 
 .railway-map .route {
     display: flex;
