@@ -163,6 +163,35 @@ main {
     resize: vertical;
 }
 
+/* 评论加载动画样式 */
+.comments-loading {
+    text-align: center;
+    padding: 2rem;
+    color: #666;
+}
+
+.loading-spinner {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    border: 3px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top-color: var(--primary-color);
+    animation: spin 1s ease-in-out infinite;
+    margin-bottom: 1rem;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.comments-loading p {
+    font-size: 1rem;
+    color: #666;
+}
+
 /* 页脚样式 */
 .footer {
     background-color: #2c3e50;
