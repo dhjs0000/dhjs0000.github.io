@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MSVR MC服务器经济指南</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2em;
+        }
+        h1, h2, h3 {
+            border-bottom: 1px solid #eee;
+            padding-bottom: 0.3em;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 1em 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f5f5f5;
+        }
+        .note {
+            background-color: #f8f9fa;
+            border-left: 4px solid #007bff;
+            padding: 1em;
+            margin: 1em 0;
+        }
+        .warning {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 1em;
+            margin: 1em 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>MSVR MC服务器经济指南</h1>
+    <p><em>最后更新：2025年8月24日</em></p>
+
+    <h2>目录</h2>
+    <ul>
+        <li><a href="#currency">1. 货币系统</a></li>
+        <li><a href="#economy">2. 经济体系</a></li>
+        <li><a href="#trade">3. 贸易系统</a></li>
+    </ul>
+
+    <h2 id="currency">1. 货币系统</h2>
+    <h3>1.1 货币体系</h3>
+    <p>MSVR MC服务器采用六级货币体系，按价值从低到高排列：</p>
+    
+    <table>
+        <tr>
+            <th>货币等级</th>
+            <th>货币类型</th>
+            <th>兑换比例</th>
+            <th>主要用途</th>
+        </tr>
+        <tr>
+            <td>Level 1</td>
+            <td>煤炭</td>
+            <td>基础单位</td>
+            <td>
+                - 日常小额交易<br>
+                - 基础物资购买<br>
+                - 公共设施使用费
+            </td>
+        </tr>
+        <tr>
+            <td>Level 2</td>
+            <td>铁锭</td>
+            <td>1铁锭 = 8煤炭</td>
+            <td>
+                - 一般商品交易<br>
+                - 工具装备购买<br>
+                - 普通服务费用
+            </td>
+        </tr>
+        <tr>
+            <td>Level 3</td>
+            <td>金锭</td>
+            <td>1金锭 = 64铁锭</td>
+            <td>
+                - 高价值物品交易<br>
+                - 土地购买<br>
+                - 高级服务
+            </td>
+        </tr>
+        <tr>
+            <td>Level 4</td>
+            <td>钻石</td>
+            <td>1钻石 = 16金锭</td>
+            <td>
+                - 奢侈品交易<br>
+                - 特殊权限购买<br>
+                - 大型项目投资
+            </td>
+        </tr>
+        <tr>
+            <td>Level 5</td>
+            <td>下界合金</td>
+            <td>1下界合金 = 16钻石</td>
+            <td>
+                - 限定物品交易<br>
+                - 高端服务支付<br>
+                - 国际贸易结算
+            </td>
+        </tr>
+        <tr>
+            <td>Level 6</td>
+            <td>基岩</td>
+            <td>1基岩 = 64下界合金</td>
+            <td>
+                - 顶级物品交易<br>
+                - 特权功能解锁<br>
+                - 大额资金储备
+            </td>
+        </tr>
+    </table>
+
+    <div class="note">
+        <strong>货币体系特点：</strong>
+        <ul>
+            <li>各级货币可自由兑换，遵循固定比例</li>
+            <li>高级货币在大额交易中更受欢迎</li>
+            <li>基岩作为最高级货币极其稀有，具有收藏价值</li>
+            <li>中央银行定期调节货币供应量，维持币值稳定</li>
+        </ul>
+    </div>
+
+    <div class="note">
+        <strong>提示：</strong> MC币可以通过服务器内的银行系统兑换为点券，但需要支付一定的手续费。
+    </div>
+
+    <h3>1.2 货币获取</h3>
+    <h4>日常获取方式：</h4>
+    <ul>
+        <li>每日签到：8-64 煤炭</li>
+        <li>在线时长奖励：每小时 8 煤炭</li>
+        <li>完成普通任务：1-8 铁锭</li>
+        <li>完成高级任务：1-4 金锭</li>
+        <li>资源销售：根据市场价格浮动</li>
+    </ul>
+
+    <h4>特殊获取方式：</h4>
+    <ul>
+        <li>节日活动：最高可获得1钻石</li>
+        <li>服务器比赛：
+            <ul>
+                <li>普通比赛：1-2 金锭</li>
+                <li>大型赛事：1 钻石</li>
+                <li>全服竞赛：1 下界合金</li>
+            </ul>
+        </li>
+        <li>成就达成：
+            <ul>
+                <li>普通成就：4-32 煤炭</li>
+                <li>稀有成就：1-4 铁锭</li>
+                <li>传说成就：1 金锭</li>
+            </ul>
+        </li>
+        <li>特殊贡献：最高可获得基岩奖励</li>
+    </ul>
+
+    <div class="warning">
+        <strong>注意：</strong> 基岩货币仅可通过特殊贡献或重大活动获得，禁止私下交易。违者将受到严厉处罚。
+    </div>
+
+    <h2 id="economy">2. 经济体系</h2>
+    <h3>2.1 经济规则</h3>
+    <ul>
+        <li>自由市场经济为主，政府调控为辅</li>
+        <li>多级货币并行流通，保持合理比例</li>
+        <li>严格的通货膨胀控制机制</li>
+        <li>经济数据每日更新公示</li>
+    </ul>
+
+    <h3>2.2 价格管理</h3>
+    <table>
+        <tr>
+            <th>物品类别</th>
+            <th>定价机制</th>
+            <th>价格区间</th>
+            <th>管理措施</th>
+        </tr>
+        <tr>
+            <td>基础资源</td>
+            <td>政府指导价</td>
+            <td>1-64煤炭</td>
+            <td>价格上限管控</td>
+        </tr>
+        <tr>
+            <td>生活用品</td>
+            <td>市场调节价</td>
+            <td>1-8铁锭</td>
+            <td>浮动监测</td>
+        </tr>
+        <tr>
+            <td>高级装备</td>
+            <td>自由定价</td>
+            <td>1-4金锭</td>
+            <td>交易记录备案</td>
+        </tr>
+        <tr>
+            <td>稀有物品</td>
+            <td>竞价交易</td>
+            <td>1钻石起</td>
+            <td>拍卖监管</td>
+        </tr>
+        <tr>
+            <td>限定物品</td>
+            <td>固定价格</td>
+            <td>1下界合金起</td>
+            <td>限量发行</td>
+        </tr>
+        <tr>
+            <td>特权物品</td>
+            <td>官方定价</td>
+            <td>1基岩起</td>
+            <td>严格控制</td>
+        </tr>
+    </table>
+
+    <div class="note">
+        <strong>价格管理原则：</strong>
+        <ul>
+            <li>基础生活物资价格保持稳定</li>
+            <li>高级物品允许合理溢价</li>
+            <li>特殊物品实行限价管理</li>
+            <li>通过税收调节市场价格</li>
+        </ul>
+    </div>
+
+    <div class="warning">
+        <strong>警告：</strong> 禁止恶意操纵市场价格，违者将受到处罚。
+    </div>
+
+    <h2 id="trade">3. 贸易系统</h2>
+    <h3>3.1 交易方式</h3>
+    <ul>
+        <li><strong>面对面交易</strong>：直接交易，无手续费</li>
+        <li><strong>寄售系统</strong>：收取2%手续费</li>
+        <li><strong>拍卖系统</strong>：收取5%手续费</li>
+        <li><strong>跨服贸易</strong>：收取3%手续费</li>
+    </ul>
+
+    <h3>3.2 交易规则</h3>
+    <ul>
+        <li>禁止现金交易游戏物品</li>
+        <li>禁止欺诈行为</li>
+        <li>大额交易需要公证</li>
+        <li>有争议交易可申请仲裁</li>
+    </ul>
+
+    <div class="note">
+        <strong>定期更新：</strong> 本指南将根据服务器经济发展情况定期更新，请以最新版本为准。
+    </div>
+
+</body>
+</html>
