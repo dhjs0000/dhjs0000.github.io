@@ -3,10 +3,12 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MSVR MC中央管理组发布处</title>
+    <title>MSVR MC服务器</title>
     <link rel="stylesheet" href="style.css" />
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
     <script type="text/javascript">
     (function(c,l,a,r,i,t,y){
         c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
@@ -31,12 +33,72 @@
 
     <main>
         <section id="home" class="hero-section">
+            <div class="swiper hero-swiper">
+                <div class="swiper-wrapper">
+                    <!-- JS 生成的 .swiper-slide -->
+                </div>
+
+                <!-- 新增：整屏毛玻璃层 -->
+                <div class="glass-wrapper">
+                    <div class="glass-panel">
+                        <h1>欢迎来到 MSVR MC 服务器</h1>
+                        <p>为玩家提供优质的游戏体验和管理服务</p>
+                        <a href="#resources" class="hero-cta">浏览资源</a>
+                    </div>
+                </div>
+
+                <div class="swiper-pagination"></div>
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+            </div>
             <div class="hero-content">
-                <h1>欢迎来到MSVR MC中央管理组</h1>
-                <p>为玩家提供优质的游戏体验和管理服务</p>
-                <a href="#resources" class="hero-cta">浏览资源</a>
+                <div class="glass-panel">
+                    <h1>欢迎来到MSVR MC服务器</h1>
+                    <p>为玩家提供优质的游戏体验和管理服务</p>
+                    <a href="#resources" class="hero-cta">浏览资源</a>
+                </div>
             </div>
         </section>
+
+        <script>
+            // 初始化Swiper
+            document.addEventListener('DOMContentLoaded', function() {
+                // 获取images目录下的所有图片
+                const images = [
+                    'images/slide1.jpg',
+                    'images/slide2.jpg',
+                    'images/slide3.jpg',
+                    // 这里可以添加更多图片
+                ];
+
+                // 动态添加轮播图片
+                const swiperWrapper = document.querySelector('.swiper-wrapper');
+                images.forEach(image => {
+                    const slide = document.createElement('div');
+                    slide.className = 'swiper-slide';
+                    slide.style.backgroundImage = `url('${image}')`;
+                    swiperWrapper.appendChild(slide);
+                });
+
+                // 初始化Swiper
+                const swiper = new Swiper('.hero-swiper', {
+                    loop: true,
+                    effect: 'fade',
+                    autoplay: {
+                        delay: 5000,
+                        disableOnInteraction: false,
+                    },
+                    pagination: {
+                        el: '.swiper-pagination',
+                        clickable: true,
+                    },
+                    navigation: {
+                        nextEl: '.swiper-button-next',
+                        prevEl: '.swiper-button-prev',
+                    },
+                });
+            });
+        </script>
 
         <section id="announcements" class="content-section">
             <div class="section-header">
