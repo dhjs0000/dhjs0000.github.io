@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VSenv 帮助文档</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: #e0e0e0;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #1e1e1e;
+        }
+        h1, h2, h3 {
+            color: #4fc3f7;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        h1 {
+            border-bottom: 2px solid #4fc3f7;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #29b6f6;
+            margin-top: 40px;
+        }
+        h3 {
+            color: #03a9f4;
+        }
+        code {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: "Consolas", "Monaco", "Courier New", monospace;
+            font-size: 0.9em;
+        }
+        pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            border-left: 4px solid #4fc3f7;
+        }
+        pre code {
+            background: none;
+            padding: 0;
+        }
+        .command {
+            background-color: #2d2d2d;
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+            font-family: "Consolas", "Monaco", "Courier New", monospace;
+            border-left: 4px solid #4fc3f7;
+        }
+        .note {
+            background-color: #2d2d2d;
+            border-left: 4px solid #ffb74d;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .warning {
+            background-color: #2d2d2d;
+            border-left: 4px solid #f44336;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: #2d2d2d;
+        }
+        th, td {
+            border: 1px solid #444;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #37474f;
+            color: #4fc3f7;
+        }
+        tr:nth-child(even) {
+            background-color: #2a2a2a;
+        }
+        .toc {
+            background-color: #2d2d2d;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border: 1px solid #444;
+        }
+        .toc h2 {
+            margin-top: 0;
+            color: #4fc3f7;
+        }
+        .toc ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .toc li {
+            margin: 8px 0;
+        }
+        .toc a {
+            color: #29b6f6;
+            text-decoration: none;
+        }
+        .toc a:hover {
+            color: #4fc3f7;
+            text-decoration: underline;
+        }
+        .section {
+            margin-bottom: 50px;
+        }
+    </style>
+</head>
+<body>
+    <h1>VSenv - VS Code 离线实例管理器</h1>
+    
+    <div class="toc">
+        <h2>目录</h2>
+        <ul>
+            <li><a href="#intro">简介</a></li>
+            <li><a href="#install">安装与配置</a></li>
+            <li><a href="#commands">命令参考</a></li>
+            <li><a href="#examples">使用示例</a></li>
+            <li><a href="#advanced">高级功能</a></li>
+            <li><a href="#troubleshoot">常见问题</a></li>
+            <li><a href="#extension">扩展管理</a></li>
+            <li><a href="#import-export">导入/导出</a></li>
+        </ul>
+    </div>
+
+    <div class="section" id="intro">
+        <h2>简介</h2>
+        <p>VSenv 是一个完全免费开源的 VS Code 离线实例管理器，允许您创建、启动、停止和删除独立的 VS Code 实例。每个实例拥有独立的用户数据和扩展目录，实现完全隔离的开发环境。</p>
+        
+        <div class="note">
+            <strong>注意：</strong>本软件以 AGPLv3.0 协议开源，由 dhjs0000 开发。如果您购买了此软件，那么您被骗了！
+        </div>
+
+        <h3>主要特性</h3>
+        <ul>
+            <li>完全隔离的 VS Code 实例</li>
+            <li>支持多种隔离方案（沙盒、AppContainer、Windows Sandbox）</li>
+            <li>硬件指纹随机化</li>
+            <li>网络隔离和代理支持</li>
+            <li>vscode:// 协议劫持与守护</li>
+            <li>扩展管理</li>
+            <li>实例导入/导出</li>
+            <li>多语言支持（英文/中文）</li>
+        </ul>
+    </div>
+
+    <div class="section" id="install">
+        <h2>安装与配置</h2>
+        
+        <h3>系统要求</h3>
+        <ul>
+            <li>Windows 10 或更高版本</li>
+            <li>PowerShell 5.0 或更高版本</li>
+            <li>管理员权限（部分功能需要）</li>
+        </ul>
+
+        <h3>快速开始</h3>
+        <ol>
+            <li>下载 VSenv 可执行文件</li>
+            <li>创建第一个实例：
+                <div class="command">vsenv create myenv</div>
+            </li>
+            <li>将 VS Code 离线包解压到提示的目录</li>
+            <li>启动实例：
+                <div class="command">vsenv start myenv</div>
+            </li>
+        </ol>
+    </div>
+
+    <div class="section" id="commands">
+        <h2>命令参考</h2>
+
+        <h3>基本命令</h3>
+        <table>
+            <tr>
+                <th>命令</th>
+                <th>描述</th>
+                <th>示例</th>
+            </tr>
+            <tr>
+                <td><code>create &lt;实例名&gt; [路径]</code></td>
+                <td>创建新的 VS Code 实例</td>
+                <td><code>vsenv create work</code></td>
+            </tr>
+            <tr>
+                <td><code>start &lt;实例名&gt; [选项]</code></td>
+                <td>启动指定的实例</td>
+                <td><code>vsenv start work</code></td>
+            </tr>
+            <tr>
+                <td><code>stop &lt;实例名&gt;</code></td>
+                <td>停止指定的实例</td>
+                <td><code>vsenv stop work</code></td>
+            </tr>
+            <tr>
+                <td><code>remove &lt;实例名&gt;</code></td>
+                <td>删除指定的实例</td>
+                <td><code>vsenv remove work</code></td>
+            </tr>
+            <tr>
+                <td><code>list</code></td>
+                <td>列出所有实例</td>
+                <td><code>vsenv list</code></td>
+            </tr>
+        </table>
+
+        <h3>协议管理</h3>
+        <table>
+            <tr>
+                <th>命令</th>
+                <th>描述</th>
+                <th>示例</th>
+            </tr>
+            <tr>
+                <td><code>regist &lt;实例名&gt;</code></td>
+                <td>将 vscode:// 协议重定向到此实例</td>
+                <td><code>vsenv regist work</code></td>
+            </tr>
+            <tr>
+                <td><code>regist-guard &lt;实例名&gt;</code></td>
+                <td>守护 vscode:// 协议不被篡改</td>
+                <td><code>vsenv regist-guard work</code></td>
+            </tr>
+            <tr>
+                <td><code>logoff</code></td>
+                <td>恢复默认的 vscode:// 协议处理程序</td>
+                <td><code>vsenv logoff</code></td>
+            </tr>
+            <tr>
+                <td><code>rest &lt;路径&gt;</code></td>
+                <td>手动重建 vscode:// 协议</td>
+                <td><code>vsenv rest "C:\Program Files\VS Code\Code.exe"</code></td>
+            </tr>
+        </table>
+
+        <h3>扩展管理</h3>
+        <table>
+            <tr>
+                <th>命令</th>
+                <th>描述</th>
+                <th>示例</th>
+            </tr>
+            <tr>
+                <td><code>extension &lt;实例名&gt; &lt;扩展ID&gt;</code></td>
+                <td>安装单个扩展</td>
+                <td><code>vsenv extension work ms-python.python</code></td>
+            </tr>
+            <tr>
+                <td><code>extension import &lt;实例名&gt; &lt;列表文件&gt;</code></td>
+                <td>批量安装扩展</td>
+                <td><code>vsenv extension import work extensions.txt</code></td>
+            </tr>
+            <tr>
+                <td><code>extension list &lt;实例名&gt;</code></td>
+                <td>列出已安装的扩展</td>
+                <td><code>vsenv extension list work</code></td>
+            </tr>
+        </table>
+
+        <h3>导入/导出</h3>
+        <table>
+            <tr>
+                <th>命令</th>
+                <th>描述</th>
+                <th>示例</th>
+            </tr>
+            <tr>
+                <td><code>export &lt;实例名&gt; &lt;导出路径&gt;</code></td>
+                <td>导出实例为 .vsenv 文件</td>
+                <td><code>vsenv export work backup.vsenv</code></td>
+            </tr>
+            <tr>
+                <td><code>import &lt;配置文件&gt; [新实例名]</code></td>
+                <td>导入实例</td>
+                <td><code>vsenv import backup.vsenv restored</code></td>
+            </tr>
+        </table>
+
+        <h3>全局选项</h3>
+        <ul>
+            <li><code>--lang &lt;en|cn&gt;</code> - 设置界面语言（默认为英文）</li>
+        </ul>
+
+        <h3>启动选项</h3>
+        <ul>
+            <li><code>--host</code> - 随机化主机名（需要管理员权限）</li>
+            <li><code>--mac</code> - 生成随机 MAC 地址（需要管理员权限）</li>
+            <li><code>--proxy &lt;url&gt;</code> - 设置 HTTP(S) 代理</li>
+            <li><code>--sandbox</code> - 在受限的 Logon-Session 沙箱内启动</li>
+            <li><code>--appcontainer</code> - 在 AppContainer 内启动（实验功能）</li>
+            <li><code>--wsb</code> - 在 Windows Sandbox 内启动（实验功能）</li>
+            <li><code>--fake-hw</code> - 随机化硬件指纹</li>
+        </ul>
+    </div>
+
+    <div class="section" id="examples">
+        <h2>使用示例</h2>
+
+        <h3>创建和启动实例</h3>
+        <pre><code># 创建名为 "work" 的实例
+vsenv create work --lang cn
+
+# 启动实例（基本）
+vsenv start work
+
+# 启动实例（带网络隔离）
+vsenv start work --host --mac --proxy http://proxy.internal:3128
+
+# 启动实例（带硬件指纹随机化）
+vsenv start work --fake-hw
+
+# 启动实例（在 Windows Sandbox 中）
+vsenv start work --wsb</code></pre>
+
+        <h3>扩展管理</h3>
+        <pre><code># 安装中文语言包
+vsenv extension work
+
+# 安装 Python 扩展
+vsenv extension work ms-python.python
+
+# 批量安装扩展
+vsenv extension import work extensions.txt
+
+# 列出已安装的扩展
+vsenv extension list work</code></pre>
+
+        <h3>协议管理</h3>
+        <pre><code># 将 vscode:// 协议重定向到 work 实例
+vsenv regist work
+
+# 守护协议不被篡改
+vsenv regist-guard work
+
+# 恢复默认协议处理程序
+vsenv logoff
+
+# 手动重建协议
+vsenv rest "C:\Program Files\VS Code\Code.exe"</code></pre>
+    </div>
+
+    <div class="section" id="advanced">
+        <h2>高级功能</h2>
+
+        <h3>隔离方案</h3>
+        <p>VSenv 提供多种隔离方案，按隔离程度从低到高：</p>
+        <ol>
+            <li><strong>基本隔离</strong> - 仅分离用户数据和扩展目录</li>
+            <li><strong>沙盒隔离</strong> - 在受限的 Logon-Session 中运行</li>
+            <li><strong>AppContainer 隔离</strong> - 使用 Windows AppContainer 技术</li>
+            <li><strong>Windows Sandbox</strong> - 在独立的虚拟机中运行</li>
+        </ol>
+
+        <h3>硬件指纹随机化</h3>
+        <p>启用 <code>--fake-hw</code> 选项后，VSenv 会随机化以下硬件信息：</p>
+        <ul>
+            <li>CPU ID</li>
+            <li>磁盘序列号</li>
+            <li>MAC 地址</li>
+        </ul>
+
+        <div class="warning">
+            <strong>警告：</strong>硬件指纹随机化仅在当前实例中生效，不会影响系统实际硬件信息。
+        </div>
+
+        <h3>网络隔离</h3>
+        <p>VSenv 提供以下网络隔离选项：</p>
+        <ul>
+            <li><strong>主机名随机化</strong> - 临时更改计算机名</li>
+            <li><strong>MAC 地址随机化</strong> - 创建虚拟网卡并分配随机 MAC</li>
+            <li><strong>代理支持</strong> - 强制所有 WinHTTP 流量通过指定代理</li>
+        </ul>
+    </div>
+
+    <div class="section" id="extension">
+        <h2>扩展管理</h2>
+
+        <h3>查找扩展 ID</h3>
+        <p>要安装扩展，您需要知道其扩展 ID。查找方法：</p>
+        <ol>
+            <li>访问 <a href="https://marketplace.visualstudio.com" target="_blank">VS Code 市场</a></li>
+            <li>搜索您想要的扩展</li>
+            <li>在扩展页面找到 "Unique Identifier" 或从 URL 中获取</li>
+        </ol>
+        <p>例如，Python 扩展的 URL 是：<code>https://marketplace.visualstudio.com/items?itemName=ms-python.python</code>，其扩展 ID 就是 <code>ms-python.python</code>。</p>
+
+        <h3>批量安装扩展</h3>
+        <p>创建文本文件，每行一个扩展 ID，支持注释（以 # 开头）：</p>
+        <pre><code># 开发工具
+ms-python.python
+ms-vscode.cpptools
+dbaeumer.vscode-eslint
+
+# 主题
+PKief.material-icon-theme</code></pre>
+        <p>然后使用以下命令批量安装：</p>
+        <div class="command">vsenv extension import work extensions.txt</div>
+    </div>
+
+    <div class="section" id="import-export">
+        <h2>导入/导出</h2>
+
+        <h3>导出实例</h3>
+        <p>将实例打包为 .vsenv 文件，包含：</p>
+        <ul>
+            <li>VS Code 程序文件</li>
+            <li>用户数据</li>
+            <li>已安装的扩展</li>
+            <li>硬件配置（如果有）</li>
+            <li>实例配置信息</li>
+        </ul>
+        <div class="command">vsenv export work backup.vsenv</div>
+
+        <h3>导入实例</h3>
+        <p>从 .vsenv 文件恢复实例：</p>
+        <div class="command">vsenv import backup.vsenv restored_work</div>
+        <p>如果不指定新实例名，将使用原始名称。</p>
+
+        <div class="note">
+            <strong>提示：</strong>导出的 .vsenv 文件可以在其他计算机上导入，实现环境的快速迁移。
+        </div>
+    </div>
+
+    <div class="section" id="troubleshoot">
+        <h2>常见问题</h2>
+
+        <h3>启动失败</h3>
+        <p><strong>问题：</strong>启动实例时提示 "Code.exe not found"</p>
+        <p><strong>解决：</strong>确保已将 VS Code 离线包解压到实例目录的 <code>vscode</code> 子目录中。</p>
+
+        <h3>协议劫持不生效</h3>
+        <p><strong>问题：</strong>注册协议后，vscode:// 链接仍打开默认 VS Code</p>
+        <p><strong>解决：</strong></p>
+        <ol>
+            <li>尝试使用 <code>vsenv logoff</code> 恢复默认设置</li>
+            <li>使用 <code>vsenv rest</code> 手动重建协议</li>
+            <li>检查是否有安全软件阻止注册表修改</li>
+        </ol>
+
+        <h3>扩展安装失败</h3>
+        <p><strong>问题：</strong>安装扩展时提示 "VS Code CLI not found"</p>
+        <p><strong>解决：</strong>确保实例目录中存在 <code>vscode\bin\code.cmd</code> 文件。</p>
+
+        <h3>Windows Sandbox 无法启动</h3>
+        <p><strong>问题：</strong>使用 <code>--wsb</code> 选项时启动失败</p>
+        <p><strong>解决：</strong></p>
+        <ul>
+            <li>确保使用的是 Windows 10 Pro/Enterprise 版本</li>
+            <li>在 Windows 功能中启用 "Windows Sandbox"</li>
+            <li>确保系统支持虚拟化并已启用</li>
+        </ul>
+
+        <h3>管理员权限问题</h3>
+        <p><strong>问题：</strong>使用 <code>--host</code> 或 <code>--mac</code> 选项时提示需要管理员权限</p>
+        <p><strong>解决：</strong>以管理员身份运行命令提示符或 PowerShell，然后执行命令。</p>
+    </div>
+
+    <div class="section">
+        <h2>获取帮助</h2>
+        <p>如果您遇到问题或有建议，请通过以下方式获取帮助：</p>
+        <ul>
+            <li>查看 GitHub 仓库的 Issues 页面</li>
+            <li>提交新的 Issue 报告问题</li>
+            <li>查看项目文档和更新</li>
+        </ul>
+        <p>记住：VSenv 是完全免费开源的软件，由社区驱动开发。欢迎贡献代码和文档！</p>
+    </div>
+
+    <footer style="text-align: center; margin-top: 50px; padding-top: 20px; border-top: 1px solid #444; color: #888;">
+        <p>VSenv © 2025 by dhjs0000 - 以 AGPLv3.0 协议开源</p>
+        <p>本软件完全免费，用爱发电中～</p>
+    </footer>
+</body>
+</html>
