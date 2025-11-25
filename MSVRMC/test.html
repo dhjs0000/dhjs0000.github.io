@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>测试公告功能</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .announcement-card { 
+            border: 1px solid #ddd; 
+            padding: 15px; 
+            margin: 10px 0; 
+            border-radius: 5px; 
+            background: #f9f9f9;
+        }
+        .date { color: #666; font-size: 0.9em; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <h1>公告测试</h1>
+    <div id="latest-announcements"></div>
+    <div id="error" class="error"></div>
+
+    <script>
+        // 测试公告数据加载
+        fetch('news.json')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('网络响应失败: ' + response.status);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('成功加载公告数据:', data);
+                const container = document.getElementById('latest-announcements');
+                
+                if (data && data.length > 0) {
+                    // 显示前6个公告
+                    data.slice(0, 6).forEach(announcement => {
+                        const card = document.createElement('div');
+                        card.className = 'announcement-card';
+                        card.innerHTML = `
+                            <h3>${announcement.title}</h3>
+                            <p>${announcement.content}</p>
+                            <span class="date">${announcement.date}</span>
+                        `;
+                        container.appendChild(card);
+                    });
+                } else {
+                    container.innerHTML = '<p>暂无公告数据</p>';
+                }
+            })
+            .catch(error => {
+                console.error('加载公告数据失败:', error);
+                document.getElementById('error').textContent = '错误: ' + error.message;
+            });
+    </script>
+</body>
+</html>

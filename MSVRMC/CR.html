@@ -105,33 +105,28 @@
                 <h2>最新公告</h2>
                 <p>了解服务器的最新动态和重要通知</p>
             </div>
-            <div class="announcements-grid">
-                <div class="announcement-card">
-
-                    <h3>服务器更新</h3>
-                    <p>更新至1.21.10X,服务器地址：play.simpfun.cn，端口：25571</p></p>
-                    <span class="date">2025-08-28</span>
-                    
-                </div>
-                <div class="announcement-card">
-                    <h3>取得授权</h3>
-                    <p>已取得作者默淼yams的MTR高速铁路接触网追加包（服务器使用版）授权<a href="https://afdian.com/item/fb0027d4653411ef9f0c52540025c377">在这里购买</a><p>警告：服务器成员不在本服使用则视为侵犯作者著作权。</p></p>
-                    <span class="date">2025-08-22</span>
-                </div>
+            <div id="latest-announcements" class="announcements-grid">
+                <!-- JS 生成的公告卡片 -->
             </div>
-            <div class="announcements-grid">‘
-                <div class="announcement-card">
-                    <h3>新版本上线</h3>
-                    <p>最新的BE游戏版本已经发布，Minecraft 1.21.93.01，找到对应版本下载以体验全新内容！</p>
-                    <span class="date">2025-07-17</span>
-                </div>
-                <div class="announcement-card">
-                    <h3>服务器停服维护完成</h3>
-                    <p>我们的停服维护完成，部分玩家物品栏和末影箱物品丢失，联系管理员补偿。</p>
-                    <span class="date">2025-07-17</span>
-                </div>
+            <div style="text-align: center; margin-top: 30px;">
+                <button id="view-all-btn" class="hero-cta" style="background-color: var(--secondary-color);">
+                    查看历史公告
+                </button>
             </div>
         </section>
+
+        <!-- 历史公告模态框 -->
+        <div id="history-modal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>历史公告</h2>
+                    <span class="close">&times;</span>
+                </div>
+                <div id="all-announcements" class="announcements-grid">
+                    <!-- JS 生成的所有公告 -->
+                </div>
+            </div>
+        </div>
 
         <section id="resources" class="content-section">
             <div class="section-header">
@@ -312,5 +307,150 @@
             <p>&copy; 2025 MSVR MC中央管理组. 保留所有权利。</p>
         </div>
     </footer>
+
+    <script>
+        // 公告数据加载和显示功能
+        document.addEventListener('DOMContentLoaded', function() {
+            // 加载公告数据
+            fetch('news.json')
+                .then(response => response.json())
+                .then(data => {
+                    // 按日期排序（最新的在前）
+                    const sortedData = data.sort((a, b) => new Date(b.date) - new Date(a.date));
+                    
+                    // 显示最新公告（前6个）
+                    displayLatestAnnouncements(sortedData.slice(0, 6));
+                    
+                    // 保存所有公告数据供历史公告使用
+                    window.allAnnouncements = sortedData;
+                })
+                .catch(error => {
+                    console.error('加载公告数据失败:', error);
+                    document.getElementById('latest-announcements').innerHTML =
+                        '<p style="text-align: center; color: #e74c3c;">公告数据加载失败，请稍后重试。</p>';
+                });
+        });
+
+        // 显示最新公告
+        function displayLatestAnnouncements(announcements) {
+            const container = document.getElementById('latest-announcements');
+            container.innerHTML = '';
+            
+            announcements.forEach(announcement => {
+                const card = createAnnouncementCard(announcement);
+                container.appendChild(card);
+            });
+        }
+
+        // 创建公告卡片
+        function createAnnouncementCard(announcement) {
+            const card = document.createElement('div');
+            card.className = 'announcement-card';
+            card.innerHTML = `
+                <h3>${announcement.title}</h3>
+                <p>${announcement.content}</p>
+                <span class="date">${announcement.date}</span>
+            `;
+            return card;
+        }
+
+        // 历史公告模态框功能
+        const modal = document.getElementById('history-modal');
+        const viewAllBtn = document.getElementById('view-all-btn');
+        const closeBtn = document.querySelector('.close');
+
+        // 点击"查看历史公告"按钮
+        viewAllBtn.addEventListener('click', function() {
+            displayAllAnnouncements();
+            modal.style.display = 'block';
+        });
+
+        // 点击关闭按钮
+        closeBtn.addEventListener('click', function() {
+            modal.style.display = 'none';
+        });
+
+        // 点击模态框外部关闭
+        window.addEventListener('click', function(event) {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+
+        // 显示所有公告
+        function displayAllAnnouncements() {
+            const container = document.getElementById('all-announcements');
+            container.innerHTML = '';
+            
+            if (window.allAnnouncements && window.allAnnouncements.length > 0) {
+                window.allAnnouncements.forEach(announcement => {
+                    const card = createAnnouncementCard(announcement);
+                    container.appendChild(card);
+                });
+            } else {
+                container.innerHTML = '<p style="text-align: center; color: #666;">暂无公告数据</p>';
+            }
+        }
+    </script>
+
+    <style>
+        /* 模态框样式 */
+        .modal {
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            color: var(--primary-color);
+        }
+
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close:hover {
+            color: #e74c3c;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+                padding: 15px;
+            }
+        }
+    </style>
 </body>
 </html>
