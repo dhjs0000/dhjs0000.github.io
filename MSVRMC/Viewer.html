@@ -3,7 +3,16 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>文档查看器</title>
+    <title>MSVR MC 文档查看器</title>
+    
+    <!-- 引入 marked.js 用于 Markdown 解析 -->
+    <script src="marked.min.js"></script>
+    
+    <!-- 引入 Prism.js 用于代码高亮 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markdown.min.js"></script>
+    
     <style>
         * {
             margin: 0;
@@ -22,9 +31,8 @@
             display: flex;
             flex-direction: column;
             height: 100vh;
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 20px;
         }
 
         header {
@@ -32,7 +40,7 @@
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-            margin-bottom: 20px;
+            margin: 20px 20px 0 20px;
         }
 
         h1 {
@@ -42,15 +50,52 @@
             margin-bottom: 15px;
         }
 
+        .header-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .back-button, .refresh-button {
+            display: inline-flex;
+            align-items: center;
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 16px;
+            background-color: rgba(52, 152, 219, 0.1);
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .back-button:hover, .refresh-button:hover {
+            background-color: rgba(52, 152, 219, 0.2);
+            transform: translateX(-2px);
+        }
+
+        .arrow-left {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-top: 2px solid #3498db;
+            border-left: 2px solid #3498db;
+            transform: rotate(-45deg);
+            margin-right: 8px;
+        }
+
         .content-wrapper {
             display: flex;
             flex: 1;
             gap: 20px;
+            padding: 20px;
             height: calc(100vh - 120px);
         }
 
         .sidebar {
-            width: 250px;
+            width: 280px;
             background-color: #fff;
             border-radius: 8px;
             padding: 20px;
@@ -62,6 +107,10 @@
             list-style: none;
         }
 
+        .document-list li {
+            margin-bottom: 5px;
+        }
+
         .document-list a {
             display: block;
             padding: 12px 15px;
@@ -69,73 +118,286 @@
             text-decoration: none;
             border-radius: 4px;
             transition: all 0.2s ease;
-            margin-bottom: 5px;
+            cursor: pointer;
         }
 
-        .document-list a:hover {
+        .document-list a:hover, .document-list a.active {
             background-color: #f0f7ff;
             color: #1e70bf;
         }
 
         .document-viewer {
             flex: 1;
+            background-color: #fff;
             border-radius: 8px;
-            overflow: hidden;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
-        iframe {
-            width: 100%;
-            height: 100%;
+        .viewer-header {
+            padding: 15px 20px;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .document-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .viewer-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .control-button {
+            padding: 6px 12px;
+            background-color: #e9ecef;
             border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: background-color 0.2s ease;
+        }
+
+        .control-button:hover {
+            background-color: #dee2e6;
+        }
+
+        .markdown-content {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+            font-size: 16px;
+            line-height: 1.8;
+        }
+
+        /* Markdown 样式 */
+        .markdown-content h1 {
+            color: #2c3e50;
+            font-size: 28px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+        }
+
+        .markdown-content h2 {
+            color: #34495e;
+            font-size: 22px;
+            margin: 25px 0 15px 0;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #bdc3c7;
+        }
+
+        .markdown-content h3 {
+            color: #34495e;
+            font-size: 18px;
+            margin: 20px 0 10px 0;
+        }
+
+        .markdown-content h4, .markdown-content h5, .markdown-content h6 {
+            color: #34495e;
+            margin: 15px 0 10px 0;
+        }
+
+        .markdown-content p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        .markdown-content strong {
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .markdown-content ul, .markdown-content ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+
+        .markdown-content li {
+            margin-bottom: 8px;
+        }
+
+        .markdown-content blockquote {
+            border-left: 4px solid #3498db;
+            padding: 15px 20px;
+            margin: 20px 0;
+            background-color: #f8f9fa;
+            color: #555;
+            font-style: italic;
+        }
+
+        .markdown-content table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
             background-color: #fff;
+        }
+
+        .markdown-content th, .markdown-content td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .markdown-content th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .markdown-content tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        .markdown-content code {
+            background-color: #f1f2f6;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 14px;
+            color: #e74c3c;
+        }
+
+        .markdown-content pre {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .markdown-content pre code {
+            background-color: transparent;
+            color: #ecf0f1;
+            padding: 0;
+            border-radius: 0;
+        }
+
+        .markdown-content a {
+            color: #3498db;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .markdown-content a:hover {
+            color: #2980b9;
+            text-decoration: underline;
+        }
+
+        .markdown-content hr {
+            border: none;
+            height: 1px;
+            background-color: #bdc3c7;
+            margin: 30px 0;
+        }
+
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+            color: #7f8c8d;
+            font-size: 16px;
+        }
+
+        .error {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+            color: #e74c3c;
+            font-size: 16px;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .toc {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .toc h3 {
+            margin-top: 0;
+            color: #2c3e50;
+            font-size: 16px;
+        }
+
+        .toc ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .toc li {
+            margin-bottom: 5px;
+        }
+
+        .toc a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        .toc a:hover {
+            text-decoration: underline;
         }
 
         @media (max-width: 768px) {
             .content-wrapper {
                 flex-direction: column;
+                height: auto;
             }
 
             .sidebar {
                 width: 100%;
                 margin-bottom: 20px;
-                height: auto;
+                max-height: 300px;
             }
 
             .document-viewer {
-                height: 70vh;
+                height: 60vh;
+            }
+
+            .markdown-content {
+                padding: 20px;
+            }
+
+            header {
+                margin: 10px;
+                padding: 15px;
+            }
+
+            .content-wrapper {
+                padding: 10px;
             }
         }
 
-        .header-actions {
-            margin-top: 15px;
-        }
+        /* 打印样式 */
+        @media print {
+            .sidebar, .viewer-header, .header-actions {
+                display: none;
+            }
 
-        .back-button {
-            display: inline-flex;
-            align-items: center;
-            color: #3498db;
-            text-decoration: none;
-            font-weight: 500;
-            padding: 8px 16px;
-            background-color: rgba(52, 152, 219, 0.1);
-            border-radius: 4px;
-            transition: all 0.2s ease;
-        }
+            .document-viewer {
+                box-shadow: none;
+            }
 
-        .back-button:hover {
-            background-color: rgba(52, 152, 219, 0.2);
-            transform: translateX(-3px);
-        }
-
-        .arrow-left {
-            display: inline-block;
-            width: 10px;
-            height: 10px;
-            border-top: 2px solid #3498db;
-            border-left: 2px solid #3498db;
-            transform: rotate(-45deg);
-            margin-right: 8px;
+            .markdown-content {
+                padding: 0;
+            }
         }
     </style>
     <script type="text/javascript">
@@ -149,29 +411,242 @@
 <body>
     <div class="container">
         <header>
-            <h1>文档查看系统</h1>
-            <p>中央MSVR MC文档</p>
+            <h1>MSVR MC 文档查看系统</h1>
+            <p>中央文档管理系统 - 支持 Markdown 格式</p>
             <div class="header-actions">
                 <a href="CR.html" class="back-button"><i class="arrow-left"></i> 返回首页</a>
+                <button class="refresh-button" onclick="refreshCurrentDocument()">🔄 刷新</button>
             </div>
         </header>
 
         <div class="content-wrapper">
             <div class="sidebar">
-                <h2>文档列表</h2>
+                <h2>📚 文档列表</h2>
                 <ul class="document-list">
-                    <li><a href="宪法_1749973284190.html" target="documentFrame">宪法</a></li>
-                    <li><a href="刑法_1752683097900.html" target="documentFrame">刑法</a></li>
-                    <li><a href="民法典_1752683079293.html" target="documentFrame">民法典</a></li>
-                    <li><a href="20250824-155235.html" target="documentFrame">【试行草案】立法法</a></li>
-                    <li><a href="economy-guide.html" target="documentFrame">【快捷文档】经济指南</a></li>
+                    <li><a href="#" onclick="loadMarkdown('md/宪法.md')">宪法</a></li>
+                    <li><a href="#" onclick="loadMarkdown('md/刑法.md')">刑法</a></li>
+                    <li><a href="#" onclick="loadMarkdown('md/民法典.md')">民法典</a></li>
+                    <li><a href="#" onclick="loadMarkdown('md/立法法.md')">立法法</a></li>
+                    <li><a href="#" onclick="loadMarkdown('md/经济指南.md')">经济指南</a></li>
+                    <li><a href="#" onclick="loadMarkdown('md/README.md')">新版说明</a></li>
                 </ul>
             </div>
 
             <div class="document-viewer">
-                <iframe name="documentFrame" title="文档内容"></iframe>
+                <div class="viewer-header">
+                    <div class="document-title" id="documentTitle">请选择要查看的文档</div>
+                    <div class="viewer-controls">
+                        <button class="control-button" onclick="toggleTOC()">📑 目录</button>
+                        <button class="control-button" onclick="printDocument()">🖨️ 打印</button>
+                        <button class="control-button" onclick="increaseFontSize()">A+</button>
+                        <button class="control-button" onclick="decreaseFontSize()">A-</button>
+                    </div>
+                </div>
+                <div class="markdown-content" id="markdownContent">
+                    <div class="loading">📖 请从左侧选择要查看的文档</div>
+                </div>
             </div>
         </div>
     </div>
+
+    <script>
+        let currentFontSize = 16;
+        let currentDocument = null;
+
+        // 配置 marked.js
+        marked.setOptions({
+            highlight: function(code, lang) {
+                if (lang && Prism.languages[lang]) {
+                    return Prism.highlight(code, Prism.languages[lang], lang);
+                }
+                return code;
+            },
+            breaks: true,
+            gfm: true,
+            headerIds: true,
+            headerPrefix: 'heading-',
+            mangle: false,
+            sanitize: false,
+            smartLists: true,
+            smartypants: true,
+            xhtml: false
+        });
+
+        // 加载 Markdown 文档
+        async function loadMarkdown(filename) {
+            const contentDiv = document.getElementById('markdownContent');
+            const titleDiv = document.getElementById('documentTitle');
+            
+            // 显示加载状态
+            contentDiv.innerHTML = '<div class="loading">📖 正在加载文档...</div>';
+            
+            // 更新标题
+            const docName = filename.split('/').pop().replace('.md', '');
+            titleDiv.textContent = getDocumentTitle(docName);
+            
+            // 更新活跃链接
+            updateActiveLink(filename);
+            
+            try {
+                const response = await fetch(filename);
+                if (!response.ok) {
+                    throw new Error(`无法加载文档: ${response.status} ${response.statusText}`);
+                }
+                
+                const markdownText = await response.text();
+                const htmlContent = marked.parse(markdownText);
+                
+                contentDiv.innerHTML = htmlContent;
+                currentDocument = filename;
+                
+                // 添加目录功能
+                addTableOfContents();
+                
+                // 高亮代码块
+                Prism.highlightAll();
+                
+                // 平滑滚动到顶部
+                contentDiv.scrollTop = 0;
+                
+            } catch (error) {
+                contentDiv.innerHTML = `<div class="error">❌ 加载失败: ${error.message}<br><br>请确保文档存在且可访问。</div>`;
+                console.error('加载文档失败:', error);
+            }
+        }
+
+        // 获取文档标题
+        function getDocumentTitle(filename) {
+            const titles = {
+                '宪法': '📖 MSVR MC 服务器宪法',
+                '刑法': '⚖️ MSVR MC 服务器刑法',
+                '民法典': '📋 MSVR MC 服务器民法典',
+                '立法法': '📝 MSVR MC 服务器立法法',
+                '经济指南': '💰 MSVR MC 服务器经济指南',
+                'README': '📄 使用说明文档'
+            };
+            return titles[filename] || '📄 文档查看器';
+        }
+
+        // 更新活跃链接
+        function updateActiveLink(filename) {
+            const links = document.querySelectorAll('.document-list a');
+            links.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('onclick').includes(filename)) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        // 添加目录功能
+        function addTableOfContents() {
+            const contentDiv = document.getElementById('markdownContent');
+            const headings = contentDiv.querySelectorAll('h1, h2, h3, h4, h5, h6');
+            
+            if (headings.length > 3) {
+                let tocHTML = '<div class="toc"><h3>📑 目录</h3><ul>';
+                headings.forEach((heading, index) => {
+                    const level = heading.tagName.toLowerCase();
+                    const text = heading.textContent;
+                    const id = `heading-${index}`;
+                    heading.id = id;
+                    
+                    const indent = '  '.repeat(parseInt(level.substring(1)) - 1);
+                    tocHTML += `<li>${indent}<a href="#${id}" onclick="scrollToHeading('${id}')">${text}</a></li>`;
+                });
+                tocHTML += '</ul></div>';
+                
+                // 将目录插入到第一个标题之前
+                const firstHeading = contentDiv.querySelector('h1, h2, h3, h4, h5, h6');
+                if (firstHeading) {
+                    firstHeading.insertAdjacentHTML('beforebegin', tocHTML);
+                }
+            }
+        }
+
+        // 滚动到指定标题
+        function scrollToHeading(id) {
+            const element = document.getElementById(id);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        // 切换目录显示
+        function toggleTOC() {
+            const toc = document.querySelector('.toc');
+            if (toc) {
+                toc.style.display = toc.style.display === 'none' ? 'block' : 'none';
+            }
+        }
+
+        // 打印文档
+        function printDocument() {
+            if (currentDocument) {
+                window.print();
+            } else {
+                alert('请先选择一个文档');
+            }
+        }
+
+        // 增大字体
+        function increaseFontSize() {
+            currentFontSize += 2;
+            document.getElementById('markdownContent').style.fontSize = currentFontSize + 'px';
+        }
+
+        // 减小字体
+        function decreaseFontSize() {
+            if (currentFontSize > 12) {
+                currentFontSize -= 2;
+                document.getElementById('markdownContent').style.fontSize = currentFontSize + 'px';
+            }
+        }
+
+        // 刷新当前文档
+        function refreshCurrentDocument() {
+            if (currentDocument) {
+                loadMarkdown(currentDocument);
+            } else {
+                alert('请先选择一个文档');
+            }
+        }
+
+        // 键盘快捷键
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey) {
+                switch(e.key) {
+                    case 'r':
+                        e.preventDefault();
+                        refreshCurrentDocument();
+                        break;
+                    case 'p':
+                        e.preventDefault();
+                        printDocument();
+                        break;
+                    case '+':
+                    case '=':
+                        e.preventDefault();
+                        increaseFontSize();
+                        break;
+                    case '-':
+                        e.preventDefault();
+                        decreaseFontSize();
+                        break;
+                }
+            }
+        });
+
+        // 页面加载完成后默认加载宪法
+        window.addEventListener('load', function() {
+            // 可以设置默认加载的文档
+            // loadMarkdown('md/宪法.md');
+        });
+
+        // 错误处理
+        window.addEventListener('error', function(e) {
+            console.error('页面错误:', e.error);
+        });
+    </script>
 </body>
 </html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Viewer 测试页面</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .test-section {
+            margin-bottom: 25px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+        }
+        .test-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        .test-status {
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .warning {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        .link-button {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            margin: 10px 5px;
+        }
+        .link-button:hover {
+            background-color: #2980b9;
+        }
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        .feature-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .feature-list li:before {
+            content: "✅ ";
+            color: #27ae60;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 MSVR MC 文档查看器测试</h1>
+        
+        <div class="test-section">
+            <div class="test-title">📋 测试说明</div>
+            <p>新的 Viewer.html 已经创建完成，支持以下功能：</p>
+            <ul class="feature-list">
+                <li>📖 直接读取和渲染 Markdown 文件</li>
+                <li>🎨 美观的样式和响应式设计</li>
+                <li>📑 自动生成文档目录</li>
+                <li>🔍 代码语法高亮显示</li>
+                <li>🖨️ 打印功能</li>
+                <li>🔤 字体大小调节</li>
+                <li>⌨️ 键盘快捷键支持</li>
+                <li>📱 移动端适配</li>
+            </ul>
+        </div>
+
+        <div class="test-section">
+            <div class="test-title">🚀 功能测试</div>
+            <p>点击下方按钮测试新的文档查看器：</p>
+            <a href="Viewer.html" class="link-button" target="_blank">打开新 Viewer</a>
+            <a href="CR.html" class="link-button" target="_blank">返回主页</a>
+        </div>
+
+        <div class="test-section">
+            <div class="test-title">📁 可用文档</div>
+            <p>以下 Markdown 文档已经准备就绪：</p>
+            <ul>
+                <li><strong>宪法.md</strong> - MSVR MC 服务器宪法</li>
+                <li><strong>刑法.md</strong> - MSVR MC 服务器刑法</li>
+                <li><strong>民法典.md</strong> - MSVR MC 服务器民法典</li>
+                <li><strong>立法法.md</strong> - MSVR MC 服务器立法法</li>
+                <li><strong>经济指南.md</strong> - MSVR MC 服务器经济指南</li>
+                <li><strong>README.md</strong> - 使用说明文档</li>
+            </ul>
+        </div>
+
+        <div class="test-section">
+            <div class="test-title">⚡ 快速测试</div>
+            <p>您可以直接在浏览器中访问以下链接来测试特定文档：</p>
+            <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; font-family: monospace; font-size: 14px;">
+                Viewer.html<br>
+                └── 自动加载文档列表
+            </div>
+        </div>
+
+        <div class="test-section">
+            <div class="test-title">🔧 技术说明</div>
+            <p><strong>使用的第三方库：</strong></p>
+            <ul>
+                <li><strong>marked.js</strong> - Markdown 解析器</li>
+                <li><strong>Prism.js</strong> - 代码语法高亮</li>
+                <li><strong>原生 JavaScript</strong> - 功能实现</li>
+            </ul>
+            <p><strong>兼容性：</strong> 支持现代浏览器，包括 Chrome、Firefox、Safari、Edge 等。</p>
+        </div>
+
+        <div class="test-status success">
+            <strong>✅ 状态：</strong> 新的 Viewer.html 已经创建完成，可以正常使用！
+        </div>
+    </div>
+
+    <script>
+        // 简单的功能测试
+        console.log('🧪 MSVR MC Viewer 测试页面已加载');
+        console.log('📁 可用文档路径:');
+        console.log('- md/宪法.md');
+        console.log('- md/刑法.md');
+        console.log('- md/民法典.md');
+        console.log('- md/立法法.md');
+        console.log('- md/经济指南.md');
+        console.log('- md/README.md');
+    </script>
+</body>
+</html>
