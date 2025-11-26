@@ -7,8 +7,8 @@
     <link rel="stylesheet" href="style.css" />
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <link rel="stylesheet" href="swiper-bundle.min.css">
+    <script src="swiper-bundle.min.js"></script>
     <script type="text/javascript">
     (function(c,l,a,r,i,t,y){
         c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
@@ -211,6 +211,53 @@
                 <div class="whitelist-card">BrassyElf2689</div>
                 <div class="whitelist-card">king137891</div>
                 <div class="whitelist-card">RebornLily1318</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 管理团队成员 -->
+    <section class="management-section">
+        <div class="section-header">
+            <h2>管理团队</h2>
+            <p>服务器核心管理人员</p>
+        </div>
+        <div class="management-container">
+            <div class="management-grid">
+                <div class="management-card admin-main">
+                    <div class="management-avatar">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                    <h3>主要管理员</h3>
+                    <p class="management-name">Woolen yarn2017</p>
+                    <p class="management-role">服务器主要管理者</p>
+                </div>
+                
+                <div class="management-card admin">
+                    <div class="management-avatar">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <h3>管理员</h3>
+                    <p class="management-name">TonierBead82373</p>
+                    <p class="management-role">服务器管理员</p>
+                </div>
+                
+                <div class="management-card admin">
+                    <div class="management-avatar">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <h3>管理员</h3>
+                    <p class="management-name">Woolen yarn2017</p>
+                    <p class="management-role">服务器管理员</p>
+                </div>
+                
+                <div class="management-card server-owner">
+                    <div class="management-avatar">
+                        <i class="fas fa-server"></i>
+                    </div>
+                    <h3>服主</h3>
+                    <p class="management-name">djhcbhgs44</p>
+                    <p class="management-role">服务器所有者</p>
+                </div>
             </div>
         </div>
     </section>
@@ -445,6 +492,184 @@
                 width: 95%;
                 margin: 10% auto;
                 padding: 15px;
+            }
+        }
+
+        /* 管理团队成员样式 */
+        .management-section {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            padding: 60px 20px;
+            margin-top: 80px;
+        }
+
+        .management-section .section-header h2 {
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .management-section .section-header p {
+            color: rgba(255,255,255,0.8);
+            font-size: 1.1rem;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .management-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .management-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .management-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            color: white;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .management-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255,255,255,0.15);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.2);
+        }
+
+        .management-avatar {
+            width: 80px;
+            height: 80px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2rem;
+            color: white;
+            border: 3px solid rgba(255,255,255,0.3);
+        }
+
+        .management-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: white;
+            font-weight: 600;
+        }
+
+        .management-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #ecf0f1;
+        }
+
+        .management-role {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 0;
+        }
+
+        /* 不同角色的特殊样式 */
+        .management-card.admin-main {
+            background: linear-gradient(135deg, rgba(241, 196, 15, 0.2) 0%, rgba(243, 156, 18, 0.2) 100%);
+            border-color: rgba(241, 196, 15, 0.3);
+        }
+
+        .management-card.admin-main .management-avatar {
+            background: rgba(241, 196, 15, 0.3);
+            border-color: rgba(241, 196, 15, 0.5);
+        }
+
+        .management-card.admin {
+            background: linear-gradient(135deg, rgba(52, 152, 219, 0.2) 0%, rgba(41, 128, 185, 0.2) 100%);
+            border-color: rgba(52, 152, 219, 0.3);
+        }
+
+        .management-card.admin .management-avatar {
+            background: rgba(52, 152, 219, 0.3);
+            border-color: rgba(52, 152, 219, 0.5);
+        }
+
+        .management-card.server-owner {
+            background: linear-gradient(135deg, rgba(231, 76, 60, 0.2) 0%, rgba(192, 57, 43, 0.2) 100%);
+            border-color: rgba(231, 76, 60, 0.3);
+        }
+
+        .management-card.server-owner .management-avatar {
+            background: rgba(231, 76, 60, 0.3);
+            border-color: rgba(231, 76, 60, 0.5);
+        }
+
+        /* 角色标签 */
+        .management-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 20px 20px 0 0;
+        }
+
+        .management-card.admin-main::before {
+            background: linear-gradient(90deg, #f1c40f, #f39c12);
+        }
+
+        .management-card.admin::before {
+            background: linear-gradient(90deg, #3498db, #2980b9);
+        }
+
+        .management-card.server-owner::before {
+            background: linear-gradient(90deg, #e74c3c, #c0392b);
+        }
+
+        @media (max-width: 768px) {
+            .management-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .management-section .section-header h2 {
+                font-size: 2rem;
+            }
+            
+            .management-card {
+                padding: 25px;
+            }
+            
+            .management-avatar {
+                width: 70px;
+                height: 70px;
+                font-size: 1.8rem;
+            }
+        }
+
+        /* 动画效果 */
+        .management-card {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
     </style>
