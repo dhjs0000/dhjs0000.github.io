@@ -312,6 +312,23 @@
                         <span class="email-address">studio@ethrtnos.cn</span>
                     </div>
                 </div>
+                
+                <!-- 一键发送给主要管理者和服主 -->
+                <div class="management-card quick-contact">
+                    <div class="management-avatar">
+                        <i class="fas fa-paper-plane"></i>
+                    </div>
+                    <h3>快速联系</h3>
+                    <p class="management-name">主要管理者 & 服主</p>
+                    <p class="management-role">一键发送邮件</p>
+                    <div class="management-contact">
+                        <a href="mailto:official@msvrmc.com" class="email-button quick-send">
+                            <i class="fas fa-rocket"></i> 一键发送
+                        </a>
+                        <span class="email-address">official@msvrmc.com</span>
+                        <p class="contact-hint">同时发送给主要管理者和服主</p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -767,6 +784,83 @@
 
         .management-card.studio::before {
             background: linear-gradient(90deg, #2ecc71, #27ae60);
+        }
+
+        /* 快速联系特殊样式 */
+        .management-card.quick-contact {
+            background: linear-gradient(135deg, rgba(241, 196, 15, 0.3) 0%, rgba(231, 76, 60, 0.3) 100%);
+            border-color: rgba(241, 196, 15, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .management-card.quick-contact .management-avatar {
+            background: linear-gradient(135deg, rgba(241, 196, 15, 0.4), rgba(231, 76, 60, 0.4));
+            border-color: rgba(255, 255, 255, 0.6);
+            animation: pulse 2s infinite;
+        }
+
+        .management-card.quick-contact::before {
+            background: linear-gradient(90deg, #f1c40f, #e74c3c);
+            height: 6px;
+        }
+
+        .email-button.quick-send {
+            background: linear-gradient(135deg, rgba(241, 196, 15, 0.4), rgba(231, 76, 60, 0.4));
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            animation: glow 2s infinite alternate;
+        }
+
+        .email-button.quick-send:hover {
+            background: linear-gradient(135deg, rgba(241, 196, 15, 0.6), rgba(231, 76, 60, 0.6));
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .contact-hint {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.9);
+            margin-top: 8px;
+            font-style: italic;
+            text-align: center;
+        }
+
+        /* 动画效果 */
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(241, 196, 15, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(241, 196, 15, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(241, 196, 15, 0);
+            }
+        }
+
+        @keyframes glow {
+            from {
+                box-shadow: 0 0 5px rgba(241, 196, 15, 0.5);
+            }
+            to {
+                box-shadow: 0 0 20px rgba(231, 76, 60, 0.8);
+            }
+        }
+
+        /* 快速联系卡片特殊动画 */
+        .management-card.quick-contact {
+            animation: fadeInUp 0.8s ease-out, float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-5px);
+            }
         }
 
         /* 邮箱按钮悬停效果 */
