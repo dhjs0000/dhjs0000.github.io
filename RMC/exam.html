@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>成绩查询系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .result.success {
+            background: #e8f5e8;
+            border: 2px solid #4caf50;
+            color: #2e7d32;
+        }
+
+        .result.error {
+            background: #ffeaea;
+            border: 2px solid #f44336;
+            color: #c62828;
+        }
+
+        .score-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .score-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .score-label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .score-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        /* 时间线样式 */
+        .timeline {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .timeline h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        .timeline-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #e0e0e0;
+            position: relative;
+        }
+
+        .timeline-item:last-child {
+            border-bottom: none;
+        }
+
+        .timeline-date {
+            font-weight: bold;
+            color: #667eea;
+            font-size: 14px;
+            min-width: 100px;
+        }
+
+        .timeline-event {
+            color: #555;
+            font-size: 14px;
+            flex: 1;
+            margin-left: 10px;
+        }
+
+        /* 时间线进度指示器 */
+        .timeline-progress {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-left: 10px;
+            position: relative;
+        }
+
+        .progress-completed {
+            background: #4caf50;
+            box-shadow: 0 0 8px rgba(76, 175, 80, 0.6);
+        }
+
+        .progress-current {
+            background: #ffc107;
+            box-shadow: 0 0 8px rgba(255, 193, 7, 0.6);
+            animation: pulse 1.5s infinite;
+        }
+
+        .progress-pending {
+            background: #e0e0e0;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* 时间线连接线 */
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: -12px;
+            width: 2px;
+            height: 12px;
+            background: #e0e0e0;
+        }
+
+        .timeline-item:first-child::before {
+            display: none;
+        }
+
+        /* 终评成绩样式 */
+        .final-score {
+            background: #e3f2fd;
+            border: 2px solid #2196f3;
+            color: #1565c0;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .final-score h4 {
+            margin-bottom: 15px;
+            color: #1565c0;
+            text-align: center;
+        }
+
+        /* 初评成绩样式 */
+        .first-score {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            color: #856404;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .first-score h4 {
+            margin-bottom: 15px;
+            color: #856404;
+            text-align: center;
+        }
+
+        .score-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .score-detail-item {
+            text-align: center;
+        }
+
+        .score-detail-label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .score-detail-value {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        /* 进度条样式 */
+        .progress-container {
+            background: #e0e0e0;
+            border-radius: 10px;
+            height: 20px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.5s ease-in-out;
+        }
+
+        .progress-a {
+            background: linear-gradient(90deg, #4caf50, #81c784);
+        }
+
+        .progress-b {
+            background: linear-gradient(90deg, #2196f3, #64b5f6);
+        }
+
+        .loading {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>成绩查询系统</h1>
+        
+        <!-- 时间线显示 -->
+        <div class="timeline">
+            <h3>RMC第2025-2届知识竞赛时间线</h3>
+            <div class="timeline-item">
+                <span class="timeline-date">2025年10月18日</span>
+                <span class="timeline-event">开始报名</span>
+                <div class="timeline-progress progress-completed" title="已完成"></div>
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-date">2025年11月18日</span>
+                <span class="timeline-event">开始考试</span>
+                <div class="timeline-progress progress-completed" title="已完成"></div>
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-date">2025年11月29日</span>
+                <span class="timeline-event">交卷时间 & 初评日期</span>
+                <div class="timeline-progress progress-current" title="进行中"></div>
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-date">2025年12月2日</span>
+                <span class="timeline-event">终评日期</span>
+                <div class="timeline-progress progress-pending" title="待进行"></div>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="name">姓名：</label>
+            <input type="text" id="name" placeholder="请输入您的姓名">
+        </div>
+        
+        <div class="form-group">
+            <label for="examNumber">考号：</label>
+            <input type="text" id="examNumber" placeholder="请输入您的考号">
+        </div>
+        
+        <button onclick="queryScore()">查询成绩</button>
+        
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p style="margin-top: 10px; color: #666;">正在查询中...</p>
+        </div>
+        
+        <div class="result" id="result"></div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script>
+        // 预定义的加密密钥（用于AES加密）
+        const AES_KEY = 'RMC-Exam-System-2024';
+        
+        // SHA256加密函数
+        function sha256Encrypt(text) {
+            return CryptoJS.SHA256(text).toString();
+        }
+        
+        // Base64编码函数
+        function base64Encode(text) {
+            return btoa(unescape(encodeURIComponent(text)));
+        }
+        
+        // AES解密函数
+        function aesDecrypt(encryptedText, key) {
+            try {
+                const decrypted = CryptoJS.AES.decrypt(encryptedText, key);
+                return decrypted.toString(CryptoJS.enc.Utf8);
+            } catch (error) {
+                console.error('AES解密失败:', error);
+                return null;
+            }
+        }
+        
+        // 查询成绩函数
+        async function queryScore() {
+            const name = document.getElementById('name').value.trim();
+            const examNumber = document.getElementById('examNumber').value.trim();
+            
+            if (!name || !examNumber) {
+                showResult('请输入姓名和考号', 'error');
+                return;
+            }
+            
+            // 显示加载状态
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('result').style.display = 'none';
+            
+            try {
+                // 1. 对输入的姓名进行SHA256加密
+                const encryptedName = sha256Encrypt(name);
+                console.log('加密后的姓名:', encryptedName);
+                
+                // 加载score.json数据
+                const response = await fetch('score.json');
+                const scoreData = await response.json();
+                
+                // 2. 查找姓名匹配的记录
+                const matchedRecord = scoreData.find(record => record.name === encryptedName);
+                
+                if (!matchedRecord) {
+                    showResult('未找到该姓名的成绩记录', 'error');
+                    return;
+                }
+                
+                // 3. 用输入的名字做Base64编码作为密钥
+                const nameBase64Key = base64Encode(name);
+                console.log('Base64编码的姓名密钥:', nameBase64Key);
+                
+                // 4. 对score.json中的加密考号进行AES解密
+                const decryptedExamNumber = aesDecrypt(matchedRecord['Exam number'], nameBase64Key);
+                console.log('解密后的考号:', decryptedExamNumber);
+                
+                if (!decryptedExamNumber) {
+                    showResult('考号解密失败，请检查姓名是否正确', 'error');
+                    return;
+                }
+                
+                // 5. 比对解密后的考号与用户输入的考号
+                if (decryptedExamNumber === examNumber) {
+                    // 显示成绩信息
+                    showScoreResult(matchedRecord);
+                } else {
+                    showResult('考号不匹配，请检查考号是否正确', 'error');
+                }
+                
+            } catch (error) {
+                console.error('查询失败:', error);
+                showResult('查询失败，请稍后重试', 'error');
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+            }
+        }
+        
+        // 解析分数并计算进度百分比
+        function parseScore(scoreStr) {
+            const parts = scoreStr.split('/');
+            if (parts.length === 2) {
+                const current = parseInt(parts[0]);
+                const total = parseInt(parts[1]);
+                const percentage = total > 0 ? (current / total) * 100 : 0;
+                return { current, total, percentage };
+            }
+            return { current: 0, total: 0, percentage: 0 };
+        }
+
+        // 计算终评进度（与初评完全一致）
+        function calculateFinalProgress(scoreText) {
+            // 如果是状态文字，返回固定百分比
+            if (scoreText === '改卷中') {
+                return { percentage: 50, text: scoreText };
+            } else if (scoreText === '已完成') {
+                return { percentage: 100, text: scoreText };
+            } else if (scoreText === '未开始') {
+                return { percentage: 0, text: scoreText };
+            } else {
+                // 尝试解析分数格式
+                const parsed = parseScore(scoreText);
+                if (parsed.percentage > 0) {
+                    return { percentage: parsed.percentage, text: scoreText };
+                }
+                return { percentage: 0, text: scoreText };
+            }
+        }
+
+        // 显示成绩结果
+        function showScoreResult(record) {
+            // 解析初评成绩
+            const aFirstScore = parseScore(record['A First score']);
+            const bFirstScore = parseScore(record['B First score']);
+            
+            // 计算终评进度（与初评逻辑一致）
+            const aFinalProgress = calculateFinalProgress(record['A score']);
+            const bFinalProgress = calculateFinalProgress(record['B score']);
+            
+            const resultDiv = document.getElementById('result');
+            resultDiv.className = 'result success';
+            resultDiv.innerHTML = `
+                <h3>查询成功！</h3>
+                
+                <!-- 终评成绩显示（与初评样式一致） -->
+                <div class="final-score">
+                    <h4>终评成绩</h4>
+                    <div class="score-details">
+                        <div class="score-detail-item">
+                            <div class="score-detail-label">A卷终评</div>
+                            <div class="score-detail-value">${aFinalProgress.text}</div>
+                            <div class="progress-container">
+                                <div class="progress-bar final-progress-bar final-progress-a" style="width: ${aFinalProgress.percentage}%"></div>
+                            </div>
+                        </div>
+                        <div class="score-detail-item">
+                            <div class="score-detail-label">B卷终评</div>
+                            <div class="score-detail-value">${bFinalProgress.text}</div>
+                            <div class="progress-container">
+                                <div class="progress-bar final-progress-bar final-progress-b" style="width: ${bFinalProgress.percentage}%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 初评成绩显示 -->
+                <div class="first-score">
+                    <h4>初评成绩</h4>
+                    <div class="score-details">
+                        <div class="score-detail-item">
+                            <div class="score-detail-label">A卷初评</div>
+                            <div class="score-detail-value">${record['A First score']}</div>
+                            <div class="progress-container">
+                                <div class="progress-bar progress-a" style="width: ${aFirstScore.percentage}%"></div>
+                            </div>
+                        </div>
+                        <div class="score-detail-item">
+                            <div class="score-detail-label">B卷初评</div>
+                            <div class="score-detail-value">${record['B First score']}</div>
+                            <div class="progress-container">
+                                <div class="progress-bar progress-b" style="width: ${bFirstScore.percentage}%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            resultDiv.style.display = 'block';
+        }
+        
+        // 显示结果消息
+        function showResult(message, type) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.className = `result ${type}`;
+            resultDiv.innerHTML = `<p>${message}</p>`;
+            resultDiv.style.display = 'block';
+        }
+        
+        // 回车键查询
+        document.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                queryScore();
+            }
+        });
+    </script>
+</body>
+</html>
