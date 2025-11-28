@@ -1,10 +1,308 @@
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>关于我们 - BBYC</title>
-<script type="text/javascript">
-    (function(c,l,a,r,i,t,y){
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-    })(window, document, "clarity", "script", "pe969al7w9");
-</script>
-<link rel="stylesheet" href="style.css">
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>关于我们 - Ethernos Studio</title>
+    <script type="text/javascript">
+        (function(c,l,a,r,i,t,y){
+            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        })(window, document, "clarity", "script", "pe969al7w9");
+    </script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .about-hero {
+            text-align: center;
+            padding: 60px 20px;
+            background: linear-gradient(135deg, rgba(120, 129, 255, 0.1) 0%, rgba(95, 85, 175, 0.1) 100%);
+            border-radius: 20px;
+            margin: 40px 0;
+        }
+
+        .about-hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #7881ff 0%, #5f55af 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .about-hero p {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .mission-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .mission-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 30px;
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease;
+        }
+
+        .mission-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .mission-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .mission-card p {
+            color: var(--text-color);
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .values-section {
+            margin: 60px 0;
+        }
+
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .value-item {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .value-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .value-item h4 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .timeline-section {
+            margin: 60px 0;
+        }
+
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--primary-color);
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 30px 0;
+            position: relative;
+        }
+
+        .timeline-item:nth-child(odd) {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-content {
+            width: 45%;
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        .timeline-date {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary-color);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .timeline::before {
+                left: 20px;
+            }
+
+            .timeline-item {
+                flex-direction: column !important;
+                align-items: flex-start;
+                padding-left: 50px;
+            }
+
+            .timeline-content {
+                width: 100%;
+            }
+
+            .timeline-date {
+                left: 20px;
+                transform: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="nav-placeholder"></div>
+
+    <!-- 主要内容区 -->
+    <main class="content">
+        <div class="about-hero">
+            <h1>关于 Ethernos Studio</h1>
+            <p>Ethernos Studio 是一个专注于开源技术创新和数字内容创作的工作室。我们致力于通过技术创新推动数字时代的发展，为开发者和创作者提供优质的技术解决方案和创作平台。</p>
+        </div>
+
+        <section class="mission-section">
+            <div class="mission-card">
+                <h3><i class="fas fa-lightbulb"></i> 我们的使命</h3>
+                <p>通过开源技术创新，降低技术门槛，让更多人能够参与到数字创作中来。我们相信技术的力量能够改变世界，并致力于将这种力量传递给每一个人。</p>
+            </div>
+            <div class="mission-card">
+                <h3><i class="fas fa-target"></i> 我们的愿景</h3>
+                <p>成为全球领先的开源技术工作室，推动技术创新和知识共享，构建一个开放、协作、创新的技术生态系统。</p>
+            </div>
+            <div class="mission-card">
+                <h3><i class="fas fa-handshake"></i> 我们的价值观</h3>
+                <p>开放、创新、专业、协作。我们相信通过开放的合作模式，能够创造出更加优秀的技术产品，为社会创造更大的价值。</p>
+            </div>
+        </section>
+
+        <section class="values-section">
+            <h2 class="section-title">核心价值观</h2>
+            <div class="values-grid">
+                <div class="value-item">
+                    <div class="value-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h4>技术创新</h4>
+                    <p>持续探索新技术，推动技术进步</p>
+                </div>
+                <div class="value-item">
+                    <div class="value-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h4>开放协作</h4>
+                    <p>倡导开源精神，促进知识共享</p>
+                </div>
+                <div class="value-item">
+                    <div class="value-icon">
+                        <i class="fas fa-award"></i>
+                    </div>
+                    <h4>专业品质</h4>
+                    <p>追求卓越，提供高质量的技术服务</p>
+                </div>
+                <div class="value-item">
+                    <div class="value-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h4>用户至上</h4>
+                    <p>以用户需求为中心，提供优质服务</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="timeline-section">
+            <h2 class="section-title">发展历程</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h4>工作室成立</h4>
+                        <p>Ethernos Studio 正式成立，开始专注于开源技术项目的开发</p>
+                    </div>
+                    <div class="timeline-date">2024</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h4>首个项目发布</h4>
+                        <p>BCC编程语言项目正式发布，获得了开发者的广泛关注</p>
+                    </div>
+                    <div class="timeline-date">2024</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h4>工具生态完善</h4>
+                        <p>Blender-VMT等开发工具相继发布，形成了完整的开发生态</p>
+                    </div>
+                    <div class="timeline-date">2025</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h4>持续创新</h4>
+                        <p>不断探索新技术领域，为开发者提供更多优质的技术解决方案</p>
+                    </div>
+                    <div class="timeline-date">未来</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-links">
+                <div class="footer-section">
+                    <h3>项目</h3>
+                    <a href="https://dhjs0000.github.io/bccWeb/">BCC语言</a>
+                    <a href="https://dhjs0000.github.io/Blender-VMT">Blender-VMT-Remastered</a>
+                </div>
+                <div class="footer-section">
+                    <h3>资源</h3>
+                    <a href="downloads.html">软件下载</a>
+                    <a href="tools.html">开发工具</a>
+                </div>
+                <div class="footer-section">
+                    <h3>服务</h3>
+                    <a href="blog.html">技术博客</a>
+                    <a href="questions.html">技术支持</a>
+                </div>
+                <div class="footer-section">
+                    <h3>关于</h3>
+                    <a href="team.html">团队</a>
+                    <a href="contact.html">联系我们</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>Copyright (C) 2025 Ethernos Studio</p>
+                <p>本程序为自由软件，在自由软件联盟发布的GNU通用公共许可协议的约束下，你可以对其进行再发布及修改。协议版本为第三版或（随你）更新的版本。</p>
+                <p>我们希望发布的这个网站有用，但不保证，甚至不保证它有经济价值和适合特定用途。详情参见GNU通用公共许可协议。</p>
+                
+                <p>This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</p>
+                <p>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</p>
+                <p>You should have received a copy of the GNU General Public License along with this program. If not, see <a href="https://www.gnu.org/licenses/">https://www.gnu.org/licenses/</a>.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

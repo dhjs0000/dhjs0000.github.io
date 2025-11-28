@@ -1,16 +1,15 @@
-# BBYC 开源技术社区网站开发文档
+# Ethernos Studio 以太诺斯工作室
 
 ## 项目概述
 
-BBYC是一个现代化的开源技术社区平台，致力于为开发者提供优质的技术交流环境。本项目包含社区网站的所有源代码和开发文档。
+Ethernos Studio 是一个专注于开源技术创新和数字内容创作的工作室。我们致力于通过技术创新推动数字时代的发展，为开发者和创作者提供优质的技术解决方案和创作平台。
 
-### 核心功能
+### 核心特色
 
-- 技术社区平台
-- BCC编程语言展示
-- Blender-VMT工具支持
-- 开发资源共享
-- 用户交流系统
+- **开源技术创新**：BCC编程语言、Blender-VMT工具等创新项目
+- **专业技术服务**：完善的技术文档、开发工具和技术支持
+- **多元化内容**：技术博客、项目展示、Minecraft服务器等
+- **用户友好体验**：现代化设计、响应式布局、优秀的用户交互
 
 ## 技术栈
 
@@ -23,21 +22,43 @@ BBYC是一个现代化的开源技术社区平台，致力于为开发者提供�
 ## 项目结构
 
 ```
-newBBYCweb/
-├── css/
-│   └── style.css          # 主样式文件
-├── js/
-│   └── script.js          # 主脚本文件
-├── pages/
-│   ├── home.html          # 主页
-│   ├── about.html         # 关于页面
-│   └── contact.html       # 联系页面
-├── docs/
-│   └── development-guide.html  # 开发指南
-├── assets/
-│   ├── images/            # 图片资源
-│   └── fonts/            # 字体资源
-└── README.md             # 项目文档
+/
+├── index.html              # 入口页面（重定向到home.html）
+├── home.html               # 主页
+├── about.html              # 关于我们页面
+├── team.html               # 团队介绍页面
+├── contact.html            # 联系我们页面
+├── docs.html               # 技术文档中心
+├── downloads.html          # 软件下载页面
+├── tools.html              # 开发工具页面
+├── blog.html               # 技术博客主页
+├── blog/                   # 博客文章目录
+│   ├── 1.html              # 博客文章1
+│   └── 2.html              # 博客文章2
+├── development-guide.html  # 开发指南页面
+├── questions.html          # 问答社区页面
+├── MSVR MC.html            # Minecraft服务器页面
+├── MSVRMC/                 # Minecraft服务器相关文件
+├── 24/                     # 网站大全项目
+├── novels/                 # 小说相关内容
+├── VSenv/                  # VSenv项目文件
+├── RMC/                    # RMC项目文件
+├── style.css               # 主样式文件
+├── script.js               # 主脚本文件
+├── config.js               # 配置文件
+├── web.js                  # 网页跳转脚本
+├── error.html              # 通用错误页面
+├── 403.html                # 403错误页面
+├── 404.html                # 404错误页面
+├── 500.html                # 500错误页面
+├── bar.html                # 旧版网站入口
+├── AMAKE.html              # AMA项目英文页面
+├── fathers_day.html        # 父亲节特别页面
+├── music.mp3               # 背景音乐文件
+├── LICENCE                 # GNU通用公共许可证（英文）
+├── LICENCE_CN              # GNU通用公共许可证（中文）
+├── README.md               # 项目文档
+└── FUTURE.md               # 未来发展规划
 ```
 
 ## 开发规范
@@ -63,31 +84,52 @@ newBBYCweb/
 - 注重代码复用性
 - 保持代码简洁清晰
 
-## 页面组件
+## 主要功能模块
 
-### 导航栏
+### 1. 主页展示 (home.html)
+- 工作室介绍和核心项目展示
+- BCC编程语言、Blender-VMT工具、网站大全
+- 技术特性介绍和统计数据展示
+- 最新动态和技术博客入口
 
-```html
-<nav class="navbar">
-    <div class="nav-container">
-        <a href="/" class="logo">BBYC</a>
-        <div class="nav-links">
-            <a href="#home">首页</a>
-            <a href="#features">特性</a>
-            <a href="#about">关于</a>
-        </div>
-    </div>
-</nav>
-```
+### 2. 关于我们 (about.html)
+- 工作室使命、愿景和价值观
+- 发展历程和时间线展示
+- 核心团队介绍
 
-### 功能卡片
+### 3. 技术文档中心 (docs.html)
+- 完整的技术文档体系
+- 快速入门指南
+- 开发指南和API文档
+- 常见问题解答
 
-```html
-<div class="feature-card">
-    <h2>功能标题</h2>
-    <p>功能描述内容</p>
-</div>
-```
+### 4. 软件下载 (downloads.html)
+- BCC编程语言下载
+- Blender-VMT-Remastered工具下载
+- 自动获取GitHub最新版本信息
+- 版本更新说明和发布日志
+
+### 5. 技术博客 (blog.html)
+- 技术文章发布平台
+- 项目开发经验分享
+- 技术问题解决方案
+- 社区贡献和开源动态
+
+### 6. Minecraft服务器 (MSVR MC.html)
+- MSVR MC服务器联盟介绍
+- 服务器状态监控
+- 游戏规则和管理制度
+- 玩家招募和管理团队介绍
+
+### 7. 开发工具 (tools.html)
+- 开发工具集合
+- 实用在线工具推荐
+- 开发者资源整理
+
+### 8. 问答社区 (questions.html)
+- 技术问答平台
+- 用户问题解答
+- 技术交流和讨论
 
 ## 主题定制
 
@@ -144,37 +186,26 @@ newBBYCweb/
    - 环境部署
    - 监控运维
 
-## 部署说明
+## 技术特点
 
-### 开发环境
+### 前端技术
+- **HTML5 + CSS3**：语义化标签，现代化样式设计
+- **JavaScript ES6+**：现代JavaScript语法和特性
+- **响应式设计**：自适应不同设备和屏幕尺寸
+- **CSS变量**：主题色彩管理和动态切换
+- **Font Awesome 6.0**：丰富的图标库支持
+- **CSS3动画**：流畅的页面过渡和交互效果
 
-1. 克隆仓库：
-```bash
-git clone https://github.com/your-username/bbyc-website.git
-cd bbyc-website
-```
+### 后端集成
+- **GitHub API集成**：自动获取项目版本信息和发布日志
+- **Microsoft Clarity**：用户行为分析和网站优化
+- **静态网站托管**：支持GitHub Pages等平台部署
 
-2. 安装依赖：
-```bash
-npm install  # 如果使用npm
-```
-
-3. 启动开发服务器：
-```bash
-npm start
-```
-
-### 生产环境
-
-1. 构建项目：
-```bash
-npm run build
-```
-
-2. 部署文件：
-   - 将构建后的文件部署到服务器
-   - 配置服务器环境
-   - 设置域名和SSL
+### 特色功能
+- **版本自动更新**：通过GitHub API自动获取最新版本信息
+- **响应式导航**：适配移动端的导航菜单设计
+- **懒加载优化**：图片和内容懒加载提升性能
+- **错误页面定制**：403、404、500等错误页面的美观设计
 
 ## 维护更新
 
@@ -212,7 +243,7 @@ npm run build
 
 ## 版权信息
 
-Copyright © 2025 BBYC. All rights reserved.
+Copyright © 2025 Ethernos Studio. All rights reserved.
 
 ## 更新日志
 

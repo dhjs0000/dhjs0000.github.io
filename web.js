@@ -21,7 +21,7 @@ function startCountdown() {
     // 如果倒计时结束，跳转到zy.html
     if (timeLeft < 0) {
       clearInterval(countdownFunction);
-      window.location.href = ".\\newBBYCweb\\index.html";
+      window.location.href = ".\\newEthernosweb\\index.html";
     }
   }, 1000);
 }
@@ -34,3 +34,4 @@ function cancelCountdown() {
 
 // 在页面加载时开始倒计时
 window.onload = startCountdown;
+
