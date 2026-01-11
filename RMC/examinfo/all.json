@@ -299,5 +299,55 @@
         "has_prize": true,
         "registration_fee": 4,
         "table": true
+    },
+    {
+        "name": "Ethernos SCC软件能力认证-S提高级 2026 第一轮",
+        "file": "SCC-S-2026-1.json",
+        "registration_begins": "2026-9-1",
+        "registration_ends": "2026-9-7",
+        "start_exam": "2026-9-8",
+        "submission_time": "2026-9-12",
+        "initial_evaluation_date": "2026-9-12",
+        "final_evaluation_date": "2026-9-15",
+        "has_prize": true,
+        "registration_fee": 4
+    },
+    {
+        "name": "Ethernos SCC软件能力认证-S提高级 2026 第二轮",
+        "file": "SCC-S-2026-2.json",
+        "registration_begins": "2026-9-16",
+        "registration_ends": "2026-10-9",
+        "start_exam": "2026-10-11",
+        "submission_time": "2026-10-11",
+        "initial_evaluation_date": "2026-10-11",
+        "final_evaluation_date": "2026-10-11",
+        "has_prize": true,
+        "registration_fee": 5,
+        "table": true
+    },
+    {
+        "name": "Ethernos SCC软件能力认证-E精英级 2026 第一轮",
+        "file": "SCC-E-2026-1.json",
+        "registration_begins": "2026-9-1",
+        "registration_ends": "2026-9-7",
+        "start_exam": "2026-9-8",
+        "submission_time": "2026-9-12",
+        "initial_evaluation_date": "2026-9-12",
+        "final_evaluation_date": "2026-9-15",
+        "has_prize": true,
+        "registration_fee": 5
+    },
+    {
+        "name": "Ethernos SCC软件能力认证-E精英级 2026 第二轮",
+        "file": "SCC-E-2026-2.json",
+        "registration_begins": "2026-9-16",
+        "registration_ends": "2026-10-9",
+        "start_exam": "2026-10-11",
+        "submission_time": "2026-10-11",
+        "initial_evaluation_date": "2026-10-11",
+        "final_evaluation_date": "2026-10-11",
+        "has_prize": true,
+        "registration_fee": 6,
+        "table": true
     }
 ]
