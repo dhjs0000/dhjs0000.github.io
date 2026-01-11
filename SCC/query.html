@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>证书查询 - Ethernos Studio</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .certificate-query {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .query-form {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #7881ff;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+        }
+        
+        .query-button {
+            background: #7881ff;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            margin-right: 10px;
+        }
+        
+        .query-button:hover {
+            background: #5f55af;
+            transform: translateY(-2px);
+        }
+        
+        .share-button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+        
+        .share-button:hover {
+            background: #45a049;
+            transform: translateY(-1px);
+        }
+        
+        .quick-link {
+            background: rgba(120, 129, 255, 0.1);
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            border-left: 4px solid #7881ff;
+        }
+        
+        .quick-link h4 {
+            color: #7881ff;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+        
+        .link-input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+        
+        .query-results {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .certificate-card {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid #7881ff;
+        }
+        
+        .certificate-card h3 {
+            color: #7881ff;
+            margin-top: 0;
+        }
+        
+        .certificate-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .info-label {
+            font-weight: bold;
+            color: #aaa;
+        }
+        
+        .info-value {
+            color: #fff;
+        }
+        
+        .no-results {
+            text-align: center;
+            color: #aaa;
+            font-style: italic;
+            padding: 40px;
+        }
+        
+        .loading {
+            text-align: center;
+            color: #7881ff;
+            padding: 20px;
+        }
+        
+        .error {
+            background: rgba(255, 0, 0, 0.1);
+            color: #ff6b6b;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #ff6b6b;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="nav-placeholder"></div>
+    
+    <div class="certificate-query">
+        <h1>证书查询系统</h1>
+        <p>请输入证书信息进行查询</p>
+        
+        <div class="query-form">
+            <div class="form-group">
+                <label for="queryInput">证书ID、姓名或项目名称：</label>
+                <input type="text" id="queryInput" placeholder="">
+            </div>
+            <button class="query-button" onclick="queryCertificate()">查询证书</button>
+            <button class="query-button" onclick="generateQuickLink()" style="background: #FF9800;">生成快速链接</button>
+        </div>
+        
+        <div id="quickLinkSection" class="quick-link" style="display: none;">
+            <h4>快速查询链接</h4>
+            <input type="text" id="quickLinkInput" class="link-input" readonly>
+            <button class="share-button" onclick="copyQuickLink()">复制链接</button>
+        </div>
+        
+        <div id="queryResults" class="query-results" style="display: none;">
+            <h2>查询结果</h2>
+            <div id="resultsContent"></div>
+        </div>
+    </div>
+    
+    <script src="../script.js"></script>
+    <script>
+        // 页面加载时检查URL参数
+        window.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const queryParam = urlParams.get('q');
+            const idParam = urlParams.get('id');
+            
+            if (queryParam) {
+                document.getElementById('queryInput').value = queryParam;
+                queryCertificate();
+            } else if (idParam) {
+                document.getElementById('queryInput').value = idParam;
+                queryCertificate();
+            }
+        });
+        
+        // 证书查询功能
+        async function queryCertificate() {
+            const queryInput = document.getElementById('queryInput').value.trim();
+            const resultsDiv = document.getElementById('queryResults');
+            const contentDiv = document.getElementById('resultsContent');
+            
+            if (!queryInput) {
+                alert('请输入查询内容');
+                return;
+            }
+            
+            // 显示加载状态
+            resultsDiv.style.display = 'block';
+            contentDiv.innerHTML = '<div class="loading">正在查询中...</div>';
+            
+            try {
+                // 加载证书数据
+                const response = await fetch('Certificate.json');
+                if (!response.ok) {
+                    throw new Error('无法加载证书数据');
+                }
+                
+                const certificates = await response.json();
+                
+                // 搜索匹配项
+                const results = certificates.filter(cert => {
+                    return cert.ID.toLowerCase().includes(queryInput.toLowerCase()) ||
+                           cert.name.toLowerCase().includes(queryInput.toLowerCase()) ||
+                           cert.item.toLowerCase().includes(queryInput.toLowerCase()) ||
+                           cert.type.toLowerCase().includes(queryInput.toLowerCase());
+                });
+                
+                // 显示结果
+                displayResults(results, queryInput);
+                
+            } catch (error) {
+                contentDiv.innerHTML = `<div class="error">查询失败：${error.message}</div>`;
+            }
+        }
+        
+        function displayResults(results, query) {
+            const contentDiv = document.getElementById('resultsContent');
+            
+            if (results.length === 0) {
+                contentDiv.innerHTML = `
+                    <div class="no-results">
+                        未找到与 "${query}" 相关的证书信息
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = `<p>找到 ${results.length} 个相关证书：</p>`;
+            
+            results.forEach(cert => {
+                html += `
+                    <div class="certificate-card">
+                        <h3>${cert.item}</h3>
+                        <div class="certificate-info">
+                            <div class="info-item">
+                                <span class="info-label">证书ID：</span>
+                                <span class="info-value">${cert.ID}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">证书类型：</span>
+                                <span class="info-value">${cert.type}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">获得者：</span>
+                                <span class="info-value">${cert.name}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">分数：</span>
+                                <span class="info-value">${cert.score}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">等级：</span>
+                                <span class="info-value">${cert.level}</span>
+                            </div>
+                        </div>
+                        <button class="share-button" onclick="shareCertificate('${cert.ID}')">分享此证书</button>
+                    </div>
+                `;
+            });
+            
+            contentDiv.innerHTML = html;
+        }
+        
+        // 回车键查询
+        document.getElementById('queryInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                queryCertificate();
+            }
+        });
+        
+        // 生成快速查询链接
+        function generateQuickLink() {
+            const queryInput = document.getElementById('queryInput').value.trim();
+            if (!queryInput) {
+                alert('请先输入查询内容');
+                return;
+            }
+            
+            const currentUrl = window.location.origin + window.location.pathname;
+            const quickLink = `${currentUrl}?q=${encodeURIComponent(queryInput)}`;
+            
+            document.getElementById('quickLinkInput').value = quickLink;
+            document.getElementById('quickLinkSection').style.display = 'block';
+        }
+        
+        // 复制快速链接
+        function copyQuickLink() {
+            const linkInput = document.getElementById('quickLinkInput');
+            linkInput.select();
+            document.execCommand('copy');
+            alert('链接已复制到剪贴板！');
+        }
+        
+        // 分享特定证书
+        function shareCertificate(certId) {
+            const currentUrl = window.location.origin + window.location.pathname;
+            const shareLink = `${currentUrl}?id=${encodeURIComponent(certId)}`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: '证书查询结果',
+                    text: `查看证书 ${certId} 的详细信息`,
+                    url: shareLink
+                });
+            } else {
+                // 如果不支持原生分享，复制链接到剪贴板
+                navigator.clipboard.writeText(shareLink).then(() => {
+                    alert(`证书分享链接已复制：${shareLink}`);
+                });
+            }
+        }
+    </script>
+</body>
+</html>
