@@ -1,0 +1,14 @@
+[
+    {
+        "name": "邓哲轩",
+        "Exam number": "SCC26-1201-001-001",
+        "score" : {
+            "item" : ["pow", "prism", "sort", "supply"],
+            "score" : [0, 0, 0, 0]
+        },
+        "final_score" : {
+            "item" : ["pow", "prism", "sort", "supply"],
+            "score" : [0, 0, 0, 0]
+        }
+    }
+]
