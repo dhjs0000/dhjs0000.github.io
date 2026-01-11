@@ -83,7 +83,7 @@
         "submission_time": "2026-4-5",
         "initial_evaluation_date": "2026-4-5",
         "final_evaluation_date": "2026-4-8",
-        "has_prize": false,
+        "has_prize": true,
         "registration_fee": 0,
         "A_and_B": true
     },
@@ -97,7 +97,7 @@
         "initial_evaluation_date": "2026-5-13",
         "final_evaluation_date": "2026-5-15",
         "has_prize": true,
-        "registration_fee": 1
+        "registration_fee": 2
     },
     {
         "name": "Ethernos SCC软件能力认证-G语法级 2026春季挑战赛 第一轮",
@@ -109,7 +109,7 @@
         "initial_evaluation_date": "2026-4-12",
         "final_evaluation_date": "2026-4-15",
         "has_prize": true,
-        "registration_fee": 1
+        "registration_fee": 2
     },
     {
         "name": "Ethernos SCC软件能力认证-J入门级 2026春季挑战赛 第一轮",
@@ -121,7 +121,7 @@
         "initial_evaluation_date": "2026-4-12",
         "final_evaluation_date": "2026-4-15",
         "has_prize": true,
-        "registration_fee": 1
+        "registration_fee": 3
     },
     {
         "name": "Ethernos SCC软件能力认证-G语法级 2026春季挑战赛 第二轮",
@@ -133,7 +133,7 @@
         "initial_evaluation_date": "2026-5-10",
         "final_evaluation_date": "2026-5-11",
         "has_prize": true,
-        "registration_fee": 1,
+        "registration_fee": 3,
         "table": true
     },
     {
@@ -146,7 +146,45 @@
         "initial_evaluation_date": "2026-5-10",
         "final_evaluation_date": "2026-5-11",
         "has_prize": true,
-        "registration_fee": 1,
+        "registration_fee": 4,
+        "table": true
+    },
+    {
+        "name": "Ethernos JHSMAC初中数学能力竞赛 第一届",
+        "file": "JHSMAC-1.json",
+        "registration_begins": "2026-5-1",
+        "registration_ends": "2026-5-20",
+        "start_exam": "2026-6-1",
+        "submission_time": "2026-6-1",
+        "initial_evaluation_date": "2026-6-1",
+        "final_evaluation_date": "2026-6-3",
+        "has_prize": true,
+        "registration_fee": 0
+    },
+    {
+        "name": "Ethernos PSCC专业级软件能力认证 1/2/3/4级 2026",
+        "file": "PSCC-1-4-2026.json",
+        "registration_begins": "2026-5-1",
+        "registration_ends": "2026-5-20",
+        "start_exam": "2026-6-6",
+        "submission_time": "2026-6-6",
+        "initial_evaluation_date": "2026-6-6",
+        "final_evaluation_date": "2026-6-9",
+        "has_prize": true,
+        "registration_fee": 2,
+        "table": true
+    },
+    {
+        "name": "Ethernos SCC软件能力认证-G语法级Online 2026在线挑战赛",
+        "file": "SCC-G-2026-Online.json",
+        "registration_begins": "2026-6-1",
+        "registration_ends": "2026-6-30",
+        "start_exam": "2026-7-1",
+        "submission_time": "2026-7-1",
+        "initial_evaluation_date": "2026-7-1",
+        "final_evaluation_date": "2026-7-1",
+        "has_prize": true,
+        "registration_fee": 2,
         "table": true
     }
 ]
