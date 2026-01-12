@@ -349,5 +349,17 @@
         "has_prize": true,
         "registration_fee": 6,
         "table": true
+    },
+    {
+        "name": "Ethernos JHSMAC初中数学能力竞赛 体验届",
+        "file": "JHSMAC-Experience.json",
+        "registration_begins": "2026-1-12",
+        "registration_ends": "2026-1-12",
+        "start_exam": "2026-1-13",
+        "submission_time": "2026-1-19",
+        "initial_evaluation_date": "2026-1-19",
+        "final_evaluation_date": "2026-1-25",
+        "has_prize": true,
+        "registration_fee": 0
     }
 ]
