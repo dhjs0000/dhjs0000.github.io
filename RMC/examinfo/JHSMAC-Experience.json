@@ -1,0 +1,26 @@
+[
+    {
+        "name": "邓哲轩",
+        "Exam number": "20251001",
+        "score": 41,
+        "final_score": "Unknown(改卷中)"
+    },
+    {
+        "name": "李泽瑞",
+        "Exam number": "20251004",
+        "score": 31,
+        "final_score": "Unknown(改卷中)"
+    },
+    {
+        "name": "蒋俊义",
+        "Exam number": "20251003",
+        "score": 0,
+        "final_score": 0
+    },
+    {
+        "name": "曹永诚",
+        "Exam number": "20251005",
+        "score": "0(缺考)",
+        "final_score": "0(缺考)"
+    }
+]
