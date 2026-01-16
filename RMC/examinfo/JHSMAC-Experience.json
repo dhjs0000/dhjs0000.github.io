@@ -20,7 +20,7 @@
     {
         "name": "曹永诚",
         "Exam number": "20251005",
-        "score": "0(缺考)",
-        "final_score": "0(缺考)"
+        "score": 0,
+        "final_score": 0
     }
 ]
