@@ -254,6 +254,10 @@
                         <div class="stat-label">总发布数</div>
                     </div>
                     <div class="stat-item">
+                        <span class="stat-number" id="totalDownloads"></span>
+                        <div class="stat-label"></div>
+                    </div>
+                    <div class="stat-item">
                         <span class="stat-number" id="totalFormats">0</span>
                         <div class="stat-label">支持格式</div>
                     </div>
@@ -356,7 +360,7 @@
             const totalFormats = new Set(releases.flatMap(release => release.formats)).size;
 
             document.getElementById('totalReleases').textContent = totalReleases;
-            document.getElementById('totalDownloads').textContent = '0'; // 不使用编造的下载量
+            document.getElementById('totalDownloads').textContent = ''; // 不使用编造的下载量
             document.getElementById('totalFormats').textContent = totalFormats;
         }
 
