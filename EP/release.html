@@ -271,6 +271,16 @@
         // 发布数据 - 从all.json加载
         let releases = [];
 
+        // 格式到文件名的映射
+        const formatFileMap = {
+            'PDF': 'PDF.pdf',
+            'Word': 'Word.docx',
+            'Pub': 'Pub.pub',
+            'EPUB': 'EPUB.epub',
+            'MOBI': 'MOBI.mobi',
+            'TXT': 'TXT.txt'
+        };
+
         // 从JSON文件加载数据
         async function loadReleases() {
             try {
@@ -330,7 +340,7 @@
                         <h4><i class="fas fa-cloud-download-alt"></i> 下载选项</h4>
                         <div class="download-buttons">
                             ${release.formats.map(format => `
-                                <a href="assets/${release.publish_id}/${format === 'PDF' ? 'PDF.pdf' : 'Word.docx'}" class="download-btn" download>
+                                <a href="assets/${release.publish_id}/${formatFileMap[format] || format}" class="download-btn" download>
                                     <i class="fas fa-download"></i>
                                     下载${format}版本
                                 </a>
