@@ -243,12 +243,6 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     // 加载鸣谢名单
     loadAcknowledgments();
-    
-    // 浏览器版本检测
-    const browserInfo = detectBrowser();
-    if (browserInfo.isOldIE) {
-        showCompatibilityModal();
-    }
 });
 
 // 加载鸣谢名单函数
