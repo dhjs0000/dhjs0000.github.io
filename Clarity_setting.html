@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clarity数据收集设置 - Ethernos Studio</title>
+    
+    <!-- Cookie同意样式 -->
+    <link rel="stylesheet" href="style.css">
+
+    
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: linear-gradient(135deg, #1e1e2e 0%, #2d2d44 100%);
+            color: #eee;
+            padding: 20px;
+            min-height: 100vh;
+            margin: 0;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: rgba(0,0,0,0.2);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            color: #7881ff;
+            text-align: center;
+        }
+        
+        .test-section {
+            margin: 30px 0;
+            padding: 20px;
+            background-color: rgba(120, 129, 255, 0.1);
+            border-radius: 8px;
+            border-left: 4px solid #7881ff;
+        }
+        
+        .test-button {
+            background: linear-gradient(135deg, #7881ff 0%, #5f55af 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .test-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(120, 129, 255, 0.3);
+        }
+        
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        
+        .status.success {
+            background-color: rgba(76, 175, 80, 0.2);
+            border: 1px solid #4CAF50;
+            color: #4CAF50;
+        }
+        
+        .status.info {
+            background-color: rgba(33, 150, 243, 0.2);
+            border: 1px solid #2196F3;
+            color: #2196F3;
+        }
+        
+        .status.warning {
+            background-color: rgba(255, 193, 7, 0.2);
+            border: 1px solid #FFC107;
+            color: #FFC107;
+        }
+        
+        .consent-info {
+            background-color: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+        
+        .consent-info h4 {
+            color: #7881ff;
+            margin-top: 0;
+        }
+    </style>
+        <link rel="stylesheet" href="cookie-consent.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body style="padding-left: 0px;">
+    <div id="nav-placeholder"></div>
+    <div class="container">
+        <h1>数据收集同意设置</h1>
+        
+        <div class="test-section">
+            <h3>当前状态</h3>
+            <div id="current-status" class="status info">正在检查同意状态...</div>
+            <div id="consent-details" class="consent-info" style="display: none;">
+                <h4>存储的同意信息：</h4>
+                <pre id="consent-data"></pre>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h3>设置</h3>
+            <button class="test-button" onclick="showConsentSettings()">重新设置同意状态</button>
+            <button class="test-button" onclick="revokeConsent()">撤销同意</button>
+            <button class="test-button" onclick="checkClarityStatus()">检查Clarity状态</button>
+            <button class="test-button" onclick="clearLocalStorage()">重置设置</button>
+            <button class="test-button" onclick="location.reload()">刷新</button>
+        </div>
+        
+        <div class="test-section">
+            <h3>运行结果</h3>
+            <div id="test-results"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>使用说明</h3>
+            <ul>
+                <li><strong>重新设置同意状态：</strong> 重新显示Cookie同意弹窗</li>
+                <li><strong>撤销同意：</strong> 清除存储的同意设置</li>
+                <li><strong>检查Clarity状态：</strong> 验证Clarity是否正确初始化</li>
+                <li><strong>重置设置：</strong> 删除所有本地存储数据</li>
+                <li><strong>刷新：</strong> 刷新页面以测试自动检测</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Cookie同意脚本 -->
+     <script src="script.js"></script>
+    <script src="cookie-consent.js"></script>
+    
+    <script>
+        // 测试脚本
+        let testResults = [];
+        
+        function addTestResult(message, type = 'info') {
+            const resultsDiv = document.getElementById('test-results');
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `status ${type}`;
+            resultDiv.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            resultsDiv.appendChild(resultDiv);
+            
+            testResults.push({
+                time: new Date().toISOString(),
+                message: message,
+                type: type
+            });
+        }
+        
+        function updateStatus() {
+            const statusDiv = document.getElementById('current-status');
+            const consentDetails = document.getElementById('consent-details');
+            const consentData = document.getElementById('consent-data');
+            
+            const manager = window.CookieConsent.getManager();
+            if (manager) {
+                const consent = manager.getCurrentConsent();
+                
+                if (consent) {
+                    statusDiv.className = 'status success';
+                    const consentText = consent.type === 'full' ? '全部数据' :
+                                      consent.type === 'partial' ? '部分数据' : '我不想提供';
+                    statusDiv.textContent = `已设置同意：${consentText}`;
+                    
+                    consentDetails.style.display = 'block';
+                    
+                    // 将JSON数据转换为人类可读的格式
+                    let readableData = '';
+                    
+                    // 基本信息
+                    readableData += `同意类型：${consentText}\n`;
+                    readableData += `设置时间：${new Date(consent.timestamp).toLocaleString('zh-CN')}\n`;
+                    
+                    // 如果有详细设置
+                    if (consent.settings) {
+                        readableData += '\n详细设置：\n';
+                        
+                        if (consent.settings.analytics !== undefined) {
+                            readableData += `  • 数据分析：${consent.settings.analytics ? '同意' : '拒绝'}\n`;
+                        }
+                        
+                        if (consent.settings.marketing !== undefined) {
+                            readableData += `  • 营销推广：${consent.settings.marketing ? '同意' : '拒绝'}\n`;
+                        }
+                        
+                        if (consent.settings.preferences !== undefined) {
+                            readableData += `  • 偏好设置：${consent.settings.preferences ? '同意' : '拒绝'}\n`;
+                        }
+                        
+                        if (consent.settings.necessary !== undefined) {
+                            readableData += `  • 必要Cookie：${consent.settings.necessary ? '同意' : '拒绝'}\n`;
+                        }
+                    }
+                    
+                    // 如果有版本信息
+                    if (consent.version) {
+                        readableData += `\n版本：${consent.version}\n`;
+                    }
+                    
+                    // 如果有其他字段
+                    const otherFields = Object.keys(consent).filter(key =>
+                        !['type', 'timestamp', 'settings', 'version'].includes(key)
+                    );
+                    
+                    if (otherFields.length > 0) {
+                        readableData += '\n其他信息：\n';
+                        otherFields.forEach(field => {
+                            readableData += `  • ${field}：${consent[field]}\n`;
+                        });
+                    }
+                    
+                    consentData.textContent = readableData;
+                } else {
+                    statusDiv.className = 'status warning';
+                    statusDiv.textContent = '未设置同意，将显示弹窗';
+                    
+                    consentDetails.style.display = 'none';
+                }
+            } else {
+                statusDiv.className = 'status warning';
+                statusDiv.textContent = 'Cookie同意管理器未初始化';
+            }
+        }
+        
+        function showConsentSettings() {
+            addTestResult('请求显示同意设置', 'info');
+            window.CookieConsent.showSettings();
+        }
+        
+        function revokeConsent() {
+            addTestResult('撤销同意设置', 'warning');
+            window.CookieConsent.revoke();
+            setTimeout(updateStatus, 100);
+        }
+        
+        function checkClarityStatus() {
+            addTestResult('检查Clarity状态...', 'info');
+            
+            if (window.clarity) {
+                addTestResult('Clarity已加载', 'success');
+                
+                // 尝试调用clarity函数
+                try {
+                    window.clarity('event', 'test_consent_check');
+                    addTestResult('Clarity事件发送成功', 'success');
+                } catch (error) {
+                    addTestResult(`Clarity事件发送失败: ${error.message}`, 'warning');
+                }
+            } else {
+                addTestResult('Clarity未加载', 'warning');
+            }
+        }
+        
+        function clearLocalStorage() {
+            addTestResult('清除本地存储', 'warning');
+            localStorage.clear();
+            setTimeout(updateStatus, 100);
+        }
+        
+        // 页面加载完成后更新状态
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                updateStatus();
+                addTestResult('页面加载完成，Clarity同意系统已初始化', 'success');
+            }, 1000);
+        });
+        
+        // 监听同意变化
+        window.CookieConsent.init();
+        const manager = window.CookieConsent.getManager();
+        if (manager) {
+            // 监听存储变化
+            window.addEventListener('storage', (e) => {
+                if (e.key && e.key.includes('consent')) {
+                    addTestResult('检测到同意设置变化', 'info');
+                    updateStatus();
+                }
+            });
+        }
+    </script>
+</body>
+</html>
