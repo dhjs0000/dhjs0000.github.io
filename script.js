@@ -125,7 +125,62 @@ document.addEventListener('DOMContentLoaded', async function() {
     document.querySelectorAll('.lazy-load').forEach(element => {
         observer.observe(element);
     });
+
+    // 加载鸣谢名单
+    loadAcknowledgments();
 });
+
+// 加载鸣谢名单函数
+async function loadAcknowledgments() {
+    const sponsorThanks = document.getElementById('sponsor-thanks');
+    const specialThanks = document.getElementById('special-thanks');
+    
+    if (!sponsorThanks && !specialThanks) return;
+    
+    try {
+        const response = await fetch('Acknowledgments.json');
+        const data = await response.json();
+        
+        // 处理赞助鸣谢 - 按赞助值从大到小排序
+        if (sponsorThanks && data.sponsor) {
+            const sortedSponsors = data.sponsor.sort((a, b) => parseInt(b.value) - parseInt(a.value));
+            
+            if (sortedSponsors.length > 0) {
+                const sponsorList = sortedSponsors.map(sponsor =>
+                    `<div class="sponsor-name">${sponsor.name}</div>`
+                ).join('');
+                
+                sponsorThanks.innerHTML = `
+                    <p>特别感谢以下在爱发电赞助我们的朋友们：</p>
+                    <div class="sponsor-list">${sponsorList}</div>
+                `;
+            } else {
+                sponsorThanks.innerHTML = '<p>暂无赞助信息</p>';
+            }
+        }
+        
+        // 处理特别鸣谢
+        if (specialThanks && data.special) {
+            if (data.special.length > 0) {
+                const specialList = data.special.map(name =>
+                    `<div class="special-name">${name}</div>`
+                ).join('');
+                
+                specialThanks.innerHTML = `
+                    <p>感谢所有支持和帮助过Ethernos Studio的朋友们：</p>
+                    <div class="special-list">${specialList}</div>
+                `;
+            } else {
+                specialThanks.innerHTML = '<p>暂无特别鸣谢信息</p>';
+            }
+        }
+        
+    } catch (error) {
+        console.error('加载鸣谢名单失败:', error);
+        if (sponsorThanks) sponsorThanks.innerHTML = '<p>加载赞助名单失败</p>';
+        if (specialThanks) specialThanks.innerHTML = '<p>加载特别鸣谢名单失败</p>';
+    }
+}
 
 // 新增倒计时功能
 window.onload = function() {
