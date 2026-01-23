@@ -1,0 +1,209 @@
+/* Cookie同意弹窗样式 */
+.cookie-consent-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    backdrop-filter: blur(5px);
+}
+
+.cookie-consent-modal.show {
+    display: flex;
+}
+
+.cookie-consent-content {
+    background: linear-gradient(135deg, #1e1e2e 0%, #2d2d44 100%);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    border: 1px solid rgba(120, 129, 255, 0.3);
+}
+
+.cookie-consent-header {
+    padding: 25px 30px 15px;
+    border-bottom: 1px solid rgba(120, 129, 255, 0.2);
+}
+
+.cookie-consent-header h3 {
+    margin: 0;
+    color: #7881ff;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.cookie-consent-body {
+    padding: 25px 30px;
+}
+
+.consent-message {
+    margin: 0 0 25px 0;
+    color: #eee;
+    font-size: 16px;
+    line-height: 1.6;
+    text-align: center;
+}
+
+.consent-options {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.consent-option {
+    display: flex;
+    align-items: flex-start;
+    padding: 15px;
+    background-color: rgba(120, 129, 255, 0.1);
+    border-radius: 10px;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.consent-option:hover {
+    background-color: rgba(120, 129, 255, 0.15);
+    border-color: rgba(120, 129, 255, 0.3);
+}
+
+.consent-option input[type="radio"] {
+    margin-right: 15px;
+    margin-top: 5px;
+    width: 18px;
+    height: 18px;
+    accent-color: #7881ff;
+}
+
+.consent-option label {
+    flex: 1;
+    cursor: pointer;
+    color: #eee;
+    font-size: 15px;
+}
+
+.consent-option label strong {
+    display: block;
+    color: #7881ff;
+    margin-bottom: 5px;
+    font-size: 16px;
+}
+
+.option-description {
+    display: block;
+    color: #aaa;
+    font-size: 13px;
+    margin-top: 3px;
+}
+
+.cookie-consent-footer {
+    padding: 20px 30px 25px;
+    border-top: 1px solid rgba(120, 129, 255, 0.2);
+    display: flex;
+    gap: 15px;
+    justify-content: flex-end;
+}
+
+.consent-btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 120px;
+}
+
+.consent-save {
+    background-color: rgba(120, 129, 255, 0.2);
+    color: #7881ff;
+    border: 1px solid rgba(120, 129, 255, 0.4);
+}
+
+.consent-save:hover:not(:disabled) {
+    background-color: rgba(120, 129, 255, 0.3);
+    transform: translateY(-1px);
+}
+
+.consent-save:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.consent-accept-all {
+    background: linear-gradient(135deg, #7881ff 0%, #5f55af 100%);
+    color: white;
+}
+
+.consent-accept-all:hover {
+    background: linear-gradient(135deg, #5f55af 0%, #4a4a8a 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(120, 129, 255, 0.3);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .cookie-consent-content {
+        width: 95%;
+        margin: 20px;
+    }
+    
+    .cookie-consent-header,
+    .cookie-consent-body {
+        padding: 20px;
+    }
+    
+    .cookie-consent-footer {
+        padding: 20px;
+        flex-direction: column;
+    }
+    
+    .consent-btn {
+        width: 100%;
+    }
+    
+    .consent-options {
+        gap: 12px;
+    }
+    
+    .consent-option {
+        padding: 12px;
+    }
+}
+
+/* 动画效果 */
+.cookie-consent-modal {
+    animation: fadeIn 0.3s ease;
+}
+
+.cookie-consent-content {
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}

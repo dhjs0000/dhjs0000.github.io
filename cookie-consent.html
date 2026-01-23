@@ -1,0 +1,41 @@
+<!-- Cookie同意弹窗 -->
+<div id="cookie-consent-modal" class="cookie-consent-modal">
+    <div class="cookie-consent-content">
+        <div class="cookie-consent-header">
+            <h3>隐私设置</h3>
+        </div>
+        <div class="cookie-consent-body">
+            <p class="consent-message">
+                我们使用Cookie和类似技术来改善您的浏览体验，分析网站流量，并提供个性化内容。
+                提供您的访问数据给我们有助于我们改进网站和修复问题。
+            </p>
+            <div class="consent-options">
+                <div class="consent-option">
+                    <input type="radio" id="consent-full" name="cookie-consent" value="full">
+                    <label for="consent-full">
+                        <strong>全部数据</strong>
+                        <span class="option-description">开启Cookie收集功能和Microsoft Clarity，提供完整体验</span>
+                    </label>
+                </div>
+                <div class="consent-option">
+                    <input type="radio" id="consent-partial" name="cookie-consent" value="partial">
+                    <label for="consent-partial">
+                        <strong>部分数据</strong>
+                        <span class="option-description">不开启Cookie收集功能，但开启Microsoft Clarity</span>
+                    </label>
+                </div>
+                <div class="consent-option">
+                    <input type="radio" id="consent-none" name="cookie-consent" value="none">
+                    <label for="consent-none">
+                        <strong>我不想提供</strong>
+                        <span class="option-description">不提供任何数据，使用基本功能</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="cookie-consent-footer">
+            <button id="consent-save" class="consent-btn consent-save" disabled>保存设置</button>
+            <button id="consent-accept-all" class="consent-btn consent-accept-all">接受全部</button>
+        </div>
+    </div>
+</div>
