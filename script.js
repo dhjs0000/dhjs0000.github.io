@@ -1,3 +1,118 @@
+// 浏览器版本检测和兼容模式提示
+function detectBrowser() {
+    const userAgent = navigator.userAgent;
+    const isIE = userAgent.indexOf("MSIE") > -1 || userAgent.indexOf("Trident") > -1;
+    
+    if (isIE) {
+        let version = 0;
+        
+        // IE 11+
+        if (userAgent.indexOf("Trident") > -1 && userAgent.indexOf("rv:") > -1) {
+            version = parseInt(userAgent.substring(userAgent.indexOf("rv:") + 3, userAgent.indexOf(".", userAgent.indexOf("rv:") + 3)));
+        }
+        // IE 10及以下
+        else if (userAgent.indexOf("MSIE") > -1) {
+            version = parseInt(userAgent.substring(userAgent.indexOf("MSIE") + 5, userAgent.indexOf(".", userAgent.indexOf("MSIE") + 5)));
+        }
+        
+        return {
+            isIE: true,
+            version: version,
+            isOldIE: version <= 8
+        };
+    }
+    
+    return {
+        isIE: false,
+        version: null,
+        isOldIE: false
+    };
+}
+
+// 显示兼容模式提示弹窗
+function showCompatibilityModal() {
+    // 检查是否已经提示过
+    if (localStorage.getItem('compatibility-modal-shown')) {
+        return;
+    }
+    
+    // 创建弹窗HTML
+    const modalHTML = `
+        <div id="compatibility-modal" style="
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+        ">
+            <div style="
+                background-color: white;
+                padding: 30px;
+                border-radius: 10px;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+                max-width: 500px;
+                width: 90%;
+                text-align: center;
+            ">
+                <h2 style="color: #d32f2f; margin-bottom: 20px;">浏览器版本过低</h2>
+                <p style="margin-bottom: 20px; line-height: 1.6;">
+                    检测到您正在使用较旧版本的Internet Explorer浏览器（IE6-8），
+                    这可能会影响网站的正常显示和功能使用。
+                </p>
+                <p style="margin-bottom: 25px; line-height: 1.6;">
+                    建议您：
+                </p>
+                <div style="margin-bottom: 25px;">
+                    <button id="compatibility-yes" style="
+                        background-color: #4CAF50;
+                        color: white;
+                        border: none;
+                        padding: 12px 24px;
+                        margin: 0 10px;
+                        border-radius: 5px;
+                        cursor: pointer;
+                        font-size: 16px;
+                    ">进入兼容模式</button>
+                    <button id="compatibility-no" style="
+                        background-color: #f44336;
+                        color: white;
+                        border: none;
+                        padding: 12px 24px;
+                        margin: 0 10px;
+                        border-radius: 5px;
+                        cursor: pointer;
+                        font-size: 16px;
+                    ">继续使用</button>
+                </div>
+                <p style="font-size: 12px; color: #666; margin-top: 15px;">
+                    兼容模式专门为Windows XP系统和IE6-8浏览器优化
+                </p>
+            </div>
+        </div>
+    `;
+    
+    // 添加弹窗到页面
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    
+    // 绑定按钮事件
+    document.getElementById('compatibility-yes').addEventListener('click', function() {
+        // 跳转到兼容模式网站
+        window.location.href = '/compatible/index.html';
+    });
+    
+    document.getElementById('compatibility-no').addEventListener('click', function() {
+        // 关闭弹窗并记录已显示
+        document.getElementById('compatibility-modal').remove();
+        localStorage.setItem('compatibility-modal-shown', 'true');
+    });
+}
+
 // 等待 DOM 加载完成
 document.addEventListener('DOMContentLoaded', async function() {
     // 加载导航栏
@@ -128,6 +243,12 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     // 加载鸣谢名单
     loadAcknowledgments();
+    
+    // 浏览器版本检测
+    const browserInfo = detectBrowser();
+    if (browserInfo.isOldIE) {
+        showCompatibilityModal();
+    }
 });
 
 // 加载鸣谢名单函数

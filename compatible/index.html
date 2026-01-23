@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ethernos Studio - 兼容模式</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .warning {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        .warning h3 {
+            margin-top: 0;
+            color: #856404;
+        }
+        .content-section {
+            margin-bottom: 25px;
+        }
+        .content-section h2 {
+            color: #34495e;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .feature-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .feature-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        .feature-list li:before {
+            content: "✓ ";
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            margin: 10px 5px;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #2980b9;
+        }
+        .button-primary {
+            background-color: #27ae60;
+        }
+        .button-primary:hover {
+            background-color: #229954;
+        }
+        .navigation {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #ecf0f1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Ethernos Studio - 兼容模式</h1>
+        
+        <div class="warning">
+            <h3>兼容性提示</h3>
+            <p>您当前正在使用兼容模式浏览网站。此模式专门为Windows XP系统和IE6-8浏览器优化，确保在老版本浏览器中也能正常访问我们的核心内容。</p>
+        </div>
+
+        <div class="content-section">
+            <h2>关于我们</h2>
+            <p>Ethernos Studio 是一个专注于创新技术和优质内容创作的团队。我们致力于为用户提供最佳的产品体验和服务。</p>
+            <p>即使在老版本的浏览器中，我们也努力确保您能够访问我们的重要信息和核心功能。</p>
+        </div>
+
+        <div class="content-section">
+            <h2>主要服务</h2>
+            <ul class="feature-list">
+                <li>技术创新与研发</li>
+                <li>内容创作与编辑</li>
+                <li>项目咨询与支持</li>
+                <li>社区建设与交流</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>联系我们</h2>
+            <p>如果您在使用兼容模式时遇到任何问题，或者需要技术支持，请通过以下方式联系我们：</p>
+            <p><strong>邮箱：</strong> support@ethernosstudio.com</p>
+            <p><strong>电话：</strong> 400-123-4567</p>
+        </div>
+
+        <div class="content-section">
+            <h2>浏览器升级建议</h2>
+            <p>为了获得更好的浏览体验和完整功能，我们建议您在条件允许的情况下升级到现代浏览器：</p>
+            <ul class="feature-list">
+                <li>Google Chrome</li>
+                <li>Mozilla Firefox</li>
+                <li>Microsoft Edge</li>
+                <li>Apple Safari</li>
+            </ul>
+        </div>
+
+        <div class="navigation">
+            <a href="ep-viewer.html" class="button button-primary">📚 EP文字资源</a>
+            <a href="/" class="button">返回主站</a>
+            <a href="/about.html" class="button">关于我们</a>
+            <a href="/contact.html" class="button">联系方式</a>
+        </div>
+    </div>
+
+    <script>
+        // 兼容模式的简单脚本
+        // 为老版本浏览器提供基本功能
+        
+        // 简单的页面统计
+        function trackPageView() {
+            try {
+                // 使用简单的localStorage进行页面访问统计
+                var visitCount = localStorage.getItem('compatible-mode-visits') || 0;
+                visitCount = parseInt(visitCount) + 1;
+                localStorage.setItem('compatible-mode-visits', visitCount);
+                
+                // 在控制台输出访问次数（如果控制台可用）
+                if (window.console && console.log) {
+                    console.log('兼容模式访问次数：' + visitCount);
+                }
+            } catch (e) {
+                // 忽略localStorage不支持的情况
+            }
+        }
+        
+        // 页面加载完成后执行
+        window.onload = function() {
+            trackPageView();
+            
+            // 为按钮添加简单的点击效果
+            var buttons = document.getElementsByTagName('a');
+            for (var i = 0; i < buttons.length; i++) {
+                if (buttons[i].className.indexOf('button') !== -1) {
+                    buttons[i].onclick = function() {
+                        // 简单的点击反馈
+                        this.style.opacity = '0.7';
+                        var self = this;
+                        setTimeout(function() {
+                            self.style.opacity = '1';
+                        }, 200);
+                    };
+                }
+            }
+        };
+    </script>
+</body>
+</html>

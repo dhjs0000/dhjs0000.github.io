@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EP文字资源发布中心 - 兼容模式</title>
+    <style>
+        body {
+            font-family: '宋体', SimSun, Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #4CAF50;
+        }
+        .header h1 {
+            color: #2c3e50;
+            font-size: 28px;
+            margin: 0 0 10px 0;
+        }
+        .header p {
+            color: #666;
+            font-size: 16px;
+            margin: 0;
+        }
+        .status-bar {
+            background-color: #e8f5e8;
+            border: 1px solid #4CAF50;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 12px;
+            color: #2e7d32;
+        }
+        
+        /* 搜索和筛选区域 */
+        .search-section {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border: 1px solid #e9ecef;
+        }
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .search-input {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .search-btn {
+            padding: 10px 20px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .filter-section {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .filter-select {
+            padding: 5px 10px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+        
+        /* 结果区域 */
+        .results-section {
+            margin-top: 20px;
+        }
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .results-count {
+            font-size: 14px;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        
+        /* 发布卡片 */
+        .release-grid {
+            display: block;
+        }
+        .release-card {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+        .release-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+        .release-title {
+            font-size: 18px;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .release-info {
+            margin-bottom: 15px;
+        }
+        .release-info p {
+            margin: 5px 0;
+            font-size: 13px;
+            color: #666;
+        }
+        .release-info .label {
+            font-weight: bold;
+            color: #333;
+            display: inline-block;
+            width: 80px;
+        }
+        .format-tags {
+            margin: 10px 0;
+        }
+        .format-tag {
+            background: #4CAF50;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            margin-right: 5px;
+            display: inline-block;
+        }
+        .license-section {
+            background: rgba(76, 175, 80, 0.1);
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 12px;
+        }
+        .license-section h4 {
+            margin: 0 0 5px 0;
+            color: #2e7d32;
+            font-size: 13px;
+        }
+        .download-section {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+        .download-section h4 {
+            margin: 0 0 10px 0;
+            color: #333;
+            font-size: 14px;
+        }
+        .download-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .download-btn {
+            display: inline-block;
+            padding: 8px 15px;
+            background: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 12px;
+            transition: background-color 0.3s;
+        }
+        .download-btn:hover {
+            background: #45a049;
+        }
+        .download-btn.secondary {
+            background: transparent;
+            border: 1px solid #4CAF50;
+            color: #4CAF50;
+        }
+        .download-btn.secondary:hover {
+            background: #4CAF50;
+            color: white;
+        }
+        .preview-section {
+            margin-top: 10px;
+            text-align: center;
+        }
+        .preview-btn {
+            display: inline-block;
+            padding: 8px 15px;
+            background: transparent;
+            border: 1px solid #2196F3;
+            color: #2196F3;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+        .preview-btn:hover {
+            background: #2196F3;
+            color: white;
+        }
+        
+        /* 统计区域 */
+        .stats-section {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 30px;
+            text-align: center;
+        }
+        .stats-section h2 {
+            margin: 0 0 20px 0;
+            color: #2c3e50;
+            font-size: 20px;
+        }
+        .stats-grid {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .stat-item {
+            text-align: center;
+            min-width: 120px;
+        }
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4CAF50;
+            display: block;
+        }
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        /* 无结果提示 */
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            color: #666;
+        }
+        .no-results h3 {
+            color: #4CAF50;
+            margin-bottom: 10px;
+        }
+        
+        /* 加载状态 */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        .loading-text {
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        
+        /* 错误状态 */
+        .error {
+            text-align: center;
+            padding: 20px;
+            color: #d32f2f;
+            background: #ffebee;
+            border: 1px solid #f44336;
+            border-radius: 5px;
+        }
+        
+        /* 响应式设计兼容 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            .search-box {
+                flex-direction: column;
+            }
+            .filter-section {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .download-buttons {
+                flex-direction: column;
+            }
+            .stats-grid {
+                flex-direction: column;
+            }
+        }
+        
+        /* IE6-8 兼容性样式 */
+        .ie-fix {
+            zoom: 1;
+        }
+        .clearfix {
+            clear: both;
+        }
+        
+        /* 打印样式 */
+        @media print {
+            body {
+                background: white;
+            }
+            .container {
+                box-shadow: none;
+                border: none;
+            }
+            .search-section, .controls {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1> EP文字资源发布中心</h1>
+        </div>
+
+        <div class="status-bar">
+            ✅ 系统已加载 <span id="totalCount">0</span> 个资源
+        </div>
+
+        <!-- 搜索和筛选区域 -->
+        <div class="search-section">
+            <div class="search-box">
+                <input type="text" class="search-input" id="searchInput" placeholder="输入关键词搜索发布内容...">
+                <button class="search-btn" onclick="searchReleases()">🔍 搜索</button>
+            </div>
+            
+            <div class="filter-section">
+                <div class="filter-group">
+                    <label>格式:</label>
+                    <select class="filter-select" id="formatFilter" onchange="filterReleases()">
+                        <option value="">全部格式</option>
+                        <option value="PDF">PDF</option>
+                        <option value="Word">Word</option>
+                        <option value="html">HTML</option>
+                        <option value="Pub">Pub</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>许可证:</label>
+                    <select class="filter-select" id="licenseFilter" onchange="filterReleases()">
+                        <option value="">全部许可证</option>
+                        <option value="CC BY-NC-SA 4.0">CC BY-NC-SA 4.0</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>排序:</label>
+                    <select class="filter-select" id="sortBy" onchange="sortReleases()">
+                        <option value="name">按名称</option>
+                        <option value="date">按日期</option>
+                        <option value="id">按ID</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- 结果区域 -->
+        <div class="results-section">
+            <div class="results-header">
+                <div class="results-count">
+                    找到 <span id="resultNumber">0</span> 个结果
+                </div>
+            </div>
+
+            <div id="releaseGrid">
+                <!-- 发布内容将在这里动态加载 -->
+            </div>
+
+            <div id="noResults" class="no-results" style="display: none;">
+                <h3>未找到匹配的结果</h3>
+                <p>请尝试调整搜索条件或过滤选项</p>
+            </div>
+        </div>
+
+        <!-- 统计区域 -->
+        <div class="stats-section">
+            <h2><i>📊</i> 发布统计</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-number" id="totalReleases">0</span>
+                    <div class="stat-label">总发布数</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="totalFormats">0</span>
+                    <div class="stat-label">支持格式</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="totalDownloads">0</span>
+                    <div class="stat-label">下载次数</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // EP文字资源发布系统 - 兼容模式
+        var releases = [];
+        var filteredReleases = [];
+        var downloadStats = {};
+        
+        // 格式到文件名的映射（兼容IE6-8的写法）
+        var formatFileMap = {
+            'PDF': 'PDF.pdf',
+            'Word': 'Word.docx',
+            'Pub': 'Pub.pub',
+            'html': 'html.html'
+        };
+
+        // 从JSON文件加载数据（兼容IE6-8）
+        function loadReleases() {
+            try {
+                // 创建XMLHttpRequest对象（兼容IE6-8）
+                var xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4) {
+                        if (xhr.status === 200) {
+                            try {
+                                var data = eval('(' + xhr.responseText + ')'); // 兼容IE6-8的JSON解析
+                                releases = data;
+                                filteredReleases = releases.slice(); // 复制数组
+                                renderReleases();
+                                updateStats();
+                            } catch (e) {
+                                showError('数据格式错误：' + e.message);
+                            }
+                        } else {
+                            showError('无法加载数据，状态码：' + xhr.status);
+                        }
+                    }
+                };
+                
+                // 尝试加载不同路径的JSON文件
+                var paths = [
+                    '../EP/json/all.json',
+                    'json/all.json',
+                    '/EP/json/all.json'
+                ];
+                
+                var currentPath = 0;
+                function tryNextPath() {
+                    if (currentPath < paths.length) {
+                        xhr.open('GET', paths[currentPath], true);
+                        xhr.onerror = function() {
+                            currentPath++;
+                            tryNextPath();
+                        };
+                        xhr.send();
+                    } else {
+                        // 如果所有路径都失败，使用模拟数据
+                        useMockData();
+                    }
+                }
+                
+                tryNextPath();
+                
+            } catch (e) {
+                // 如果XMLHttpRequest失败，使用模拟数据
+                useMockData();
+            }
+        }
+
+        // 使用模拟数据（当JSON加载失败时）
+        function useMockData() {
+            releases = [
+                {
+                    name: "速通系列 秒学Python (新手入门)2026",
+                    publish_id: "43251224001",
+                    formats: ["Word", "PDF"],
+                    license: "CC BY-NC-SA 4.0",
+                    register_date: "2025-12-24",
+                    final_date: "2026-1-11"
+                },
+                {
+                    name: "速通系列 秒学C++ 入门 (未完成)",
+                    publish_id: "43260118001",
+                    formats: ["Pub", "PDF"],
+                    license: "CC BY-NC-SA 4.0",
+                    register_date: "2025-01-18",
+                    final_date: "N/A"
+                },
+                {
+                    name: "小说《逆光》 中篇 科幻小说",
+                    publish_id: "40250616001",
+                    formats: ["html"],
+                    license: "CC BY-NC-SA 4.0",
+                    register_date: "2026-1-23",
+                    final_date: "2025-6-16"
+                },
+                {
+                    name: "小说《阿尔法战区：零》 短篇",
+                    publish_id: "40251201001",
+                    formats: ["Word"],
+                    license: "CC BY-NC-SA 4.0",
+                    register_date: "2026-1-23",
+                    final_date: "2025-12-01"
+                },
+                {
+                    name: "《均衡者：时茧褶光》完整版",
+                    publish_id: "40250616002",
+                    formats: ["html", "PDF"],
+                    license: "CC BY-NC-SA 4.0",
+                    register_date: "2026-1-23",
+                    final_date: "2026-1-23"
+                }
+            ];
+            filteredReleases = releases.slice();
+            renderReleases();
+            updateStats();
+        }
+
+        // 渲染发布内容
+        function renderReleases() {
+            var container = document.getElementById('releaseGrid');
+            var resultsCount = document.getElementById('resultNumber');
+            var noResults = document.getElementById('noResults');
+            
+            resultsCount.textContent = filteredReleases.length;
+            
+            if (filteredReleases.length === 0) {
+                container.innerHTML = '';
+                noResults.style.display = 'block';
+                return;
+            }
+            
+            noResults.style.display = 'none';
+            
+            var html = '';
+            for (var i = 0; i < filteredReleases.length; i++) {
+                var release = filteredReleases[i];
+                html += createReleaseCard(release);
+            }
+            
+            container.innerHTML = html;
+        }
+
+        // 创建发布卡片
+        function createReleaseCard(release) {
+            var formatsHtml = '';
+            for (var i = 0; i < release.formats.length; i++) {
+                formatsHtml += '<span class="format-tag"><i>📄</i> ' + release.formats[i] + '</span>';
+            }
+            
+            var downloadsHtml = '';
+            for (var i = 0; i < release.formats.length; i++) {
+                var format = release.formats[i];
+                var filename = formatFileMap[format] || format;
+                downloadsHtml += '<a href="../EP/assets/' + release.publish_id + '/' + filename + '" class="download-btn" download="" onclick="trackDownload(\'' + release.publish_id + '\')">' +
+                                '<i>⬇</i> 下载' + format + '版本</a>';
+            }
+            
+            var finalDateHtml = release.final_date && release.final_date !== 'N/A' ? 
+                '<p><span class="label">完成日期:</span> ' + release.final_date + '</p>' : '';
+            
+            return '<div class="release-card">' +
+                   '<div class="release-title"><i>📖</i> ' + release.name + '</div>' +
+                   '<div class="release-info">' +
+                   '<p><span class="label">发布ID:</span> ' + release.publish_id + '</p>' +
+                   '<p><span class="label">注册日期:</span> ' + release.register_date + '</p>' +
+                   finalDateHtml +
+                   '</div>' +
+                   '<div class="format-tags">' + formatsHtml + '</div>' +
+                   '<div class="license-section">' +
+                   '<h4><i>⚖</i> 许可证信息</h4>' +
+                   '<p>本作品采用 ' + release.license + ' 许可协议。</p>' +
+                   '</div>' +
+                   '<div class="download-section">' +
+                   '<h4><i>⬇</i> 下载选项</h4>' +
+                   '<div class="download-buttons">' + downloadsHtml +
+                   '<a href="../EP/assets/' + release.publish_id + '/LICENSE" class="download-btn secondary" target="_blank">' +
+                   '<i>📋</i> 查看许可证</a>' +
+                   '</div>' +
+                   '</div>' +
+                   // 只有HTML格式才显示在线预览，点击后跳转到实际HTML页面
+                   (release.formats.indexOf('html') !== -1 ?
+                   '<div class="preview-section">' +
+                   '<a href="../EP/assets/' + release.publish_id + '/html.html" class="preview-btn" target="_blank">' +
+                   '<i>👁</i> 在线预览</a>' +
+                   '</div>' : '') +
+                   '</div>';
+        }
+
+        // 搜索功能
+        function searchReleases() {
+            var searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            filterReleases();
+        }
+
+        // 筛选功能
+        function filterReleases() {
+            var searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            var formatFilter = document.getElementById('formatFilter').value;
+            var licenseFilter = document.getElementById('licenseFilter').value;
+            
+            filteredReleases = [];
+            
+            for (var i = 0; i < releases.length; i++) {
+                var release = releases[i];
+                var matchesSearch = !searchTerm || release.name.toLowerCase().indexOf(searchTerm) !== -1;
+                var matchesFormat = !formatFilter || release.formats.indexOf(formatFilter) !== -1;
+                var matchesLicense = !licenseFilter || release.license === licenseFilter;
+                
+                if (matchesSearch && matchesFormat && matchesLicense) {
+                    filteredReleases.push(release);
+                }
+            }
+            
+            renderReleases();
+        }
+
+        // 排序功能
+        function sortReleases() {
+            var sortBy = document.getElementById('sortBy').value;
+            
+            filteredReleases.sort(function(a, b) {
+                var aValue, bValue;
+                
+                switch (sortBy) {
+                    case 'name':
+                        aValue = a.name.toLowerCase();
+                        bValue = b.name.toLowerCase();
+                        break;
+                    case 'date':
+                        aValue = new Date(a.register_date);
+                        bValue = new Date(b.register_date);
+                        break;
+                    case 'id':
+                        aValue = a.publish_id;
+                        bValue = b.publish_id;
+                        break;
+                    default:
+                        return 0;
+                }
+                
+                if (aValue < bValue) return -1;
+                if (aValue > bValue) return 1;
+                return 0;
+            });
+            
+            renderReleases();
+        }
+
+        // 更新统计
+        function updateStats() {
+            var totalReleases = releases.length;
+            var totalFormats = 0;
+            var formatSet = {};
+            
+            for (var i = 0; i < releases.length; i++) {
+                for (var j = 0; j < releases[i].formats.length; j++) {
+                    formatSet[releases[i].formats[j]] = true;
+                }
+            }
+            
+            for (var format in formatSet) {
+                totalFormats++;
+            }
+            
+            document.getElementById('totalReleases').textContent = totalReleases;
+            document.getElementById('totalFormats').textContent = totalFormats;
+            document.getElementById('totalDownloads').textContent = getTotalDownloads();
+            document.getElementById('totalCount').textContent = totalReleases;
+        }
+
+        // 获取总下载次数
+        function getTotalDownloads() {
+            var total = 0;
+            for (var id in downloadStats) {
+                total += downloadStats[id];
+            }
+            return total;
+        }
+
+        // 跟踪下载
+        function trackDownload(releaseId) {
+            if (!downloadStats[releaseId]) {
+                downloadStats[releaseId] = 0;
+            }
+            downloadStats[releaseId]++;
+            
+            // 保存到localStorage（如果支持）
+            try {
+                localStorage.setItem('ep-download-stats', JSON.stringify(downloadStats));
+            } catch (e) {
+                // 忽略不支持的情况
+            }
+            
+            updateStats();
+        }
+
+
+        // 显示错误
+        function showError(message) {
+            document.getElementById('releaseGrid').innerHTML = 
+                '<div class="error">' +
+                '<h3>❌ 加载失败</h3>' +
+                '<p>' + message + '</p>' +
+                '<button class="btn" onclick="loadReleases()">重新加载</button>' +
+                '</div>';
+        }
+
+        // 页面加载完成后初始化
+        window.onload = function() {
+            // 为IE6-8添加兼容性处理
+            if (navigator.userAgent.indexOf('MSIE 6') !== -1 || 
+                navigator.userAgent.indexOf('MSIE 7') !== -1 || 
+                navigator.userAgent.indexOf('MSIE 8') !== -1) {
+                document.body.className += ' ie-fix';
+            }
+            
+            // 加载下载统计（如果支持localStorage）
+            try {
+                var savedStats = localStorage.getItem('ep-download-stats');
+                if (savedStats) {
+                    downloadStats = eval('(' + savedStats + ')');
+                }
+            } catch (e) {
+                // 忽略错误
+            }
+            
+            // 加载数据
+            loadReleases();
+            
+            // 绑定回车键搜索
+            document.getElementById('searchInput').onkeypress = function(e) {
+                if (!e) e = window.event;
+                if (e.keyCode === 13) {
+                    searchReleases();
+                }
+            };
+        };
+
+    </script>
+</body>
+</html>
