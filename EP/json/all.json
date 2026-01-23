@@ -14,5 +14,21 @@
         "license": "CC BY-NC-SA 4.0",
         "register_date": "2025-01-18",
         "final_date": "N/A"
+    },
+    {
+        "name": "小说《逆光》 中篇 科幻小说",
+        "publish_id": "40250616001",
+        "formats": ["html"],
+        "license": "CC BY-NC-SA 4.0",
+        "register_date": "2026-1-23",
+        "final_date": "2025-6-16"
+    },
+    {
+        "name": "小说《阿尔法战区：零》 短篇",
+        "publish_id": "40251201001",
+        "formats": ["Word"],
+        "license": "CC BY-NC-SA 4.0",
+        "register_date": "2026-1-23",
+        "final_date": "2025-12-01"
     }
 ]
