@@ -302,6 +302,11 @@
             border-color: var(--primary-color, #3b82f6);
         }
 
+        .release-asset-item.recommended {
+            border-color: var(--secondary-color, #10b981);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
         .release-asset-info {
             display: flex;
             align-items: center;
@@ -332,6 +337,18 @@
 
         .release-asset-download:hover {
             background: var(--primary-hover, #2563eb);
+        }
+
+        .release-asset-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 8px;
+            background: var(--secondary-color, #10b981);
+            color: white;
+            font-size: 0.625rem;
+            font-weight: 600;
+            border-radius: 4px;
+            margin-left: 8px;
         }
 
         /* 骨架屏 */
@@ -397,6 +414,24 @@
         .btn-history:hover {
             border-color: var(--primary-color, #3b82f6);
             color: var(--primary-color, #3b82f6);
+        }
+
+        /* 推荐下载标记 */
+        .download-recommended {
+            position: relative;
+        }
+
+        .download-recommended::after {
+            content: '推荐';
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--secondary-color, #10b981);
+            color: white;
+            font-size: 0.625rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
         }
 
         /* 响应式 */
@@ -541,23 +576,149 @@
     <script src="script.js"></script>
     <script src="config.js"></script>
     <script>
-        // 软件图标映射
-        const iconMap = {
-            'vsenv': 'fa-code',
-            'ECL编程语言': 'fa-terminal',
-            'BCC': 'fa-code',
-            'Blender-VMT': 'fa-cube',
-            'Blender-VMT-Remastered': 'fa-cubes'
-        };
+        // 全局软件配置存储
+        let softwareConfigs = {};
 
-        // 软件特性映射
-        const featuresMap = {
-            'vsenv': ['内核级实例隔离', '完全隔离插件', '多版本管理'],
-            'ECL编程语言': ['基于Rust', '半过程式', '高性能'],
-            'BCC': ['简单语法', '强大功能', '完整工具链'],
-            'Blender-VMT': ['版本管理', '用户友好', '项目追踪'],
-            'Blender-VMT-Remastered': ['高效版本管理', '直观界面', '完整项目追踪']
-        };
+        // 检测用户操作系统
+        function getUserPlatform() {
+            const ua = navigator.userAgent.toLowerCase();
+            if (ua.includes('win')) return 'windows';
+            if (ua.includes('mac') || ua.includes('darwin')) return 'macos';
+            if (ua.includes('linux')) return 'linux';
+            return 'unknown';
+        }
+
+        // 语义分析引擎 - 分析单个 Asset
+        function analyzeAsset(asset, config = {}) {
+            const filename = asset.name.toLowerCase();
+            const defaultConfig = {
+                priority_patterns: [],
+                ignore_patterns: ['runtime', 'deps', 'dependencies', 'source', 'src', 'docs', 'test', 'debug'],
+                platform_keywords: {
+                    windows: ['windows', 'win', 'win32', 'win64', 'amd64-windows', 'x86_64-windows', '.exe', '.msi', '.zip'],
+                    macos: ['mac', 'macos', 'darwin', 'osx', '.dmg', '.app', '.pkg'],
+                    linux: ['linux', 'appimage', '.deb', '.rpm', '.tar.gz', '.tar.xz', '.AppImage']
+                }
+            };
+            
+            const cfg = { ...defaultConfig, ...config };
+            const userPlatform = getUserPlatform();
+            
+            let score = 0;
+            const reasons = [];
+            
+            // 1. 忽略模式检查（大幅降分）
+            for (const pattern of cfg.ignore_patterns) {
+                if (filename.includes(pattern.toLowerCase())) {
+                    score -= 50;
+                    reasons.push(`忽略模式匹配: ${pattern}`);
+                }
+            }
+            
+            // 2. 优先模式检查（高权重加分）
+            for (const pattern of cfg.priority_patterns) {
+                if (filename.includes(pattern.toLowerCase())) {
+                    score += 30;
+                    reasons.push(`优先模式匹配: ${pattern}`);
+                }
+            }
+            
+            // 3. 版本号检测（主程序包特征）
+            const versionPattern = /v?\d+\.\d+\.?\d*/;
+            if (versionPattern.test(filename)) {
+                score += 20;
+                reasons.push('包含版本号');
+            }
+            
+            // 4. 平台匹配（根据用户系统）
+            let platformMatch = false;
+            for (const [platform, keywords] of Object.entries(cfg.platform_keywords)) {
+                for (const keyword of keywords) {
+                    if (filename.includes(keyword.toLowerCase())) {
+                        if (platform === userPlatform) {
+                            score += 25;
+                            platformMatch = true;
+                            reasons.push(`匹配当前平台: ${platform}`);
+                        } else {
+                            score += 5;
+                            reasons.push(`支持平台: ${platform}`);
+                        }
+                        break;
+                    }
+                }
+            }
+            
+            // 5. 架构信息检测
+            const archPatterns = ['amd64', 'x86_64', 'x64', 'i386', 'i686', 'x86', 'arm64', 'aarch64'];
+            for (const arch of archPatterns) {
+                if (filename.includes(arch)) {
+                    score += 10;
+                    reasons.push(`架构信息: ${arch}`);
+                    break;
+                }
+            }
+            
+            // 6. 文件类型评分
+            if (filename.endsWith('.exe') || filename.endsWith('.msi')) {
+                score += 15;
+                reasons.push('Windows安装包');
+            } else if (filename.endsWith('.dmg') || filename.endsWith('.pkg')) {
+                score += 15;
+                reasons.push('macOS安装包');
+            } else if (filename.endsWith('.appimage') || filename.endsWith('.deb') || filename.endsWith('.rpm')) {
+                score += 15;
+                reasons.push('Linux安装包');
+            } else if (filename.endsWith('.zip') || filename.endsWith('.tar.gz')) {
+                score += 5;
+                reasons.push('压缩包');
+            }
+            
+            // 7. 文件名长度惩罚（过长可能是源码包）
+            if (filename.length > 50) {
+                score -= 5;
+                reasons.push('文件名过长');
+            }
+            
+            return {
+                score,
+                reasons,
+                platformMatch,
+                confidence: Math.min(Math.abs(score) / 100, 1)
+            };
+        }
+
+        // 获取推荐的下载 Asset
+        function getRecommendedAsset(assets, config = {}) {
+            if (!assets || assets.length === 0) return null;
+            
+            // 为每个 Asset 评分
+            const scored = assets.map(asset => ({
+                asset,
+                analysis: analyzeAsset(asset, config)
+            }));
+            
+            // 按分数排序
+            scored.sort((a, b) => b.analysis.score - a.analysis.score);
+            
+            // 返回最高分的 Asset
+            const best = scored[0];
+            if (best.analysis.score < -20) {
+                // 置信度太低，返回第一个原始 Asset
+                return { asset: assets[0], analysis: { score: 0, confidence: 0, reasons: ['默认选择'], isFallback: true } };
+            }
+            
+            return best;
+        }
+
+        // 按优先级排序所有 Assets
+        function sortAssetsByPriority(assets, config = {}) {
+            if (!assets || assets.length === 0) return [];
+            
+            return assets.map(asset => ({
+                asset,
+                analysis: analyzeAsset(asset, config)
+            })).sort((a, b) => b.analysis.score - a.analysis.score);
+        }
 
         // 格式化日期
         function formatDate(dateString) {
@@ -598,9 +759,12 @@
         // 创建软件卡片
         function createSoftwareCard(software, index) {
             const cardClass = index === 0 ? 'card-highlight' : (index % 2 === 0 ? 'card-success' : 'card-info');
-            const icon = iconMap[software.name] || 'fa-box';
-            const features = featuresMap[software.name] || ['功能强大', '易于使用', '开源免费'];
+            const icon = software.icon || 'fa-box';
+            const features = software.features || ['功能强大', '易于使用', '开源免费'];
             const softwareId = software.name.replace(/\s+/g, '-').toLowerCase();
+            
+            // 保存配置
+            softwareConfigs[softwareId] = software.asset_config || {};
 
             return `
                 <div class="info-panel ${cardClass}" id="card-${softwareId}" style="${index > 0 ? 'margin-top: 24px;' : ''}">
@@ -635,7 +799,7 @@
                     </div>
 
                     <div class="button-group" style="justify-content: flex-start;">
-                        <a href="#" id="${softwareId}-download" class="button" target="_blank">
+                        <a href="#" id="${softwareId}-download" class="button download-recommended" target="_blank">
                             <i class="fas fa-download"></i> 下载
                         </a>
                         <button class="button outline btn-history" onclick="openReleaseModal('${software.name}', '${software.relatively_url}')">
@@ -661,9 +825,11 @@
             const dateEl = document.getElementById(`${softwareId}-date`);
             const notesEl = document.getElementById(`${softwareId}-notes`);
             const downloadBtn = document.getElementById(`${softwareId}-download`);
+            const assetConfig = softwareConfigs[softwareId] || {};
 
             downloadBtn.href = `${software.repo_url}/releases`;
             downloadBtn.innerHTML = `<i class="fas fa-download"></i> 前往下载`;
+            downloadBtn.classList.remove('download-recommended');
 
             try {
                 const controller = new AbortController();
@@ -689,9 +855,19 @@
                     <div class="markdown-body" style="color: var(--text-muted);">${notes}</div>
                 `;
 
+                // 使用智能推荐算法选择下载文件
                 if (data.assets && data.assets.length > 0) {
-                    downloadBtn.href = data.assets[0].browser_download_url;
-                    downloadBtn.innerHTML = `<i class="fas fa-download"></i> 下载 ${data.tag_name}`;
+                    const recommended = getRecommendedAsset(data.assets, assetConfig);
+                    if (recommended && recommended.asset) {
+                        downloadBtn.href = recommended.asset.browser_download_url;
+                        downloadBtn.innerHTML = `<i class="fas fa-download"></i> 下载 ${data.tag_name}`;
+                        if (recommended.analysis.confidence > 0.3) {
+                            downloadBtn.classList.add('download-recommended');
+                        }
+                    } else {
+                        downloadBtn.href = data.html_url;
+                        downloadBtn.innerHTML = `<i class="fas fa-download"></i> 下载 ${data.tag_name}`;
+                    }
                 } else {
                     downloadBtn.href = data.html_url;
                     downloadBtn.innerHTML = `<i class="fas fa-download"></i> 下载 ${data.tag_name}`;
@@ -727,10 +903,7 @@
             document.getElementById('releaseModal').classList.add('active');
             document.body.style.overflow = 'hidden';
 
-            // 显示骨架屏
             showSkeletonLoading();
-
-            // 加载第一页数据
             await loadMoreReleases();
         }
 
@@ -767,7 +940,6 @@
             const perPage = 10;
             const releaseList = document.getElementById('releaseList');
 
-            // 移除加载更多按钮
             const loadMoreBtn = releaseList.querySelector('.release-load-more');
             if (loadMoreBtn) loadMoreBtn.remove();
 
@@ -797,12 +969,10 @@
                     return;
                 }
 
-                // 清除骨架屏（如果是第一页）
                 if (currentModalPage === 1) {
                     releaseList.innerHTML = '';
                 }
 
-                // 添加新版本
                 const startIndex = modalReleases.length;
                 modalReleases.push(...releases);
 
@@ -823,7 +993,6 @@
                     releaseList.appendChild(item);
                 });
 
-                // 如果有更多数据，添加加载更多按钮
                 if (releases.length === perPage) {
                     const loadMoreDiv = document.createElement('div');
                     loadMoreDiv.className = 'release-load-more';
@@ -837,7 +1006,6 @@
 
                 currentModalPage++;
 
-                // 如果是第一页，自动选择第一个版本
                 if (currentModalPage === 2 && modalReleases.length > 0) {
                     selectRelease(0);
                 }
@@ -868,13 +1036,27 @@
 
             selectedReleaseIndex = index;
             const release = modalReleases[index];
+            
+            // 获取软件配置（从 repoUrl 推断 softwareId）
+            let assetConfig = {};
+            for (const [id, cfg] of Object.entries(softwareConfigs)) {
+                if (currentModalRepo && currentModalRepo.includes(id.replace(/-/g, '').toLowerCase())) {
+                    assetConfig = cfg;
+                    break;
+                }
+            }
 
-            // 更新列表选中状态
             document.querySelectorAll('.release-item').forEach(item => {
                 item.classList.toggle('active', parseInt(item.dataset.index) === index);
             });
 
-            // 更新详情面板
+            // 使用智能排序显示 Assets
+            const sortedAssets = release.assets && release.assets.length > 0 
+                ? sortAssetsByPriority(release.assets, assetConfig)
+                : [];
+            
+            const topScore = sortedAssets.length > 0 ? sortedAssets[0].analysis.score : 0;
+
             const detailPanel = document.getElementById('releaseDetail');
             detailPanel.innerHTML = `
                 <div class="release-detail-header">
@@ -892,17 +1074,22 @@
                     <div class="markdown-body">
                         ${release.body ? marked.parse(release.body) : '<p style="color: var(--text-muted);">暂无更新说明</p>'}
                     </div>
-                    ${release.assets && release.assets.length > 0 ? `
+                    ${sortedAssets.length > 0 ? `
                         <div class="release-assets">
                             <div class="release-assets-title">
-                                <i class="fas fa-box-archive"></i> 下载资源 (${release.assets.length})
+                                <i class="fas fa-box-archive"></i> 下载资源 (${sortedAssets.length})
                             </div>
-                            ${release.assets.map(asset => `
-                                <div class="release-asset-item">
+                            ${sortedAssets.map(({asset, analysis}, idx) => {
+                                const isRecommended = idx === 0 && analysis.score > 0 && analysis.confidence > 0.3;
+                                return `
+                                <div class="release-asset-item ${isRecommended ? 'recommended' : ''}">
                                     <div class="release-asset-info">
-                                        <i class="fas fa-file-archive" style="color: var(--primary-color);"></i>
+                                        <i class="fas fa-file-archive" style="color: ${isRecommended ? 'var(--secondary-color)' : 'var(--primary-color)'};"></i>
                                         <div>
-                                            <div class="release-asset-name">${asset.name}</div>
+                                            <div class="release-asset-name">
+                                                ${asset.name}
+                                                ${isRecommended ? '<span class="release-asset-badge">推荐</span>' : ''}
+                                            </div>
                                             <div class="release-asset-size">${formatFileSize(asset.size)} · ${asset.download_count} 次下载</div>
                                         </div>
                                     </div>
@@ -910,13 +1097,12 @@
                                         <i class="fas fa-download"></i> 下载
                                     </a>
                                 </div>
-                            `).join('')}
+                            `}).join('')}
                         </div>
-                    ` : ''}
+                    ` : '<div class="release-empty-state" style="padding: 40px 0;"><i class="fas fa-box-open"></i><h3>无下载资源</h3><p>该版本未包含可下载的文件</p></div>'}
                 </div>
             `;
 
-            // 滚动到选中的版本
             const selectedItem = document.querySelector(`.release-item[data-index="${index}"]`);
             if (selectedItem) {
                 selectedItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });

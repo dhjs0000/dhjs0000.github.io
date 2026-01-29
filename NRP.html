@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ethernos NRP</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="cookie-consent.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.2.0/github-markdown.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background: var(--bg-color, #0f0f1a); color: var(--text-color, #e4e4e7); min-height: 100vh; overflow: hidden; }
+        .nrp-header { position: fixed; top: 0; left: 0; right: 0; height: 64px; background: var(--card-bg, #1a1a2e); border-bottom: 1px solid var(--border-color, #2d2d44); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; z-index: 1000; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3); }
+        .nrp-logo { display: flex; align-items: center; gap: 12px; font-size: 1.25rem; font-weight: 600; color: var(--text-color, #e4e4e7); }
+        .nrp-logo i { color: var(--primary-color, #3b82f6); font-size: 1.5rem; }
+        .nrp-nav-right { display: flex; align-items: center; gap: 12px; }
+        .nrp-search-container { display: flex; align-items: center; gap: 12px; }
+        .nrp-search-box { position: relative; display: flex; align-items: center; }
+        .nrp-search-box i { position: absolute; left: 12px; color: var(--text-muted, #a1a1aa); font-size: 0.875rem; }
+        .nrp-search-input { width: 280px; height: 40px; padding: 0 12px 0 36px; border: 1px solid var(--border-color, #2d2d44); border-radius: 8px; background: var(--bg-color, #0f0f1a); color: var(--text-color, #e4e4e7); font-size: 0.875rem; transition: all 0.2s ease; }
+        .nrp-search-input:focus { outline: none; border-color: var(--primary-color, #3b82f6); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
+        .nrp-search-input::placeholder { color: var(--text-muted, #71717a); }
+        .nrp-search-btn { height: 40px; padding: 0 16px; border: none; border-radius: 8px; background: var(--primary-color, #3b82f6); color: white; font-size: 0.875rem; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s ease; }
+        .nrp-search-btn:hover { background: var(--primary-hover, #2563eb); }
+        .nrp-search-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        
+        /* Token 登录按钮 */
+        .nrp-login-btn { height: 40px; padding: 0 16px; border: 1px solid var(--border-color, #2d2d44); border-radius: 8px; background: transparent; color: var(--text-muted, #a1a1aa); font-size: 0.875rem; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s ease; }
+        .nrp-login-btn:hover { border-color: var(--primary-color, #3b82f6); color: var(--primary-color, #3b82f6); }
+        .nrp-login-btn.logged-in { border-color: var(--secondary-color, #10b981); color: var(--secondary-color, #10b981); }
+        
+        /* Token 输入弹窗 */
+        .token-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; z-index: 10001; }
+        .token-modal-overlay.active { display: flex; }
+        .token-modal { width: 400px; background: var(--card-bg, #1a1a2e); border-radius: 12px; border: 1px solid var(--border-color, #2d2d44); padding: 24px; }
+        .token-modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+        .token-modal-title { font-size: 1.125rem; font-weight: 600; }
+        .token-modal-close { background: none; border: none; color: var(--text-muted, #a1a1aa); cursor: pointer; font-size: 1.25rem; }
+        .token-modal-desc { font-size: 0.875rem; color: var(--text-muted, #a1a1aa); margin-bottom: 16px; line-height: 1.5; }
+        .token-modal-desc a { color: var(--primary-color, #3b82f6); }
+        .token-input { width: 100%; height: 44px; padding: 0 12px; border: 1px solid var(--border-color, #2d2d44); border-radius: 8px; background: var(--bg-color, #0f0f1a); color: var(--text-color, #e4e4e7); font-size: 0.875rem; font-family: monospace; margin-bottom: 16px; }
+        .token-input:focus { outline: none; border-color: var(--primary-color, #3b82f6); }
+        .token-modal-actions { display: flex; gap: 12px; }
+        .token-modal-btn { flex: 1; height: 40px; border: none; border-radius: 8px; font-size: 0.875rem; cursor: pointer; transition: all 0.2s ease; }
+        .token-modal-btn.primary { background: var(--primary-color, #3b82f6); color: white; }
+        .token-modal-btn.primary:hover { background: var(--primary-hover, #2563eb); }
+        .token-modal-btn.secondary { background: transparent; border: 1px solid var(--border-color, #2d2d44); color: var(--text-muted, #a1a1aa); }
+        .token-modal-btn.secondary:hover { border-color: var(--text-color, #e4e4e7); color: var(--text-color, #e4e4e7); }
+        
+        /* 速率限制提示 */
+        .rate-limit-banner { position: fixed; top: 64px; left: 0; right: 0; background: #f59e0b; color: #000; padding: 12px 24px; text-align: center; font-size: 0.875rem; z-index: 999; display: none; }
+        .rate-limit-banner.active { display: block; }
+        .rate-limit-banner a { color: #000; text-decoration: underline; font-weight: 600; cursor: pointer; }
+
+        .nrp-main { position: fixed; top: 64px; left: 0; right: 0; bottom: 0; display: flex; overflow: hidden; }
+        .nrp-main.with-banner { top: 108px; }
+        .nrp-list-panel { width: 380px; border-right: 1px solid var(--border-color, #2d2d44); display: flex; flex-direction: column; background: var(--bg-color, #16162a); }
+        .nrp-list-header { padding: 16px 20px; border-bottom: 1px solid var(--border-color, #2d2d44); display: flex; align-items: center; justify-content: space-between; }
+        .nrp-list-title { font-size: 0.9375rem; font-weight: 600; color: var(--text-color, #e4e4e7); display: flex; align-items: center; gap: 8px; }
+        .nrp-repo-badge { font-size: 0.75rem; padding: 4px 8px; background: var(--primary-color, #3b82f6); color: white; border-radius: 4px; font-weight: 500; }
+        .nrp-list { flex: 1; overflow-y: auto; padding: 12px; }
+        .nrp-list::-webkit-scrollbar { width: 6px; }
+        .nrp-list::-webkit-scrollbar-track { background: transparent; }
+        .nrp-list::-webkit-scrollbar-thumb { background: var(--border-color, #2d2d44); border-radius: 3px; }
+        .nrp-release-item { padding: 14px 16px; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; margin-bottom: 6px; border: 1px solid transparent; background: var(--card-bg, #1a1a2e); }
+        .nrp-release-item:hover { border-color: var(--border-color, #2d2d44); transform: translateX(4px); }
+        .nrp-release-item.active { background: var(--primary-color, #3b82f6); border-color: var(--primary-color, #3b82f6); color: white; }
+        .nrp-release-item.active .nrp-release-date, .nrp-release-item.active .nrp-release-tag { color: rgba(255, 255, 255, 0.8); }
+        .nrp-release-version { font-weight: 600; font-size: 0.9375rem; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; word-break: break-all; }
+        .nrp-release-date { font-size: 0.75rem; color: var(--text-muted, #a1a1aa); margin-bottom: 2px; }
+        .nrp-release-tag { font-size: 0.75rem; color: var(--text-muted, #a1a1aa); font-family: monospace; }
+        .nrp-release-prerelease { display: inline-flex; align-items: center; padding: 2px 6px; background: #f59e0b; color: #000; font-size: 0.625rem; font-weight: 600; border-radius: 4px; text-transform: uppercase; flex-shrink: 0; }
+        .nrp-load-more { padding: 12px; text-align: center; }
+        .nrp-load-more button { width: 100%; padding: 12px; border: 1px solid var(--border-color, #2d2d44); background: var(--card-bg, #1a1a2e); color: var(--text-color, #e4e4e7); border-radius: 8px; cursor: pointer; font-size: 0.875rem; transition: all 0.2s ease; }
+        .nrp-load-more button:hover:not(:disabled) { border-color: var(--primary-color, #3b82f6); background: var(--bg-color, #16162a); }
+        .nrp-load-more button:disabled { opacity: 0.5; cursor: not-allowed; }
+        .nrp-detail-panel { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: var(--card-bg, #1a1a2e); }
+        .nrp-detail-header { padding: 24px 32px; border-bottom: 1px solid var(--border-color, #2d2d44); background: var(--bg-color, #16162a); }
+        .nrp-detail-version { font-size: 1.75rem; font-weight: 700; color: var(--text-color, #e4e4e7); margin-bottom: 12px; display: flex; align-items: center; gap: 12px; }
+        .nrp-detail-meta { display: flex; gap: 20px; font-size: 0.875rem; color: var(--text-muted, #a1a1aa); flex-wrap: wrap; }
+        .nrp-detail-meta span { display: flex; align-items: center; gap: 6px; }
+        .nrp-detail-content { flex: 1; overflow-y: auto; padding: 32px; }
+        .nrp-detail-content::-webkit-scrollbar { width: 8px; }
+        .nrp-detail-content::-webkit-scrollbar-track { background: transparent; }
+        .nrp-detail-content::-webkit-scrollbar-thumb { background: var(--border-color, #2d2d44); border-radius: 4px; }
+        .nrp-assets { margin-top: 32px; padding-top: 32px; border-top: 1px solid var(--border-color, #2d2d44); }
+        .nrp-assets-title { font-size: 1.125rem; font-weight: 600; color: var(--text-color, #e4e4e7); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+        .nrp-asset-item { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; background: var(--bg-color, #16162a); border-radius: 10px; margin-bottom: 10px; border: 1px solid var(--border-color, #2d2d44); transition: all 0.2s ease; }
+        .nrp-asset-item:hover { border-color: var(--primary-color, #3b82f6); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); }
+        .nrp-asset-item.recommended { border-color: var(--secondary-color, #10b981); background: rgba(16, 185, 129, 0.08); }
+        .nrp-asset-info { display: flex; align-items: center; gap: 14px; flex: 1; min-width: 0; }
+        .nrp-asset-icon { width: 40px; height: 40px; border-radius: 8px; background: var(--card-bg, #1a1a2e); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .nrp-asset-icon i { font-size: 1.25rem; }
+        .nrp-asset-name-wrap { flex: 1; min-width: 0; }
+        .nrp-asset-name { font-size: 0.9375rem; color: var(--text-color, #e4e4e7); font-weight: 500; word-break: break-all; margin-bottom: 4px; }
+        .nrp-asset-meta { font-size: 0.75rem; color: var(--text-muted, #a1a1aa); }
+        .nrp-asset-download { padding: 10px 20px; background: var(--primary-color, #3b82f6); color: white; border: none; border-radius: 8px; font-size: 0.875rem; font-weight: 500; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s ease; flex-shrink: 0; margin-left: 12px; }
+        .nrp-asset-download:hover { background: var(--primary-hover, #2563eb); }
+        .nrp-asset-badge { display: inline-flex; align-items: center; padding: 3px 10px; background: var(--secondary-color, #10b981); color: white; font-size: 0.6875rem; font-weight: 600; border-radius: 4px; margin-left: 8px; text-transform: uppercase; }
+        .skeleton { background: linear-gradient(90deg, var(--border-color, #2d2d44) 25%, var(--card-bg, #1a1a2e) 50%, var(--border-color, #2d2d44) 75%); background-size: 200% 100%; animation: skeleton-loading 1.5s ease-in-out infinite; border-radius: 4px; }
+        @keyframes skeleton-loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+        .nrp-skeleton-item { padding: 16px; margin-bottom: 8px; background: var(--card-bg, #1a1a2e); border-radius: 8px; }
+        .nrp-skeleton-title { height: 18px; width: 70%; margin-bottom: 10px; }
+        .nrp-skeleton-line { height: 14px; width: 50%; }
+        .nrp-empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; padding: 60px 40px; text-align: center; color: var(--text-muted, #a1a1aa); }
+        .nrp-empty-state i { font-size: 4rem; margin-bottom: 24px; opacity: 0.4; }
+        .nrp-empty-state h3 { font-size: 1.5rem; font-weight: 600; color: var(--text-color, #e4e4e7); margin-bottom: 12px; }
+        .nrp-empty-state p { font-size: 1rem; max-width: 400px; line-height: 1.6; }
+        @media (max-width: 1024px) { .nrp-list-panel { width: 320px; } }
+        @media (max-width: 768px) {
+            .nrp-header { padding: 0 16px; }
+            .nrp-logo span { display: none; }
+            .nrp-search-input { width: 180px; }
+            .nrp-login-btn span { display: none; }
+            .nrp-main { flex-direction: column; }
+            .nrp-list-panel { width: 100%; height: 40%; border-right: none; border-bottom: 1px solid var(--border-color, #2d2d44); }
+            .nrp-detail-panel { height: 60%; }
+            .nrp-detail-header { padding: 16px 20px; }
+            .nrp-detail-content { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 速率限制提示条 -->
+    <div class="rate-limit-banner" id="rateLimitBanner">
+        <i class="fas fa-exclamation-triangle"></i>
+        API 速率限制已超出（60次/小时）。<a onclick="openTokenModal()">登录 GitHub</a> 可获得 5000次/小时 的限额。
+    </div>
+
+    <!-- 顶部导航栏 -->
+    <header class="nrp-header">
+        <div class="nrp-logo">
+            <i class="fab fa-github"></i>
+            <span>Ethernos NRP</span>
+        </div>
+        <div class="nrp-nav-right">
+            <div class="nrp-search-container">
+                <div class="nrp-search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" class="nrp-search-input" id="repoSearchInput" placeholder="username/reponame" onkeypress="if(event.key==='Enter')searchRepo()">
+                </div>
+                <button class="nrp-search-btn" id="searchBtn" onclick="searchRepo()">
+                    <i class="fas fa-arrow-right"></i>
+                    跳转
+                </button>
+            </div>
+            <button class="nrp-login-btn" id="loginBtn" onclick="openTokenModal()">
+                <i class="fas fa-key"></i>
+                <span id="loginBtnText">登录</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Token 输入弹窗 -->
+    <div class="token-modal-overlay" id="tokenModal" onclick="closeTokenModalOnOverlay(event)">
+        <div class="token-modal" onclick="event.stopPropagation()">
+            <div class="token-modal-header">
+                <span class="token-modal-title"><i class="fab fa-github"></i> GitHub Token 登录</span>
+                <button class="token-modal-close" onclick="closeTokenModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="token-modal-desc">
+                <p style="margin-bottom: 12px;">输入 GitHub Personal Access Token 以提高 API 速率限制（60次/小时 → 5000次/小时）。</p>
+                <ul style="margin: 0 0 12px 16px; line-height: 1.8;">
+                    <li><i class="fas fa-shield-alt" style="color: var(--secondary-color, #10b981);"></i> 我们不会把你的 Token 上传到云端</li>
+                    <li><i class="fas fa-laptop" style="color: var(--secondary-color, #10b981);"></i> 你的所有数据将保存在本地浏览器</li>
+                    <li><i class="fas fa-question-circle" style="color: var(--primary-color, #3b82f6);"></i> <a href="https://docs.github.com/rest/overview/resources-in-the-rest-api#rate-limiting" target="_blank">关于为什么要登录（GitHub Docs）</a></li>
+                </ul>
+                <a href="https://github.com/settings/tokens" target="_blank">在 GitHub 生成 Token</a>（使用classic ，只需勾选 "public_repo" 权限）
+            </div>
+            <input type="password" class="token-input" id="tokenInput" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+            <div class="token-modal-actions">
+                <button class="token-modal-btn secondary" onclick="clearToken()">清除</button>
+                <button class="token-modal-btn primary" onclick="saveToken()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 主内容区 -->
+    <main class="nrp-main" id="mainContent">
+        <div class="nrp-empty-state">
+            <i class="fab fa-github"></i>
+            <h3>GitHub Release 浏览器</h3>
+            <p>在上方搜索框输入仓库地址（格式：username/reponame）<br>即可查看该仓库的所有 Release 和智能推荐的下载资源</p>
+        </div>
+    </main>
+
+    <script>
+        // 全局状态
+        let currentRepo = null, currentPage = 1, releases = [], selectedIndex = -1;
+        let githubToken = localStorage.getItem('github_token') || '';
+
+        // 初始化
+        function init() {
+            updateLoginButton();
+            const params = new URLSearchParams(window.location.search);
+            const repo = params.get('repo');
+            if (repo) {
+                document.getElementById('repoSearchInput').value = repo;
+                searchRepo();
+            }
+        }
+
+        // 更新登录按钮状态
+        function updateLoginButton() {
+            const btn = document.getElementById('loginBtn');
+            const text = document.getElementById('loginBtnText');
+            if (githubToken) {
+                btn.classList.add('logged-in');
+                text.textContent = '已登录';
+            } else {
+                btn.classList.remove('logged-in');
+                text.textContent = '登录';
+            }
+        }
+
+        // Token 弹窗
+        function openTokenModal() {
+            document.getElementById('tokenInput').value = githubToken;
+            document.getElementById('tokenModal').classList.add('active');
+        }
+        function closeTokenModal() {
+            document.getElementById('tokenModal').classList.remove('active');
+        }
+        function closeTokenModalOnOverlay(e) {
+            if (e.target === e.currentTarget) closeTokenModal();
+        }
+        function saveToken() {
+            const token = document.getElementById('tokenInput').value.trim();
+            if (token) {
+                githubToken = token;
+                localStorage.setItem('github_token', token);
+            }
+            updateLoginButton();
+            closeTokenModal();
+        }
+        function clearToken() {
+            githubToken = '';
+            localStorage.removeItem('github_token');
+            document.getElementById('tokenInput').value = '';
+            updateLoginButton();
+        }
+
+        // 显示/隐藏速率限制提示
+        function showRateLimitBanner() {
+            document.getElementById('rateLimitBanner').classList.add('active');
+            document.getElementById('mainContent').classList.add('with-banner');
+        }
+        function hideRateLimitBanner() {
+            document.getElementById('rateLimitBanner').classList.remove('active');
+            document.getElementById('mainContent').classList.remove('with-banner');
+        }
+
+        // 检测用户操作系统
+        function getUserPlatform() {
+            const ua = navigator.userAgent.toLowerCase();
+            if (ua.includes('win')) return 'windows';
+            if (ua.includes('mac') || ua.includes('darwin')) return 'macos';
+            if (ua.includes('linux')) return 'linux';
+            return 'unknown';
+        }
+
+        // 语义分析引擎
+        function analyzeAsset(asset) {
+            const filename = asset.name.toLowerCase();
+            const userPlatform = getUserPlatform();
+            let score = 0, reasons = [];
+            
+            // 忽略模式
+            const ignorePatterns = ['runtime', 'deps', 'dependencies', 'source', 'src', 'docs', 'test', 'debug', 'baseline', 'profile'];
+            for (const p of ignorePatterns) if (filename.includes(p)) { score -= 30; reasons.push(`忽略:${p}`); }
+            
+            // 平台检测
+            const platformKeywords = {
+                windows: ['windows', 'win32', 'win64', '.exe', '.msi'],
+                macos: ['macos', 'darwin', 'osx', '.dmg', '.app', '.pkg'],
+                linux: ['linux', 'appimage', '.deb', '.rpm', '.tar.gz']
+            };
+            let detectedPlatform = null;
+            for (const [platform, keywords] of Object.entries(platformKeywords)) {
+                for (const kw of keywords) {
+                    if (filename.includes(kw)) {
+                        detectedPlatform = platform;
+                        if (platform === userPlatform) { score += 100; reasons.push(`✓平台:${platform}`); }
+                        else { score -= 50; reasons.push(`✗平台:${platform}`); }
+                        break;
+                    }
+                }
+                if (detectedPlatform) break;
+            }
+            
+            // 架构检测（仅平台匹配时）
+            if (detectedPlatform === userPlatform) {
+                const ua = navigator.userAgent.toLowerCase();
+                if ((ua.includes('win64') || ua.includes('x64')) && (filename.includes('x64') || filename.includes('win64'))) {
+                    score += 15; reasons.push('✓64位');
+                } else if (filename.includes('x86')) { score -= 10; reasons.push('✗32位'); }
+            }
+            
+            return { score, reasons, platformMatch: detectedPlatform === userPlatform };
+        }
+
+        // 排序 Assets
+        function sortAssetsByPriority(assets) {
+            if (!assets || assets.length === 0) return [];
+            const scored = assets.map(asset => ({ asset, analysis: analyzeAsset(asset) }));
+            scored.sort((a, b) => {
+                if (b.analysis.score !== a.analysis.score) return b.analysis.score - a.analysis.score;
+                return b.asset.download_count - a.asset.download_count;
+            });
+            return scored;
+        }
+
+        // 获取推荐列表
+        function getRecommendedAssets(sortedAssets) {
+            if (!sortedAssets || sortedAssets.length === 0) return [];
+            const maxScore = sortedAssets[0].analysis.score;
+            if (maxScore <= 0) return [];
+            const topAssets = sortedAssets.filter(item => item.analysis.score === maxScore);
+            if (topAssets.length === sortedAssets.length) return [];
+            return topAssets;
+        }
+
+        // 获取请求头
+        function getHeaders() {
+            const headers = { 'Accept': 'application/vnd.github.v3+json' };
+            if (githubToken && githubToken.startsWith('ghp_')) {
+                headers.Authorization = `token ${githubToken}`;
+            }
+            return headers;
+        }
+
+        // 格式化
+        function formatDate(dateString) {
+            try { return new Date(dateString).toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' }); } 
+            catch { return dateString; }
+        }
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 B';
+            const k = 1024, sizes = ['B', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        // 处理 API 错误
+        async function handleApiError(response) {
+            if (response.status === 403) {
+                const data = await response.json().catch(() => ({}));
+                if (data.message && data.message.includes('rate limit')) {
+                    showRateLimitBanner();
+                    return { rateLimited: true, message: 'API 速率限制已超出' };
+                }
+            }
+            return null;
+        }
+
+        // 搜索仓库
+        async function searchRepo() {
+            const input = document.getElementById('repoSearchInput');
+            const btn = document.getElementById('searchBtn');
+            const repo = input.value.trim();
+            if (!repo) return;
+            if (!repo.includes('/')) { alert('格式：username/reponame'); return; }
+
+            // 更新 URL，支持刷新不丢失
+            const newUrl = new URL(window.location);
+            newUrl.searchParams.set('repo', repo);
+            window.history.pushState({}, '', newUrl);
+
+            hideRateLimitBanner();
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            currentRepo = repo; currentPage = 1; releases = []; selectedIndex = -1;
+            renderLayout(); showSkeleton();
+            await loadReleases();
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-arrow-right"></i> 跳转';
+        }
+
+        function renderLayout() {
+            document.getElementById('mainContent').innerHTML = `
+                <div class="nrp-list-panel">
+                    <div class="nrp-list-header">
+                        <div class="nrp-list-title"><i class="fas fa-list"></i> 版本列表</div>
+                        <span class="nrp-repo-badge">${currentRepo}</span>
+                    </div>
+                    <div class="nrp-list" id="releaseList"></div>
+                </div>
+                <div class="nrp-detail-panel">
+                    <div class="nrp-detail-content" id="releaseDetail">
+                        <div class="nrp-empty-state">
+                            <i class="fas fa-arrow-left"></i>
+                            <h3>选择版本</h3>
+                            <p>从左侧选择版本查看详情</p>
+                        </div>
+                    </div>
+                </div>`;
+        }
+
+        function showSkeleton() {
+            document.getElementById('releaseList').innerHTML = Array(6).fill(0).map(() => `
+                <div class="nrp-skeleton-item"><div class="skeleton nrp-skeleton-title"></div><div class="skeleton nrp-skeleton-line"></div></div>
+            `).join('');
+        }
+
+        // 加载 Release
+        async function loadReleases() {
+            const perPage = 15;
+            const listEl = document.getElementById('releaseList');
+            const loadMoreBtn = listEl.querySelector('.nrp-load-more');
+            if (loadMoreBtn) loadMoreBtn.remove();
+
+            try {
+                const response = await fetch(`https://api.github.com/repos/${currentRepo}/releases?page=${currentPage}&per_page=${perPage}`, { headers: getHeaders() });
+                
+                // 处理速率限制错误
+                const errorInfo = await handleApiError(response);
+                if (errorInfo) {
+                    if (currentPage === 1) showError('API 速率限制', '已超出未认证用户的 60次/小时 限制，请点击上方"登录"按钮添加 GitHub Token。');
+                    return;
+                }
+
+                if (!response.ok) {
+                    if (response.status === 404) { showError('仓库不存在', '请检查地址'); return; }
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+                const data = await response.json();
+                if (data.length === 0 && currentPage === 1) { showError('暂无发布', '该仓库没有 Release'); return; }
+                if (currentPage === 1) listEl.innerHTML = '';
+                
+                const startIndex = releases.length;
+                releases.push(...data);
+                data.forEach((release, index) => {
+                    const item = document.createElement('div');
+                    item.className = 'nrp-release-item';
+                    item.dataset.index = startIndex + index;
+                    item.onclick = () => selectRelease(startIndex + index);
+                    item.innerHTML = `
+                        <div class="nrp-release-version">${release.name || release.tag_name} ${release.prerelease ? '<span class="nrp-release-prerelease">Pre</span>' : ''}</div>
+                        <div class="nrp-release-date">${formatDate(release.published_at)}</div>
+                        <div class="nrp-release-tag">${release.tag_name}</div>`;
+                    listEl.appendChild(item);
+                });
+
+                if (data.length === perPage) {
+                    const loadMoreDiv = document.createElement('div');
+                    loadMoreDiv.className = 'nrp-load-more';
+                    loadMoreDiv.innerHTML = `<button onclick="loadReleases()"><i class="fas fa-chevron-down"></i> 加载更多</button>`;
+                    listEl.appendChild(loadMoreDiv);
+                }
+                currentPage++;
+                if (currentPage === 2 && releases.length > 0) selectRelease(0);
+
+            } catch (error) {
+                console.error('加载失败:', error);
+                if (currentPage === 1) showError('加载失败', error.message);
+            }
+        }
+
+        function selectRelease(index) {
+            if (index < 0 || index >= releases.length) return;
+            selectedIndex = index;
+            const release = releases[index];
+            document.querySelectorAll('.nrp-release-item').forEach(item => item.classList.toggle('active', parseInt(item.dataset.index) === index));
+            
+            const sortedAssets = release.assets && release.assets.length > 0 ? sortAssetsByPriority(release.assets) : [];
+            const recommendedAssets = getRecommendedAssets(sortedAssets);
+            const recommendedSet = new Set(recommendedAssets.map(r => r.asset.name));
+
+            const detailEl = document.getElementById('releaseDetail');
+            detailEl.innerHTML = `
+                <div class="nrp-detail-header">
+                    <div class="nrp-detail-version">${release.name || release.tag_name} ${release.prerelease ? '<span class="nrp-release-prerelease">Pre-release</span>' : ''}</div>
+                    <div class="nrp-detail-meta">
+                        <span><i class="fas fa-tag"></i> ${release.tag_name}</span>
+                        <span><i class="fas fa-calendar"></i> ${formatDate(release.published_at)}</span>
+                        <span><i class="fas fa-user"></i> ${release.author.login}</span>
+                        <span><i class="fas fa-download"></i> ${release.assets?.length || 0} 文件</span>
+                    </div>
+                </div>
+                <div class="nrp-detail-content">
+                    <div class="markdown-body">${release.body ? marked.parse(release.body) : '<p style="color:var(--text-muted)">无更新说明</p>'}</div>
+                    ${sortedAssets.length > 0 ? `
+                        <div class="nrp-assets">
+                            <div class="nrp-assets-title"><i class="fas fa-box-archive"></i> 下载 (${sortedAssets.length}) ${recommendedAssets.length > 0 ? `<span style="font-size:0.875rem;font-weight:normal;color:var(--text-muted)">· ${recommendedAssets.length}个推荐</span>` : ''}</div>
+                            ${sortedAssets.map(({asset}) => {
+                                const isRec = recommendedSet.has(asset.name);
+                                const icon = asset.name.endsWith('.exe') ? 'fa-windows' : asset.name.endsWith('.dmg') ? 'fa-apple' : asset.name.endsWith('.AppImage') ? 'fa-linux' : 'fa-file-archive';
+                                return `<div class="nrp-asset-item ${isRec ? 'recommended' : ''}">
+                                    <div class="nrp-asset-info">
+                                        <div class="nrp-asset-icon" style="color:${isRec ? 'var(--secondary-color)' : 'var(--primary-color)'}"><i class="fas ${icon}"></i></div>
+                                        <div class="nrp-asset-name-wrap">
+                                            <div class="nrp-asset-name">${asset.name} ${isRec ? '<span class="nrp-asset-badge">推荐</span>' : ''}</div>
+                                            <div class="nrp-asset-meta">${formatFileSize(asset.size)} · ${asset.download_count.toLocaleString()}次下载</div>
+                                        </div>
+                                    </div>
+                                    <a href="${asset.browser_download_url}" class="nrp-asset-download" target="_blank"><i class="fas fa-download"></i>下载</a>
+                                </div>`;
+                            }).join('')}
+                        </div>
+                    ` : '<div class="nrp-empty-state" style="padding:40px 0"><i class="fas fa-box-open"></i><h3>无下载资源</h3></div>'}
+                </div>`;
+            document.querySelector(`.nrp-release-item[data-index="${index}"]`)?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function showError(title, message) {
+            document.getElementById('mainContent').innerHTML = `<div class="nrp-empty-state"><i class="fas fa-exclamation-circle" style="color:#ef4444"></i><h3>${title}</h3><p>${message}</p></div>`;
+        }
+
+        // 启动
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
