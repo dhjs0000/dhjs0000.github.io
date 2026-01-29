@@ -9,6 +9,420 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.2.0/github-markdown.min.css">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        /* 版本历史模态框样式 */
+        .release-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .release-modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .release-modal {
+            width: 90vw;
+            aspect-ratio: 16/9;
+            max-height: 90vh;
+            background: var(--card-bg, #1a1a2e);
+            border-radius: 12px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+
+        .release-modal-overlay.active .release-modal {
+            transform: scale(1);
+        }
+
+        .release-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border-color, #2d2d44);
+            background: var(--bg-color, #16162a);
+        }
+
+        .release-modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-color, #e4e4e7);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .release-modal-close {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            border: none;
+            background: transparent;
+            color: var(--text-muted, #a1a1aa);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .release-modal-close:hover {
+            background: var(--border-color, #2d2d44);
+            color: var(--text-color, #e4e4e7);
+        }
+
+        .release-modal-body {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* 左侧版本列表 */
+        .release-list-panel {
+            width: 320px;
+            border-right: 1px solid var(--border-color, #2d2d44);
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-color, #16162a);
+        }
+
+        .release-list-header {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color, #2d2d44);
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-muted, #a1a1aa);
+        }
+
+        .release-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 8px;
+        }
+
+        .release-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .release-list::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .release-list::-webkit-scrollbar-thumb {
+            background: var(--border-color, #2d2d44);
+            border-radius: 3px;
+        }
+
+        .release-item {
+            padding: 12px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 4px;
+            border: 1px solid transparent;
+        }
+
+        .release-item:hover {
+            background: var(--card-bg, #1a1a2e);
+            border-color: var(--border-color, #2d2d44);
+        }
+
+        .release-item.active {
+            background: var(--primary-color, #3b82f6);
+            color: white;
+        }
+
+        .release-item.active .release-item-date,
+        .release-item.active .release-item-tag {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .release-item-version {
+            font-weight: 600;
+            font-size: 0.9375rem;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .release-item-date {
+            font-size: 0.75rem;
+            color: var(--text-muted, #a1a1aa);
+            margin-bottom: 2px;
+        }
+
+        .release-item-tag {
+            font-size: 0.75rem;
+            color: var(--text-muted, #a1a1aa);
+            font-family: monospace;
+        }
+
+        .release-item-prerelease {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 6px;
+            background: #f59e0b;
+            color: #000;
+            font-size: 0.625rem;
+            font-weight: 600;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        .release-load-more {
+            padding: 12px;
+            text-align: center;
+        }
+
+        .release-load-more button {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color, #2d2d44);
+            background: transparent;
+            color: var(--text-color, #e4e4e7);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+        }
+
+        .release-load-more button:hover:not(:disabled) {
+            background: var(--card-bg, #1a1a2e);
+            border-color: var(--primary-color, #3b82f6);
+        }
+
+        .release-load-more button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* 右侧详情面板 */
+        .release-detail-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: var(--card-bg, #1a1a2e);
+        }
+
+        .release-detail-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color, #2d2d44);
+        }
+
+        .release-detail-version {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-color, #e4e4e7);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .release-detail-meta {
+            display: flex;
+            gap: 16px;
+            font-size: 0.875rem;
+            color: var(--text-muted, #a1a1aa);
+        }
+
+        .release-detail-meta span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .release-detail-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+        }
+
+        .release-detail-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .release-detail-content::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .release-detail-content::-webkit-scrollbar-thumb {
+            background: var(--border-color, #2d2d44);
+            border-radius: 4px;
+        }
+
+        .release-assets {
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-color, #2d2d44);
+        }
+
+        .release-assets-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-color, #e4e4e7);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .release-asset-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            background: var(--bg-color, #16162a);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            border: 1px solid var(--border-color, #2d2d44);
+            transition: all 0.2s ease;
+        }
+
+        .release-asset-item:hover {
+            border-color: var(--primary-color, #3b82f6);
+        }
+
+        .release-asset-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .release-asset-name {
+            font-size: 0.875rem;
+            color: var(--text-color, #e4e4e7);
+        }
+
+        .release-asset-size {
+            font-size: 0.75rem;
+            color: var(--text-muted, #a1a1aa);
+        }
+
+        .release-asset-download {
+            padding: 8px 16px;
+            background: var(--primary-color, #3b82f6);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .release-asset-download:hover {
+            background: var(--primary-hover, #2563eb);
+        }
+
+        /* 骨架屏 */
+        .skeleton {
+            background: linear-gradient(90deg, var(--border-color, #2d2d44) 25%, var(--card-bg, #1a1a2e) 50%, var(--border-color, #2d2d44) 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s ease-in-out infinite;
+            border-radius: 4px;
+        }
+
+        @keyframes skeleton-loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .release-skeleton-item {
+            padding: 12px 16px;
+            margin-bottom: 8px;
+        }
+
+        .release-skeleton-title {
+            height: 16px;
+            width: 60%;
+            margin-bottom: 8px;
+        }
+
+        .release-skeleton-line {
+            height: 12px;
+            width: 40%;
+        }
+
+        /* 空状态 */
+        .release-empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 24px;
+            text-align: center;
+            color: var(--text-muted, #a1a1aa);
+        }
+
+        .release-empty-state i {
+            font-size: 3rem;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .release-empty-state h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-color, #e4e4e7);
+            margin-bottom: 8px;
+        }
+
+        /* 版本历史按钮 */
+        .btn-history {
+            background: transparent;
+            border: 1px solid var(--border-color, #2d2d44);
+            color: var(--text-muted, #a1a1aa);
+        }
+
+        .btn-history:hover {
+            border-color: var(--primary-color, #3b82f6);
+            color: var(--primary-color, #3b82f6);
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .release-modal {
+                width: 95vw;
+                aspect-ratio: auto;
+                height: 90vh;
+            }
+
+            .release-modal-body {
+                flex-direction: column;
+            }
+
+            .release-list-panel {
+                width: 100%;
+                height: 40%;
+                border-right: none;
+                border-bottom: 1px solid var(--border-color, #2d2d44);
+            }
+
+            .release-detail-panel {
+                height: 60%;
+            }
+        }
+    </style>
 </head>
 <body>
     <div id="nav-placeholder"></div>
@@ -18,85 +432,11 @@
 
         <div class="asymmetric-layout">
             <!-- 左侧主要内容 -->
-            <div class="main-content">
-                <!-- BCC 下载部分 -->
-                <div class="info-panel card-highlight" id="bcc-card">
-                    <div class="info-panel-header">
-                        <i class="fas fa-code"></i>
-                        <h2>BCC编程语言</h2>
-                    </div>
-                    <p>简单、优雅的现代编程语言，为开发者提供更好的编程体验。</p>
-                    
-                    <div class="version-info" style="display: flex; gap: 24px; margin: 16px 0; padding: 16px; background: var(--bg-color); border-radius: 6px;">
-                        <div>
-                            <i class="fas fa-code-branch" style="color: var(--primary-color);"></i>
-                            <span id="bcc-version" style="margin-left: 8px; font-family: monospace;">加载中...</span>
-                        </div>
-                        <div>
-                            <i class="far fa-calendar-alt" style="color: var(--text-muted);"></i>
-                            <span id="bcc-date" style="margin-left: 8px; color: var(--text-muted);">加载中...</span>
-                        </div>
-                    </div>
-
-                    <ul style="list-style: none; padding: 0; margin: 16px 0;">
-                        <li style="padding: 8px 0; border-bottom: 1px solid var(--border-color);"><i class="fas fa-check" style="color: var(--secondary-color); margin-right: 8px;"></i>简单易用的语法</li>
-                        <li style="padding: 8px 0; border-bottom: 1px solid var(--border-color);"><i class="fas fa-check" style="color: var(--secondary-color); margin-right: 8px;"></i>强大的编程功能</li>
-                        <li style="padding: 8px 0;"><i class="fas fa-check" style="color: var(--secondary-color); margin-right: 8px;"></i>完整的开发工具链</li>
-                    </ul>
-
-                    <div class="release-notes" id="bcc-notes" style="margin: 16px 0; padding: 16px; background: var(--bg-color); border-radius: 6px;">
-                        <h3 style="margin: 0 0 12px 0; font-size: 0.875rem; color: var(--text-muted);">更新说明</h3>
-                        <p style="margin: 0; color: var(--text-muted);">加载中...</p>
-                    </div>
-
-                    <div class="button-group" style="justify-content: flex-start;">
-                        <a href="#" id="bcc-download" class="button" target="_blank">
-                            <i class="fas fa-download"></i> 下载
-                        </a>
-                        <a href="docs.html#bcc" class="button outline">
-                            <i class="fas fa-book"></i> 文档
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Blender-VMT 下载部分 -->
-                <div class="info-panel card-success" id="vmt-card" style="margin-top: 24px;">
-                    <div class="info-panel-header">
-                        <i class="fab fa-blender" style="color: var(--secondary-color);"></i>
-                        <h2>Blender-VMT-Remastered</h2>
-                    </div>
-                    <p>专业的 Blender 版本管理工具，让项目版本控制更轻松。</p>
-                    
-                    <div class="version-info" style="display: flex; gap: 24px; margin: 16px 0; padding: 16px; background: var(--bg-color); border-radius: 6px;">
-                        <div>
-                            <i class="fas fa-code-branch" style="color: var(--primary-color);"></i>
-                            <span id="vmt-version" style="margin-left: 8px; font-family: monospace;">加载中...</span>
-                        </div>
-                        <div>
-                            <i class="far fa-calendar-alt" style="color: var(--text-muted);"></i>
-                            <span id="vmt-date" style="margin-left: 8px; color: var(--text-muted);">加载中...</span>
-                        </div>
-                    </div>
-
-                    <ul style="list-style: none; padding: 0; margin: 16px 0;">
-                        <li style="padding: 8px 0; border-bottom: 1px solid var(--border-color);"><i class="fas fa-check" style="color: var(--secondary-color); margin-right: 8px;"></i>高效的版本管理</li>
-                        <li style="padding: 8px 0; border-bottom: 1px solid var(--border-color);"><i class="fas fa-check" style="color: var(--secondary-color); margin-right: 8px;"></i>直观的用户界面</li>
-                        <li style="padding: 8px 0;"><i class="fas fa-check" style="color: var(--secondary-color); margin-right: 8px;"></i>完整的项目追踪</li>
-                    </ul>
-
-                    <div class="release-notes" id="vmt-notes" style="margin: 16px 0; padding: 16px; background: var(--bg-color); border-radius: 6px;">
-                        <h3 style="margin: 0 0 12px 0; font-size: 0.875rem; color: var(--text-muted);">更新说明</h3>
-                        <p style="margin: 0; color: var(--text-muted);">加载中...</p>
-                    </div>
-
-                    <div class="button-group" style="justify-content: flex-start;">
-                        <a href="#" id="vmt-download" class="button" target="_blank">
-                            <i class="fas fa-download"></i> 下载
-                        </a>
-                        <a href="docs.html#blender-vmt" class="button outline">
-                            <i class="fas fa-book"></i> 文档
-                        </a>
-                    </div>
+            <div class="main-content" id="software-container">
+                <!-- 软件卡片将通过 JavaScript 动态生成 -->
+                <div class="loading-state">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>正在加载软件列表...</p>
                 </div>
             </div>
 
@@ -104,30 +444,21 @@
             <aside class="sidebar">
                 <div class="sidebar-section">
                     <h3>快速链接</h3>
-                    <ul class="list-group">
-                        <li class="list-group-item"><a href="https://github.com/dhjs0000/bccWeb"><i class="fab fa-github"></i> BCC GitHub</a></li>
-                        <li class="list-group-item"><a href="https://github.com/dhjs0000/Blender-VMT-Remastered"><i class="fab fa-github"></i> VMT GitHub</a></li>
-                        <li class="list-group-item"><a href="docs.html"><i class="fas fa-book"></i> 文档中心</a></li>
+                    <ul class="list-group" id="quick-links">
+                        <!-- 动态生成 -->
                     </ul>
                 </div>
 
                 <div class="sidebar-section">
                     <h3>版本历史</h3>
-                    <div class="timeline">
-                        <div class="timeline-item">
-                            <div class="timeline-date">2025-01</div>
-                            <div class="timeline-content">BCC v1.0 发布</div>
-                        </div>
-                        <div class="timeline-item">
-                            <div class="timeline-date">2024-12</div>
-                            <div class="timeline-content">VMT-Remastered v2.0</div>
-                        </div>
+                    <div class="timeline" id="version-timeline">
+                        <!-- 动态生成 -->
                     </div>
                 </div>
 
                 <div class="sidebar-section">
                     <h3>标签</h3>
-                    <div>
+                    <div id="tags-container">
                         <span class="tag">编程语言</span>
                         <span class="tag">Blender</span>
                         <span class="tag">开源</span>
@@ -173,29 +504,59 @@
         </div>
     </footer>
 
+    <!-- 版本历史模态框 -->
+    <div class="release-modal-overlay" id="releaseModal">
+        <div class="release-modal">
+            <div class="release-modal-header">
+                <div class="release-modal-title">
+                    <i class="fas fa-code-branch"></i>
+                    <span id="modalSoftwareName">版本历史</span>
+                </div>
+                <button class="release-modal-close" onclick="closeReleaseModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="release-modal-body">
+                <div class="release-list-panel">
+                    <div class="release-list-header">
+                        <i class="fas fa-list"></i> 版本列表
+                    </div>
+                    <div class="release-list" id="releaseList">
+                        <!-- 动态生成 -->
+                    </div>
+                </div>
+                <div class="release-detail-panel">
+                    <div class="release-detail-content" id="releaseDetail">
+                        <div class="release-empty-state">
+                            <i class="fas fa-arrow-left"></i>
+                            <h3>选择版本查看详情</h3>
+                            <p>从左侧列表选择一个版本以查看详细信息</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
     <script src="config.js"></script>
     <script>
-        // GitHub API 配置
-        const repos = {
-            bcc: {
-                owner: 'dhjs0000',
-                repo: 'bccWeb',
-                fallback: {
-                    version: '获取失败，请前往Github查看',
-                    date: '获取失败，请前往Github查看',
-                    notes: '获取失败，请前往Github查看'
-                }
-            },
-            vmt: {
-                owner: 'dhjs0000',
-                repo: 'Blender-VMT-Remastered',
-                fallback: {
-                    version: '获取失败，请前往Github查看',
-                    date: '获取失败，请前往Github查看',
-                    notes: '获取失败，请前往Github查看'
-                }
-            }
+        // 软件图标映射
+        const iconMap = {
+            'vsenv': 'fa-code',
+            'ECL编程语言': 'fa-terminal',
+            'BCC': 'fa-code',
+            'Blender-VMT': 'fa-cube',
+            'Blender-VMT-Remastered': 'fa-cubes'
+        };
+
+        // 软件特性映射
+        const featuresMap = {
+            'vsenv': ['内核级实例隔离', '完全隔离插件', '多版本管理'],
+            'ECL编程语言': ['基于Rust', '半过程式', '高性能'],
+            'BCC': ['简单语法', '强大功能', '完整工具链'],
+            'Blender-VMT': ['版本管理', '用户友好', '项目追踪'],
+            'Blender-VMT-Remastered': ['高效版本管理', '直观界面', '完整项目追踪']
         };
 
         // 格式化日期
@@ -212,75 +573,420 @@
             }
         }
 
-        // 使用备用数据
-        function useFallbackData(cardId, fallbackData) {
-            document.getElementById(`${cardId}-version`).textContent = fallbackData.version;
-            document.getElementById(`${cardId}-date`).textContent = fallbackData.date;
-            document.getElementById(`${cardId}-notes`).innerHTML = `
-                <h3 style="margin: 0 0 12px 0; font-size: 0.875rem; color: var(--text-muted);">更新说明</h3>
-                <p style="margin: 0; color: var(--text-muted);">${fallbackData.notes}</p>
+        // 格式化文件大小
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 B';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        // 获取请求头
+        function getHeaders() {
+            const headers = {
+                'Accept': 'application/vnd.github.v3+json'
+            };
+            if (typeof config !== 'undefined' && config.githubToken &&
+                config.githubToken !== 'ghp_YOUR_TOKEN_HERE' &&
+                config.githubToken.startsWith('ghp_')) {
+                headers.Authorization = `token ${config.githubToken}`;
+            }
+            return headers;
+        }
+
+        // 创建软件卡片
+        function createSoftwareCard(software, index) {
+            const cardClass = index === 0 ? 'card-highlight' : (index % 2 === 0 ? 'card-success' : 'card-info');
+            const icon = iconMap[software.name] || 'fa-box';
+            const features = featuresMap[software.name] || ['功能强大', '易于使用', '开源免费'];
+            const softwareId = software.name.replace(/\s+/g, '-').toLowerCase();
+
+            return `
+                <div class="info-panel ${cardClass}" id="card-${softwareId}" style="${index > 0 ? 'margin-top: 24px;' : ''}">
+                    <div class="info-panel-header">
+                        <i class="fas ${icon}"></i>
+                        <h2>${software.name}</h2>
+                    </div>
+                    <p>${software.description}</p>
+                    
+                    <div class="version-info" style="display: flex; gap: 24px; margin: 16px 0; padding: 16px; background: var(--bg-color); border-radius: 6px;">
+                        <div>
+                            <i class="fas fa-code-branch" style="color: var(--primary-color);"></i>
+                            <span id="${softwareId}-version" style="margin-left: 8px; font-family: monospace;">获取中...</span>
+                        </div>
+                        <div>
+                            <i class="far fa-calendar-alt" style="color: var(--text-muted);"></i>
+                            <span id="${softwareId}-date" style="margin-left: 8px; color: var(--text-muted);">获取中...</span>
+                        </div>
+                    </div>
+
+                    <ul style="list-style: none; padding: 0; margin: 16px 0;">
+                        ${features.map((f, i) => `
+                            <li style="padding: 8px 0; ${i < features.length - 1 ? 'border-bottom: 1px solid var(--border-color);' : ''}">
+                                <i class="fas fa-check" style="color: var(--secondary-color); margin-right: 8px;"></i>${f}
+                            </li>
+                        `).join('')}
+                    </ul>
+
+                    <div class="release-notes" id="${softwareId}-notes" style="margin: 16px 0; padding: 16px; background: var(--bg-color); border-radius: 6px;">
+                        <h3 style="margin: 0 0 12px 0; font-size: 0.875rem; color: var(--text-muted);">更新说明</h3>
+                        <p style="margin: 0; color: var(--text-muted);">正在从 GitHub 获取...</p>
+                    </div>
+
+                    <div class="button-group" style="justify-content: flex-start;">
+                        <a href="#" id="${softwareId}-download" class="button" target="_blank">
+                            <i class="fas fa-download"></i> 下载
+                        </a>
+                        <button class="button outline btn-history" onclick="openReleaseModal('${software.name}', '${software.relatively_url}')">
+                            <i class="fas fa-history"></i> 版本历史
+                        </button>
+                        ${software.web_url ? `
+                            <a href="${software.web_url}" class="button outline" target="_blank">
+                                <i class="fas fa-globe"></i> 官网
+                            </a>
+                        ` : ''}
+                        <a href="${software.repo_url}" class="button outline" target="_blank">
+                            <i class="fab fa-github"></i> GitHub
+                        </a>
+                    </div>
+                </div>
             `;
-            const downloadBtn = document.getElementById(`${cardId}-download`);
-            downloadBtn.href = `https://github.com/${repos[cardId].owner}/${repos[cardId].repo}/releases`;
-            downloadBtn.innerHTML = `<i class="fas fa-download"></i> 在 GitHub 下载`;
         }
 
         // 获取最新版本信息
-        async function getLatestRelease(owner, repo, cardId) {
+        async function fetchReleaseInfo(software) {
+            const softwareId = software.name.replace(/\s+/g, '-').toLowerCase();
+            const versionEl = document.getElementById(`${softwareId}-version`);
+            const dateEl = document.getElementById(`${softwareId}-date`);
+            const notesEl = document.getElementById(`${softwareId}-notes`);
+            const downloadBtn = document.getElementById(`${softwareId}-download`);
+
+            downloadBtn.href = `${software.repo_url}/releases`;
+            downloadBtn.innerHTML = `<i class="fas fa-download"></i> 前往下载`;
+
             try {
                 const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 5000);
-
-                const headers = {
-                    'Accept': 'application/vnd.github.v3+json'
-                };
-
-                if (typeof config !== 'undefined' && config.githubToken) {
-                    headers.Authorization = `token ${config.githubToken}`;
-                }
+                const timeoutId = setTimeout(() => controller.abort(), 3000);
 
                 const response = await fetch(
-                    `https://api.github.com/repos/${owner}/${repo}/releases/latest`,
-                    { headers, signal: controller.signal }
+                    `https://api.github.com/repos/${software.relatively_url}/releases/latest`,
+                    { headers: getHeaders(), signal: controller.signal }
                 );
 
                 clearTimeout(timeoutId);
 
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
                 const data = await response.json();
 
-                document.getElementById(`${cardId}-version`).textContent = data.tag_name || '暂无版本信息';
-                document.getElementById(`${cardId}-date`).textContent = formatDate(data.published_at) || '暂无发布日期';
+                versionEl.textContent = data.tag_name || '未知版本';
+                dateEl.textContent = formatDate(data.published_at) || '未知日期';
 
                 const notes = data.body ? marked.parse(data.body) : '暂无更新说明';
-                document.getElementById(`${cardId}-notes`).innerHTML = `
+                notesEl.innerHTML = `
                     <h3 style="margin: 0 0 12px 0; font-size: 0.875rem; color: var(--text-muted);">更新说明</h3>
                     <div class="markdown-body" style="color: var(--text-muted);">${notes}</div>
                 `;
 
-                const downloadBtn = document.getElementById(`${cardId}-download`);
                 if (data.assets && data.assets.length > 0) {
                     downloadBtn.href = data.assets[0].browser_download_url;
                     downloadBtn.innerHTML = `<i class="fas fa-download"></i> 下载 ${data.tag_name}`;
                 } else {
                     downloadBtn.href = data.html_url;
-                    downloadBtn.innerHTML = `<i class="fas fa-download"></i> 在 GitHub 下载`;
+                    downloadBtn.innerHTML = `<i class="fas fa-download"></i> 下载 ${data.tag_name}`;
                 }
+
             } catch (error) {
-                console.error('Error:', error);
-                useFallbackData(cardId, repos[cardId].fallback);
+                console.log(`${software.name} 版本信息获取失败:`, error.message);
+                versionEl.textContent = '请查看 GitHub';
+                dateEl.textContent = '请查看 GitHub';
+                notesEl.innerHTML = `
+                    <h3 style="margin: 0 0 12px 0; font-size: 0.875rem; color: var(--text-muted);">更新说明</h3>
+                    <p style="margin: 0; color: var(--text-muted);">
+                        无法获取最新版本信息，请前往 GitHub 查看详情。
+                    </p>
+                `;
             }
         }
 
-        window.addEventListener('DOMContentLoaded', () => {
-            ['bcc', 'vmt'].forEach(cardId => {
-                const repo = repos[cardId];
-                getLatestRelease(repo.owner, repo.repo, cardId);
+        // 版本历史模态框状态
+        let currentModalRepo = null;
+        let currentModalPage = 1;
+        let modalReleases = [];
+        let selectedReleaseIndex = -1;
+
+        // 打开版本历史模态框
+        async function openReleaseModal(softwareName, repoUrl) {
+            currentModalRepo = repoUrl;
+            currentModalPage = 1;
+            modalReleases = [];
+            selectedReleaseIndex = -1;
+
+            document.getElementById('modalSoftwareName').textContent = `${softwareName} - 版本历史`;
+            document.getElementById('releaseModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+
+            // 显示骨架屏
+            showSkeletonLoading();
+
+            // 加载第一页数据
+            await loadMoreReleases();
+        }
+
+        // 关闭版本历史模态框
+        function closeReleaseModal() {
+            document.getElementById('releaseModal').classList.remove('active');
+            document.body.style.overflow = '';
+            currentModalRepo = null;
+            modalReleases = [];
+        }
+
+        // 显示骨架屏
+        function showSkeletonLoading() {
+            const releaseList = document.getElementById('releaseList');
+            releaseList.innerHTML = Array(5).fill(0).map(() => `
+                <div class="release-skeleton-item">
+                    <div class="skeleton release-skeleton-title"></div>
+                    <div class="skeleton release-skeleton-line"></div>
+                </div>
+            `).join('');
+
+            document.getElementById('releaseDetail').innerHTML = `
+                <div class="release-empty-state">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <h3>正在加载版本历史...</h3>
+                </div>
+            `;
+        }
+
+        // 加载更多版本
+        async function loadMoreReleases() {
+            if (!currentModalRepo) return;
+
+            const perPage = 10;
+            const releaseList = document.getElementById('releaseList');
+
+            // 移除加载更多按钮
+            const loadMoreBtn = releaseList.querySelector('.release-load-more');
+            if (loadMoreBtn) loadMoreBtn.remove();
+
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 10000);
+
+                const response = await fetch(
+                    `https://api.github.com/repos/${currentModalRepo}/releases?page=${currentModalPage}&per_page=${perPage}`,
+                    { headers: getHeaders(), signal: controller.signal }
+                );
+
+                clearTimeout(timeoutId);
+
+                if (!response.ok) {
+                    if (response.status === 404) {
+                        showEmptyState('暂无发布历史', '该仓库尚未创建任何 Release');
+                        return;
+                    }
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+                const releases = await response.json();
+
+                if (releases.length === 0 && currentModalPage === 1) {
+                    showEmptyState('暂无发布历史', '该仓库尚未创建任何 Release');
+                    return;
+                }
+
+                // 清除骨架屏（如果是第一页）
+                if (currentModalPage === 1) {
+                    releaseList.innerHTML = '';
+                }
+
+                // 添加新版本
+                const startIndex = modalReleases.length;
+                modalReleases.push(...releases);
+
+                releases.forEach((release, index) => {
+                    const actualIndex = startIndex + index;
+                    const item = document.createElement('div');
+                    item.className = 'release-item';
+                    item.dataset.index = actualIndex;
+                    item.onclick = () => selectRelease(actualIndex);
+                    item.innerHTML = `
+                        <div class="release-item-version">
+                            ${release.name || release.tag_name}
+                            ${release.prerelease ? '<span class="release-item-prerelease">Pre-release</span>' : ''}
+                        </div>
+                        <div class="release-item-date">${formatDate(release.published_at)}</div>
+                        <div class="release-item-tag">${release.tag_name}</div>
+                    `;
+                    releaseList.appendChild(item);
+                });
+
+                // 如果有更多数据，添加加载更多按钮
+                if (releases.length === perPage) {
+                    const loadMoreDiv = document.createElement('div');
+                    loadMoreDiv.className = 'release-load-more';
+                    loadMoreDiv.innerHTML = `
+                        <button onclick="loadMoreReleases()">
+                            <i class="fas fa-chevron-down"></i> 加载更多
+                        </button>
+                    `;
+                    releaseList.appendChild(loadMoreDiv);
+                }
+
+                currentModalPage++;
+
+                // 如果是第一页，自动选择第一个版本
+                if (currentModalPage === 2 && modalReleases.length > 0) {
+                    selectRelease(0);
+                }
+
+            } catch (error) {
+                console.error('加载版本历史失败:', error);
+                if (currentModalPage === 1) {
+                    showEmptyState('加载失败', '无法获取版本历史，请稍后重试');
+                }
+            }
+        }
+
+        // 显示空状态
+        function showEmptyState(title, message) {
+            document.getElementById('releaseList').innerHTML = `
+                <div class="release-empty-state" style="padding: 40px 20px;">
+                    <i class="fas fa-inbox"></i>
+                    <h3>${title}</h3>
+                    <p>${message}</p>
+                </div>
+            `;
+            document.getElementById('releaseDetail').innerHTML = '';
+        }
+
+        // 选择版本
+        function selectRelease(index) {
+            if (index < 0 || index >= modalReleases.length) return;
+
+            selectedReleaseIndex = index;
+            const release = modalReleases[index];
+
+            // 更新列表选中状态
+            document.querySelectorAll('.release-item').forEach(item => {
+                item.classList.toggle('active', parseInt(item.dataset.index) === index);
             });
+
+            // 更新详情面板
+            const detailPanel = document.getElementById('releaseDetail');
+            detailPanel.innerHTML = `
+                <div class="release-detail-header">
+                    <div class="release-detail-version">
+                        ${release.name || release.tag_name}
+                        ${release.prerelease ? '<span class="release-item-prerelease">Pre-release</span>' : ''}
+                    </div>
+                    <div class="release-detail-meta">
+                        <span><i class="fas fa-tag"></i> ${release.tag_name}</span>
+                        <span><i class="fas fa-calendar"></i> ${formatDate(release.published_at)}</span>
+                        <span><i class="fas fa-user"></i> ${release.author.login}</span>
+                    </div>
+                </div>
+                <div class="release-detail-content">
+                    <div class="markdown-body">
+                        ${release.body ? marked.parse(release.body) : '<p style="color: var(--text-muted);">暂无更新说明</p>'}
+                    </div>
+                    ${release.assets && release.assets.length > 0 ? `
+                        <div class="release-assets">
+                            <div class="release-assets-title">
+                                <i class="fas fa-box-archive"></i> 下载资源 (${release.assets.length})
+                            </div>
+                            ${release.assets.map(asset => `
+                                <div class="release-asset-item">
+                                    <div class="release-asset-info">
+                                        <i class="fas fa-file-archive" style="color: var(--primary-color);"></i>
+                                        <div>
+                                            <div class="release-asset-name">${asset.name}</div>
+                                            <div class="release-asset-size">${formatFileSize(asset.size)} · ${asset.download_count} 次下载</div>
+                                        </div>
+                                    </div>
+                                    <a href="${asset.browser_download_url}" class="release-asset-download" target="_blank">
+                                        <i class="fas fa-download"></i> 下载
+                                    </a>
+                                </div>
+                            `).join('')}
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+
+            // 滚动到选中的版本
+            const selectedItem = document.querySelector(`.release-item[data-index="${index}"]`);
+            if (selectedItem) {
+                selectedItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+
+        // 更新侧边栏快速链接
+        function updateSidebar(softwares) {
+            const quickLinksEl = document.getElementById('quick-links');
+            quickLinksEl.innerHTML = softwares.map(s => `
+                <li class="list-group-item">
+                    <a href="${s.repo_url}" target="_blank">
+                        <i class="fab fa-github"></i> ${s.name}
+                    </a>
+                </li>
+            `).join('');
+        }
+
+        // 初始化页面
+        async function init() {
+            const container = document.getElementById('software-container');
+
+            try {
+                const response = await fetch('softs.json');
+                if (!response.ok) {
+                    throw new Error(`Failed to load softs.json: ${response.status}`);
+                }
+
+                const softwares = await response.json();
+
+                if (!Array.isArray(softwares) || softwares.length === 0) {
+                    throw new Error('软件列表为空');
+                }
+
+                container.innerHTML = softwares.map((s, i) => createSoftwareCard(s, i)).join('');
+                updateSidebar(softwares);
+
+                softwares.forEach(software => {
+                    fetchReleaseInfo(software);
+                });
+
+            } catch (error) {
+                console.error('加载软件列表失败:', error);
+                container.innerHTML = `
+                    <div class="error-state" style="text-align: center; padding: 40px; color: var(--text-muted);">
+                        <i class="fas fa-exclamation-circle" style="font-size: 3rem; margin-bottom: 16px; color: var(--danger-color);"></i>
+                        <h3>加载失败</h3>
+                        <p>无法加载软件列表，请刷新页面重试。</p>
+                        <p style="font-size: 0.875rem; margin-top: 8px;">${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        // ESC 关闭模态框
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeReleaseModal();
+            }
         });
+
+        // 点击遮罩层关闭
+        document.getElementById('releaseModal').addEventListener('click', (e) => {
+            if (e.target.id === 'releaseModal') {
+                closeReleaseModal();
+            }
+        });
+
+        // 页面加载完成后初始化
+        window.addEventListener('DOMContentLoaded', init);
     </script>
     <script src="cookie-consent.js"></script>
 </body>

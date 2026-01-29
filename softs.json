@@ -1,0 +1,91 @@
+[
+    {
+        "name": "vsenv",
+        "description": "内核级VSCode实例隔离工具，所有插件信息全部完全隔离。",
+        "repo_url": "https://github.com/Ethernos-Studio/vsenv",
+        "relatively_url": "Ethernos-Studio/vsenv",
+        "web_url": "https://ethernos.cn/VSenvWeb/",
+        "icon": "fa-code",
+        "features": ["内核级实例隔离", "完全隔离插件", "多版本管理"],
+        "asset_config": {
+            "priority_patterns": ["vsenv", "setup", "installer"],
+            "ignore_patterns": ["Runtime", "Deps", "runtime", "deps", "dependencies"],
+            "platform_keywords": {
+                "windows": ["windows", "win", "amd64-windows", "x86_64-windows", ".exe", ".msi"],
+                "macos": ["mac", "macos", "darwin", ".dmg", ".app"],
+                "linux": ["linux", "appimage", ".deb", ".rpm", ".tar.gz"]
+            }
+        }
+    },
+    {
+        "name": "ECL编程语言",
+        "description": "基于Rust的半过程式编程语言。",
+        "repo_url": "https://github.com/Ethernos-Studio/ECL",
+        "relatively_url": "Ethernos-Studio/ECL",
+        "icon": "fa-terminal",
+        "features": ["基于Rust", "半过程式", "高性能"],
+        "asset_config": {
+            "priority_patterns": ["ecl", "ECL", "setup", "installer"],
+            "ignore_patterns": ["source", "src", "docs", "test", "runtime"],
+            "platform_keywords": {
+                "windows": ["windows", "win", ".exe"],
+                "macos": ["mac", "macos", "darwin", ".dmg"],
+                "linux": ["linux", ".tar.gz", ".deb"]
+            }
+        }
+    },
+    {
+        "name": "BCC",
+        "description": "简单、现代的编程语言，为开发者提供更好的编程体验。",
+        "repo_url": "https://github.com/dhjs0000/bcc",
+        "relatively_url": "dhjs0000/bcc",
+        "web_url": "https://ethernos.cn/bccWeb/",
+        "icon": "fa-code",
+        "features": ["简单语法", "强大功能", "完整工具链"],
+        "asset_config": {
+            "priority_patterns": ["bcc", "BCC", "setup", "installer"],
+            "ignore_patterns": ["source", "src", "docs", "runtime", "deps"],
+            "platform_keywords": {
+                "windows": ["windows", "win", ".exe"],
+                "macos": ["mac", "macos", ".dmg"],
+                "linux": ["linux", ".tar.gz"]
+            }
+        }
+    },
+    {
+        "name": "Blender-VMT",
+        "description": "Blender Version Manager Tool",
+        "repo_url": "https://github.com/dhjs0000/Blender-VMT",
+        "relatively_url": "dhjs0000/Blender-VMT",
+        "web_url": "https://ethernos.cn/Blender-VMT/",
+        "icon": "fa-cube",
+        "features": ["版本管理", "用户友好", "项目追踪"],
+        "asset_config": {
+            "priority_patterns": ["vmt", "VMT", "blender", "setup"],
+            "ignore_patterns": ["source", "src", "docs", "runtime", "deps"],
+            "platform_keywords": {
+                "windows": ["windows", "win", ".exe", ".zip"],
+                "macos": ["mac", "macos", ".dmg", ".app"],
+                "linux": ["linux", ".tar.gz", ".AppImage"]
+            }
+        }
+    },
+    {
+        "name": "Blender-VMT-Remastered",
+        "description": "Blender Version Manager Tool - Remastered Edition",
+        "repo_url": "https://github.com/dhjs0000/Blender-VMT-Remastered",
+        "relatively_url": "dhjs0000/Blender-VMT-Remastered",
+        "web_url": "https://ethernos.cn/Blender-VMT",
+        "icon": "fa-cubes",
+        "features": ["高效版本管理", "直观界面", "完整项目追踪"],
+        "asset_config": {
+            "priority_patterns": ["vmt", "VMT", "remastered", "setup"],
+            "ignore_patterns": ["source", "src", "docs", "runtime", "deps"],
+            "platform_keywords": {
+                "windows": ["windows", "win", ".exe", ".zip"],
+                "macos": ["mac", "macos", ".dmg", ".app"],
+                "linux": ["linux", ".tar.gz", ".AppImage"]
+            }
+        }
+    }
+]
