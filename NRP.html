@@ -345,6 +345,9 @@
 
         // 处理 API 错误
         async function handleApiError(response) {
+            if (response.status === 401) {
+                return { authError: true, message: '请检查登录是否有效，Token 是否已经过期' };
+            }
             if (response.status === 403) {
                 const data = await response.json().catch(() => ({}));
                 if (data.message && data.message.includes('rate limit')) {
@@ -414,10 +417,16 @@
             try {
                 const response = await fetch(`https://api.github.com/repos/${currentRepo}/releases?page=${currentPage}&per_page=${perPage}`, { headers: getHeaders() });
                 
-                // 处理速率限制错误
+                // 处理 API 错误
                 const errorInfo = await handleApiError(response);
                 if (errorInfo) {
-                    if (currentPage === 1) showError('API 速率限制', '已超出未认证用户的 60次/小时 限制，请点击上方"登录"按钮添加 GitHub Token。');
+                    if (currentPage === 1) {
+                        if (errorInfo.authError) {
+                            showError('登录已过期', errorInfo.message + '，请重新登录。');
+                        } else if (errorInfo.rateLimited) {
+                            showError('API 速率限制', '已超出未认证用户的 60次/小时 限制，请点击上方"登录"按钮添加 GitHub Token。');
+                        }
+                    }
                     return;
                 }
 
