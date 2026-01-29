@@ -5,58 +5,133 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>联系我们 - Ethernos Studio</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="cookie-consent.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <div id="nav-placeholder"></div>
-    <!-- 主要内容区 -->
+
     <main class="content">
         <h1 class="page-title">联系我们</h1>
         
-        <div class="contact-container">
-            <div class="contact-methods">
-                <div class="contact-method fade-in lazy-load">
-                    <h3><i class="fas fa-envelope"></i>电子邮件</h3>
-                    <p>studio@ethernos.cn</p>
-                    <a href="mailto:studio@ethernos.cn" class="button">发送邮件</a>
+        <div class="asymmetric-layout reverse">
+            <!-- 左侧联系信息 -->
+            <div class="main-content">
+                <!-- 邮件 -->
+                <div class="info-panel card-highlight" style="margin-bottom: 20px;">
+                    <div class="info-panel-header">
+                        <i class="fas fa-envelope"></i>
+                        <h2>电子邮件</h2>
+                    </div>
+                    <p style="color: var(--text-muted); margin-bottom: 16px;">首选联系方式，工作日24小时内回复</p>
+                    <code style="background: var(--bg-color); padding: 8px 12px; border-radius: 6px; font-size: 0.9rem;">studio@ethernos.cn</code>
+                    <div style="margin-top: 16px;">
+                        <a href="mailto:studio@ethernos.cn" class="button">
+                            <i class="fas fa-paper-plane"></i> 发送邮件
+                        </a>
+                    </div>
                 </div>
-                
-                <div class="contact-method fade-in lazy-load">
-                    <h3><i class="fab fa-github"></i>GitHub</h3>
-                    <p>在GitHub上关注我们的开源项目</p>
-                    <a href="https://github.com/Ethernos-Studio" target="_blank" class="button outline">访问Ethernos Studio主页</a>
-                    <a href="https://github.com/dhjs0000" target="_blank" class="button outline">访问dhjs0000主页</a>
+
+                <!-- GitHub -->
+                <div class="info-panel" style="margin-bottom: 20px;">
+                    <div class="info-panel-header">
+                        <i class="fab fa-github" style="color: var(--text-color);"></i>
+                        <h2>GitHub</h2>
+                    </div>
+                    <p style="color: var(--text-muted); margin-bottom: 16px;">关注我们的开源项目，提交 Issue 或 PR</p>
+                    <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                        <a href="https://github.com/Ethernos-Studio" target="_blank" class="button outline">
+                            <i class="fab fa-github"></i> Studio
+                        </a>
+                        <a href="https://github.com/dhjs0000" target="_blank" class="button outline">
+                            <i class="fab fa-github"></i> dhjs0000
+                        </a>
+                    </div>
                 </div>
-                <div class="contact-method fade-in lazy-load">
-                    <h3><i class="fab fa-bilibili"></i>哔哩哔哩</h3>
-                    <p>在哔哩哔哩上关注我们的技术分享</p>
-                    <a href="https://space.bilibili.com/430218185" target="_blank" class="button outline">访问dhjs0000主页</a>
-                    <a href="https://space.bilibili.com/3546980420684160" target="_blank" class="button outline">访问Ethernos Studio主页</a>
+
+                <!-- 哔哩哔哩 -->
+                <div class="info-panel" style="margin-bottom: 20px;">
+                    <div class="info-panel-header">
+                        <i class="fab fa-bilibili" style="color: #00a1d6;"></i>
+                        <h2>哔哩哔哩</h2>
+                    </div>
+                    <p style="color: var(--text-muted); margin-bottom: 16px;">关注技术分享和项目更新视频</p>
+                    <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                        <a href="https://space.bilibili.com/430218185" target="_blank" class="button outline">
+                            <i class="fab fa-bilibili"></i> dhjs0000
+                        </a>
+                        <a href="https://space.bilibili.com/3546980420684160" target="_blank" class="button outline">
+                            <i class="fab fa-bilibili"></i> Studio
+                        </a>
+                    </div>
                 </div>
-                <div class="contact-method fade-in lazy-load">
-                    <h3><i class="fab fa-QQ"></i>QQ</h3>
-                    <p>加QQ dhjs0000</p>
-                    3110197220
-                </div>
-                <div class="contact-method fade-in lazy-load">
-                    <h3><i class="fab fa-wechat"></i>微信</h3>
-                    <p>加微信 dhjs0000</p>
-                    GYTVXMT001
-                    
+
+                <!-- 即时通讯 -->
+                <div class="info-panel card-success">
+                    <div class="info-panel-header">
+                        <i class="fas fa-comments" style="color: var(--secondary-color);"></i>
+                        <h2>即时通讯</h2>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div>
+                            <h3 style="font-size: 0.875rem; color: var(--text-muted); margin: 0 0 8px 0;">
+                                <i class="fab fa-qq"></i> QQ
+                            </h3>
+                            <code style="background: var(--bg-color); padding: 6px 10px; border-radius: 4px; font-size: 0.875rem;">3110197220</code>
+                        </div>
+                        <div>
+                            <h3 style="font-size: 0.875rem; color: var(--text-muted); margin: 0 0 8px 0;">
+                                <i class="fab fa-weixin"></i> 微信
+                            </h3>
+                            <code style="background: var(--bg-color); padding: 6px 10px; border-radius: 4px; font-size: 0.875rem;">GYTVXMT001</code>
+                        </div>
+                    </div>
                 </div>
             </div>
+
+            <!-- 右侧侧边栏 -->
+            <aside class="sidebar">
+                <div class="sidebar-section">
+                    <h3>响应时间</h3>
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <i class="fas fa-envelope" style="color: var(--primary-color);"></i>
+                            邮件: 24小时内
+                        </li>
+                        <li class="list-group-item">
+                            <i class="fab fa-github" style="color: var(--text-color);"></i>
+                            GitHub Issue: 48小时内
+                        </li>
+                        <li class="list-group-item">
+                            <i class="fab fa-qq" style="color: #12b7f5;"></i>
+                            QQ: 在线时即时
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3>常见问题</h3>
+                    <p style="font-size: 0.875rem; color: var(--text-muted); margin: 0 0 12px 0;">
+                        技术问题请先查看文档或提交 GitHub Issue
+                    </p>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3>时区</h3>
+                    <p style="font-size: 0.875rem; color: var(--text-muted); margin: 0;">
+                        <i class="far fa-clock"></i> 北京时间 UTC+8
+                    </p>
+                </div>
+            </aside>
         </div>
     </main>
 
-    <!-- 页脚 -->
     <footer class="footer">
         <div class="footer-container">
             <div class="footer-links">
                 <div class="footer-section">
                     <h3>项目</h3>
                     <a href="https://ethernos.cn/bccWeb/">BCC语言</a>
-                    <a href="https://ethernos.cn/Blender-VMT-Remastered/">Blender-VMT-Remastered</a>
                 </div>
                 <div class="footer-section">
                     <h3>资源</h3>
@@ -75,7 +150,13 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>© 2025 Ethernos Studio. All rights reserved.</p>
+                <p>Copyright (C) 2026 Ethernos</p>
+                <p>本程序为自由软件，在自由软件联盟发布的GNU通用公共许可协议的约束下，你可以对其进行再发布及修改。协议版本为第三版或（随你）更新的版本。</p>
+                <p>我们希望发布的这个网站有用，但不保证，甚至不保证它有经济价值和适合特定用途。详情参见GNU通用公共许可协议。</p>
+                
+                <p>This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</p>
+                <p>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</p>
+                <p>You should have received a copy of the GNU General Public License along with this program. If not, see <a href="https://www.gnu.org/licenses/">https://www.gnu.org/licenses/</a>.</p>
             </div>
         </div>
     </footer>

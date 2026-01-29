@@ -165,43 +165,68 @@ document.addEventListener('DOMContentLoaded', async function() {
         });
     }
     
-    // 移动端项目下拉菜单切换
+    // 项目下拉菜单切换（所有设备）
     const projectDropdown = document.querySelector('.project-dropdown');
-    if (projectDropdown) {
-        const projectLink = projectDropdown.querySelector('a');
-        projectLink.addEventListener('click', function(e) {
-            if (window.innerWidth <= 768) {
-                e.preventDefault();
-                projectDropdown.classList.toggle('active');
+    const projectDropdownToggle = document.getElementById('projectDropdownToggle');
+    
+    if (projectDropdown && projectDropdownToggle) {
+        projectDropdownToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            projectDropdown.classList.toggle('active');
+        });
+        
+        // 点击页面其他地方关闭下拉菜单
+        document.addEventListener('click', function(e) {
+            if (!projectDropdown.contains(e.target)) {
+                projectDropdown.classList.remove('active');
             }
+        });
+        
+        // 点击下拉菜单内的链接后关闭菜单
+        const dropdownLinks = projectDropdown.querySelectorAll('.dropdown-content a');
+        dropdownLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                projectDropdown.classList.remove('active');
+            });
         });
     }
 
     // 主题切换
-    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggle = document.getElementById('themeToggle');
     const body = document.body;
     
     // 从 localStorage 获取保存的主题
-    const savedTheme = localStorage.getItem('theme');
+    const savedTheme = localStorage.getItem('data-theme');
     if (savedTheme) {
-        body.classList.add(savedTheme);
-        if (themeToggle && savedTheme === 'dark-theme') {
-            themeToggle.classList.add('dark');
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    } else {
+        // 默认使用深色主题
+        document.documentElement.setAttribute('data-theme', 'dark');
+    }
+    
+    // 更新主题切换按钮状态
+    function updateThemeToggle() {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        if (themeToggle) {
+            if (currentTheme === 'light') {
+                themeToggle.classList.add('light');
+            } else {
+                themeToggle.classList.remove('light');
+            }
         }
     }
+    updateThemeToggle();
     
     // 主题切换按钮点击事件
     if (themeToggle) {
         themeToggle.addEventListener('click', function() {
-            body.classList.toggle('dark-theme');
-            themeToggle.classList.toggle('dark');
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
             
-            // 保存主题设置到 localStorage
-            if (body.classList.contains('dark-theme')) {
-                localStorage.setItem('theme', 'dark-theme');
-            } else {
-                localStorage.setItem('theme', '');
-            }
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('data-theme', newTheme);
+            updateThemeToggle();
         });
     }
 

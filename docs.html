@@ -5,22 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ethernos Studio 文档中心</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="cookie-consent.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         /* 文档页面特定样式 */
         .docs-container {
             display: flex;
-            height: calc(100vh - 60px);
-            margin-top: 60px;
+            min-height: calc(100vh - 64px);
+            margin-top: 64px;
         }
 
         /* 左侧导航栏 */
         .side-nav {
-            width: 300px;
+            width: 280px;
             background: var(--card-bg);
             border-right: 1px solid var(--border-color);
             overflow-y: auto;
-            padding: 20px;
+            padding: 24px;
             flex-shrink: 0;
         }
 
@@ -32,7 +33,7 @@
         }
 
         .tree-menu li {
-            margin: 5px 0;
+            margin: 4px 0;
         }
 
         .tree-menu .menu-item {
@@ -41,8 +42,8 @@
             padding: 8px 12px;
             color: var(--text-color);
             text-decoration: none;
-            border-radius: 4px;
-            transition: all 0.3s ease;
+            border-radius: 6px;
+            transition: background-color 0.2s;
             cursor: pointer;
         }
 
@@ -62,13 +63,13 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            transition: transform 0.3s ease;
+            transition: transform 0.2s;
         }
 
         .tree-menu .submenu {
             list-style: none;
             padding-left: 24px;
-            margin-top: 5px;
+            margin-top: 4px;
             display: none;
         }
 
@@ -93,112 +94,74 @@
             margin: 0 auto;
         }
 
+        .content-container h1 {
+            font-size: 2rem;
+            margin-bottom: 16px;
+            color: var(--text-color);
+        }
+
+        .content-container > p {
+            color: var(--text-muted);
+            margin-bottom: 32px;
+        }
+
         /* 快速卡片样式 */
         .quick-cards {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin: 30px 0;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin: 32px 0;
         }
 
         .quick-card {
             background: var(--card-bg);
+            border: 1px solid var(--border-color);
             border-radius: 8px;
             padding: 20px;
-            border: 1px solid var(--border-color);
-            transition: all 0.3s ease;
+            transition: border-color 0.2s;
         }
 
         .quick-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary-color);
         }
 
         .quick-card h3 {
             color: var(--primary-color);
-            margin: 0 0 10px 0;
+            margin: 0 0 8px 0;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
+            font-size: 1rem;
         }
 
         .quick-card p {
             margin: 0;
-            color: var(--text-color);
-            opacity: 0.8;
+            color: var(--text-muted);
+            font-size: 0.875rem;
         }
 
-        /* 代码块样式 */
-        pre {
-            background: var(--code-bg);
-            padding: 15px;
-            border-radius: 8px;
-            overflow-x: auto;
-            margin: 15px 0;
-        }
-
-        code {
-            font-family: 'Consolas', monospace;
-            color: var(--code-color);
-        }
-
-        /* 文档内容样式 */
-        .doc-section {
-            margin-bottom: 40px;
-        }
-
-        .doc-section h2 {
-            color: var(--primary-color);
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid var(--border-color);
-        }
-
-        .doc-section h3 {
-            color: var(--text-color);
-            margin: 25px 0 15px;
-        }
-
-        .doc-section p {
-            line-height: 1.6;
-            margin: 15px 0;
-        }
-
-        .doc-section ul {
-            padding-left: 20px;
-            margin: 15px 0;
-        }
-
-        .doc-section li {
-            margin: 8px 0;
-            line-height: 1.5;
-        }
-
-        /* 示例代码框 */
-        .code-example {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            margin: 20px 0;
-        }
-
-        .code-example .code-header {
-            padding: 10px 15px;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .code-example pre {
-            margin: 0;
-            border-radius: 0 0 8px 8px;
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .docs-container {
+                flex-direction: column;
+            }
+            
+            .side-nav {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+                max-height: 200px;
+            }
+            
+            .main-content {
+                padding: 20px;
+            }
         }
     </style>
-    <link rel="stylesheet" href="cookie-consent.css">
 </head>
 <body>
     <div id="nav-placeholder"></div>
+
     <!-- 文档容器 -->
     <div class="docs-container">
         <!-- 左侧导航栏 -->
@@ -243,7 +206,6 @@
                     </div>
                 </div>
             </div>
-            <p>不想搞了~~~</p>
         </main>
     </div>
 
@@ -254,7 +216,6 @@
                 <div class="footer-section">
                     <h3>项目</h3>
                     <a href="https://ethernos.cn/bccWeb/">BCC语言</a>
-                    <a href="https://ethernos.cn/Blender-VMT-Remastered/">Blender-VMT-Remastered</a>
                 </div>
                 <div class="footer-section">
                     <h3>资源</h3>
@@ -273,8 +234,13 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>本项目使用GNU通用公共许可协议第三版开源许可证，详情请见（LICENCE_CN）</p>
-                <p>This project is open-sourced under the GNU General Public License Version 3. For detailed information, please refer to （LICENCE).</p>
+                <p>Copyright (C) 2026 Ethernos</p>
+                <p>本程序为自由软件，在自由软件联盟发布的GNU通用公共许可协议的约束下，你可以对其进行再发布及修改。协议版本为第三版或（随你）更新的版本。</p>
+                <p>我们希望发布的这个网站有用，但不保证，甚至不保证它有经济价值和适合特定用途。详情参见GNU通用公共许可协议。</p>
+                
+                <p>This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</p>
+                <p>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</p>
+                <p>You should have received a copy of the GNU General Public License along with this program. If not, see <a href="https://www.gnu.org/licenses/">https://www.gnu.org/licenses/</a>.</p>
             </div>
         </div>
     </footer>
@@ -283,7 +249,6 @@
     <script>
         // 树形菜单交互
         document.addEventListener('DOMContentLoaded', function() {
-            // 树形菜单交互
             document.querySelectorAll('.tree-menu .menu-item').forEach(item => {
                 if (item.querySelector('.toggle-icon')) {
                     item.addEventListener('click', (e) => {
@@ -296,23 +261,14 @@
             // 菜单项点击事件
             document.querySelectorAll('.tree-menu a.menu-item').forEach(link => {
                 link.addEventListener('click', (e) => {
-                    // 移除所有活动状态
                     document.querySelectorAll('.tree-menu .menu-item').forEach(item => {
                         item.classList.remove('active');
                     });
-                    // 添加活动状态
                     e.target.classList.add('active');
                 });
-            });
-
-            // 点击内容区域时关闭移动端菜单
-            document.querySelector('.main-content').addEventListener('click', () => {
-                if (window.innerWidth <= 768) {
-                    document.querySelector('.side-nav').classList.remove('active');
-                }
             });
         });
     </script>
     <script src="cookie-consent.js"></script>
 </body>
-</html> 
+</html>

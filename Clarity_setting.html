@@ -3,294 +3,607 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clarity数据收集设置 - Ethernos Studio</title>
-    
-    <!-- Cookie同意样式 -->
+    <title>设置 - Ethernos Studio</title>
     <link rel="stylesheet" href="style.css">
-
-    
+    <link rel="stylesheet" href="cookie-consent.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background: linear-gradient(135deg, #1e1e2e 0%, #2d2d44 100%);
-            color: #eee;
-            padding: 20px;
-            min-height: 100vh;
+        .settings-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 32px;
+            margin-top: 24px;
+        }
+
+        .settings-sidebar {
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+        }
+
+        .settings-nav {
+            list-style: none;
+            padding: 0;
             margin: 0;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
         }
-        
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: rgba(0,0,0,0.2);
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+
+        .settings-nav-item {
+            border-bottom: 1px solid var(--border-color);
         }
-        
-        h1 {
-            color: #7881ff;
+
+        .settings-nav-item:last-child {
+            border-bottom: none;
+        }
+
+        .settings-nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 20px;
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: background-color 0.2s;
+            cursor: pointer;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+        }
+
+        .settings-nav-link:hover {
+            background: var(--hover-bg);
+        }
+
+        .settings-nav-link.active {
+            background: var(--hover-bg);
+            color: var(--primary-color);
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .settings-nav-link i {
+            width: 20px;
             text-align: center;
         }
-        
-        .test-section {
-            margin: 30px 0;
-            padding: 20px;
-            background-color: rgba(120, 129, 255, 0.1);
-            border-radius: 8px;
-            border-left: 4px solid #7881ff;
+
+        .settings-content {
+            min-height: 500px;
         }
-        
-        .test-button {
-            background: linear-gradient(135deg, #7881ff 0%, #5f55af 100%);
+
+        .settings-section {
+            display: none;
+        }
+
+        .settings-section.active {
+            display: block;
+        }
+
+        .settings-section h2 {
+            margin: 0 0 8px 0;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .settings-section .section-desc {
+            color: var(--text-muted);
+            margin-bottom: 24px;
+            font-size: 0.875rem;
+        }
+
+        .setting-item {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .setting-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .setting-item-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 0 0 4px 0;
+        }
+
+        .setting-item-desc {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        .setting-toggle {
+            position: relative;
+            width: 44px;
+            height: 24px;
+            background: var(--border-color);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            flex-shrink: 0;
+        }
+
+        .setting-toggle.active {
+            background: var(--secondary-color);
+        }
+
+        .setting-toggle::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.2s;
+        }
+
+        .setting-toggle.active::after {
+            transform: translateX(20px);
+        }
+
+        .setting-select {
+            width: 100%;
+            padding: 10px 12px;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-color);
+            font-size: 0.875rem;
+            margin-top: 12px;
+        }
+
+        .setting-select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .storage-bar {
+            height: 8px;
+            background: var(--bg-color);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 12px 0;
+        }
+
+        .storage-bar-fill {
+            height: 100%;
+            background: var(--primary-color);
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+
+        .storage-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .btn-danger {
+            background: #da3633;
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 8px 16px;
             border-radius: 6px;
+            font-size: 0.875rem;
             cursor: pointer;
-            font-size: 14px;
-            margin: 5px;
-            transition: all 0.3s ease;
+            transition: background-color 0.2s;
         }
-        
-        .test-button:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 15px rgba(120, 129, 255, 0.3);
+
+        .btn-danger:hover {
+            background: #b62320;
         }
-        
-        .status {
-            padding: 10px;
-            margin: 10px 0;
+
+        .btn-secondary {
+            background: var(--bg-color);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
             border-radius: 6px;
-            font-family: monospace;
-            font-size: 14px;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s;
         }
-        
-        .status.success {
-            background-color: rgba(76, 175, 80, 0.2);
-            border: 1px solid #4CAF50;
-            color: #4CAF50;
+
+        .btn-secondary:hover {
+            background: var(--hover-bg);
         }
-        
-        .status.info {
-            background-color: rgba(33, 150, 243, 0.2);
-            border: 1px solid #2196F3;
-            color: #2196F3;
-        }
-        
-        .status.warning {
-            background-color: rgba(255, 193, 7, 0.2);
-            border: 1px solid #FFC107;
-            color: #FFC107;
-        }
-        
-        .consent-info {
-            background-color: rgba(0,0,0,0.3);
-            padding: 15px;
-            border-radius: 6px;
-            margin: 10px 0;
-        }
-        
-        .consent-info h4 {
-            color: #7881ff;
-            margin-top: 0;
+
+        @media (max-width: 768px) {
+            .settings-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .settings-sidebar {
+                position: static;
+                margin-bottom: 24px;
+            }
         }
     </style>
-        <link rel="stylesheet" href="cookie-consent.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body style="padding-left: 0px;">
+<body>
     <div id="nav-placeholder"></div>
-    <div class="container">
-        <h1>数据收集同意设置</h1>
-        
-        <div class="test-section">
-            <h3>当前状态</h3>
-            <div id="current-status" class="status info">正在检查同意状态...</div>
-            <div id="consent-details" class="consent-info" style="display: none;">
-                <h4>存储的同意信息：</h4>
-                <pre id="consent-data"></pre>
+
+    <main class="content">
+        <h1 class="page-title">设置</h1>
+
+        <div class="settings-layout">
+            <!-- 左侧导航栏 -->
+            <aside class="settings-sidebar">
+                <ul class="settings-nav">
+                    <li class="settings-nav-item">
+                        <button class="settings-nav-link active" data-section="privacy">
+                            <i class="fas fa-shield-alt"></i>
+                            隐私设置
+                        </button>
+                    </li>
+                    <li class="settings-nav-item">
+                        <button class="settings-nav-link" data-section="storage">
+                            <i class="fas fa-database"></i>
+                            存储设置
+                        </button>
+                    </li>
+                    <li class="settings-nav-item">
+                        <button class="settings-nav-link" data-section="personalization">
+                            <i class="fas fa-palette"></i>
+                            个性化设置
+                        </button>
+                    </li>
+                </ul>
+            </aside>
+
+            <!-- 右侧内容区 -->
+            <div class="settings-content">
+                <!-- 隐私设置 -->
+                <section id="privacy" class="settings-section active">
+                    <h2>隐私设置</h2>
+                    <p class="section-desc">管理数据收集和隐私相关选项</p>
+
+                    <div class="setting-item">
+                        <div class="setting-item-header">
+                            <div>
+                                <h3 class="setting-item-title">数据分析</h3>
+                                <p class="setting-item-desc">允许我们使用 Microsoft Clarity 收集匿名使用数据，帮助改进网站体验</p>
+                            </div>
+                            <div class="setting-toggle" id="analyticsToggle"></div>
+                        </div>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-item-header">
+                            <div>
+                                <h3 class="setting-item-title">Cookie 同意</h3>
+                                <p class="setting-item-desc">查看和管理您的 Cookie 同意设置</p>
+                            </div>
+                        </div>
+                        <button class="btn-secondary" onclick="showConsentSettings()" style="margin-top: 12px;">
+                            <i class="fas fa-cog"></i> 管理 Cookie 设置
+                        </button>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-item-header">
+                            <div>
+                                <h3 class="setting-item-title">重置隐私设置</h3>
+                                <p class="setting-item-desc">清除所有隐私相关的本地存储数据</p>
+                            </div>
+                        </div>
+                        <button class="btn-danger" onclick="clearPrivacyData()" style="margin-top: 12px;">
+                            <i class="fas fa-trash"></i> 清除隐私数据
+                        </button>
+                    </div>
+                </section>
+
+                <!-- 存储设置 -->
+                <section id="storage" class="settings-section">
+                    <h2>存储设置</h2>
+                    <p class="section-desc">管理本地存储的数据和缓存</p>
+
+                    <div class="setting-item">
+                        <h3 class="setting-item-title">本地存储使用情况</h3>
+                        <p class="setting-item-desc">当前网站使用的本地存储空间</p>
+                        <div class="storage-bar">
+                            <div class="storage-bar-fill" id="storageBar" style="width: 0%;"></div>
+                        </div>
+                        <div class="storage-info">
+                            <span id="storageUsed">计算中...</span>
+                            <span id="storageTotal">约 5 MB 可用</span>
+                        </div>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-item-header">
+                            <div>
+                                <h3 class="setting-item-title">主题偏好</h3>
+                                <p class="setting-item-desc">清除保存的亮/暗色主题设置</p>
+                            </div>
+                        </div>
+                        <button class="btn-secondary" onclick="clearThemeSetting()" style="margin-top: 12px;">
+                            <i class="fas fa-moon"></i> 重置主题设置
+                        </button>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-item-header">
+                            <div>
+                                <h3 class="setting-item-title">清除所有数据</h3>
+                                <p class="setting-item-desc">删除所有本地存储的数据，包括设置和缓存</p>
+                            </div>
+                        </div>
+                        <button class="btn-danger" onclick="clearAllData()" style="margin-top: 12px;">
+                            <i class="fas fa-exclamation-triangle"></i> 清除所有数据
+                        </button>
+                    </div>
+                </section>
+
+                <!-- 个性化设置 -->
+                <section id="personalization" class="settings-section">
+                    <h2>个性化设置</h2>
+                    <p class="section-desc">自定义网站外观和行为</p>
+
+                    <div class="setting-item">
+                        <div class="setting-item-header">
+                            <div>
+                                <h3 class="setting-item-title">主题模式</h3>
+                                <p class="setting-item-desc">选择您喜欢的主题外观</p>
+                            </div>
+                        </div>
+                        <select class="setting-select" id="themeSelect">
+                            <option value="dark">深色模式</option>
+                            <option value="light">浅色模式</option>
+                            <option value="system">跟随系统</option>
+                        </select>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-item-header">
+                            <div>
+                                <h3 class="setting-item-title">减少动画</h3>
+                                <p class="setting-item-desc">减少页面过渡动画，适合偏好简洁体验的用户</p>
+                            </div>
+                            <div class="setting-toggle" id="reduceMotionToggle"></div>
+                        </div>
+                    </div>
+
+                    <div class="setting-item">
+                        <h3 class="setting-item-title">当前设置状态</h3>
+                        <p class="setting-item-desc">查看当前应用的个性化设置</p>
+                        <div style="margin-top: 12px; padding: 12px; background: var(--bg-color); border-radius: 6px; font-size: 0.875rem; font-family: monospace;">
+                            <div id="currentSettings">加载中...</div>
+                        </div>
+                    </div>
+                </section>
             </div>
         </div>
-        
-        <div class="test-section">
-            <h3>设置</h3>
-            <button class="test-button" onclick="showConsentSettings()">重新设置同意状态</button>
-            <button class="test-button" onclick="revokeConsent()">撤销同意</button>
-            <button class="test-button" onclick="checkClarityStatus()">检查Clarity状态</button>
-            <button class="test-button" onclick="clearLocalStorage()">重置设置</button>
-            <button class="test-button" onclick="location.reload()">刷新</button>
-        </div>
-        
-        <div class="test-section">
-            <h3>运行结果</h3>
-            <div id="test-results"></div>
-        </div>
-        
-        <div class="test-section">
-            <h3>使用说明</h3>
-            <ul>
-                <li><strong>重新设置同意状态：</strong> 重新显示Cookie同意弹窗</li>
-                <li><strong>撤销同意：</strong> 清除存储的同意设置</li>
-                <li><strong>检查Clarity状态：</strong> 验证Clarity是否正确初始化</li>
-                <li><strong>重置设置：</strong> 删除所有本地存储数据</li>
-                <li><strong>刷新：</strong> 刷新页面以测试自动检测</li>
-            </ul>
-        </div>
-    </div>
+    </main>
 
-    <!-- Cookie同意脚本 -->
-     <script src="script.js"></script>
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-links">
+                <div class="footer-section">
+                    <h3>项目</h3>
+                    <a href="https://ethernos.cn/bccWeb/">BCC语言</a>
+                </div>
+                <div class="footer-section">
+                    <h3>资源</h3>
+                    <a href="downloads.html">软件下载</a>
+                    <a href="tools.html">开发工具</a>
+                </div>
+                <div class="footer-section">
+                    <h3>服务</h3>
+                    <a href="blog.html">技术博客</a>
+                    <a href="questions.html">技术支持</a>
+                </div>
+                <div class="footer-section">
+                    <h3>关于</h3>
+                    <a href="team.html">团队</a>
+                    <a href="contact.html">联系我们</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>Copyright (C) 2026 Ethernos</p>
+                <p>本程序为自由软件，在自由软件联盟发布的GNU通用公共许可协议的约束下，你可以对其进行再发布及修改。协议版本为第三版或（随你）更新的版本。</p>
+                <p>我们希望发布的这个网站有用，但不保证，甚至不保证它有经济价值和适合特定用途。详情参见GNU通用公共许可协议。</p>
+                
+                <p>This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</p>
+                <p>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</p>
+                <p>You should have received a copy of the GNU General Public License along with this program. If not, see <a href="https://www.gnu.org/licenses/">https://www.gnu.org/licenses/</a>.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
     <script src="cookie-consent.js"></script>
-    
     <script>
-        // 测试脚本
-        let testResults = [];
-        
-        function addTestResult(message, type = 'info') {
-            const resultsDiv = document.getElementById('test-results');
-            const resultDiv = document.createElement('div');
-            resultDiv.className = `status ${type}`;
-            resultDiv.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
-            resultsDiv.appendChild(resultDiv);
-            
-            testResults.push({
-                time: new Date().toISOString(),
-                message: message,
-                type: type
+        // 标签切换
+        document.querySelectorAll('.settings-nav-link').forEach(link => {
+            link.addEventListener('click', function() {
+                // 移除所有 active
+                document.querySelectorAll('.settings-nav-link').forEach(l => l.classList.remove('active'));
+                document.querySelectorAll('.settings-section').forEach(s => s.classList.remove('active'));
+                
+                // 添加 active
+                this.classList.add('active');
+                const sectionId = this.dataset.section;
+                document.getElementById(sectionId).classList.add('active');
             });
-        }
-        
-        function updateStatus() {
-            const statusDiv = document.getElementById('current-status');
-            const consentDetails = document.getElementById('consent-details');
-            const consentData = document.getElementById('consent-data');
-            
-            const manager = window.CookieConsent.getManager();
-            if (manager) {
-                const consent = manager.getCurrentConsent();
-                
-                if (consent) {
-                    statusDiv.className = 'status success';
-                    const consentText = consent.type === 'full' ? '全部数据' :
-                                      consent.type === 'partial' ? '部分数据' : '我不想提供';
-                    statusDiv.textContent = `已设置同意：${consentText}`;
-                    
-                    consentDetails.style.display = 'block';
-                    
-                    // 将JSON数据转换为人类可读的格式
-                    let readableData = '';
-                    
-                    // 基本信息
-                    readableData += `同意类型：${consentText}\n`;
-                    readableData += `设置时间：${new Date(consent.timestamp).toLocaleString('zh-CN')}\n`;
-                    
-                    // 如果有详细设置
-                    if (consent.settings) {
-                        readableData += '\n详细设置：\n';
-                        
-                        if (consent.settings.analytics !== undefined) {
-                            readableData += `  • 数据分析：${consent.settings.analytics ? '同意' : '拒绝'}\n`;
-                        }
-                        
-                        if (consent.settings.marketing !== undefined) {
-                            readableData += `  • 营销推广：${consent.settings.marketing ? '同意' : '拒绝'}\n`;
-                        }
-                        
-                        if (consent.settings.preferences !== undefined) {
-                            readableData += `  • 偏好设置：${consent.settings.preferences ? '同意' : '拒绝'}\n`;
-                        }
-                        
-                        if (consent.settings.necessary !== undefined) {
-                            readableData += `  • 必要Cookie：${consent.settings.necessary ? '同意' : '拒绝'}\n`;
-                        }
-                    }
-                    
-                    // 如果有版本信息
-                    if (consent.version) {
-                        readableData += `\n版本：${consent.version}\n`;
-                    }
-                    
-                    // 如果有其他字段
-                    const otherFields = Object.keys(consent).filter(key =>
-                        !['type', 'timestamp', 'settings', 'version'].includes(key)
-                    );
-                    
-                    if (otherFields.length > 0) {
-                        readableData += '\n其他信息：\n';
-                        otherFields.forEach(field => {
-                            readableData += `  • ${field}：${consent[field]}\n`;
-                        });
-                    }
-                    
-                    consentData.textContent = readableData;
-                } else {
-                    statusDiv.className = 'status warning';
-                    statusDiv.textContent = '未设置同意，将显示弹窗';
-                    
-                    consentDetails.style.display = 'none';
-                }
-            } else {
-                statusDiv.className = 'status warning';
-                statusDiv.textContent = 'Cookie同意管理器未初始化';
-            }
-        }
-        
-        function showConsentSettings() {
-            addTestResult('请求显示同意设置', 'info');
-            window.CookieConsent.showSettings();
-        }
-        
-        function revokeConsent() {
-            addTestResult('撤销同意设置', 'warning');
-            window.CookieConsent.revoke();
-            setTimeout(updateStatus, 100);
-        }
-        
-        function checkClarityStatus() {
-            addTestResult('检查Clarity状态...', 'info');
-            
-            if (window.clarity) {
-                addTestResult('Clarity已加载', 'success');
-                
-                // 尝试调用clarity函数
-                try {
-                    window.clarity('event', 'test_consent_check');
-                    addTestResult('Clarity事件发送成功', 'success');
-                } catch (error) {
-                    addTestResult(`Clarity事件发送失败: ${error.message}`, 'warning');
-                }
-            } else {
-                addTestResult('Clarity未加载', 'warning');
-            }
-        }
-        
-        function clearLocalStorage() {
-            addTestResult('清除本地存储', 'warning');
-            localStorage.clear();
-            setTimeout(updateStatus, 100);
-        }
-        
-        // 页面加载完成后更新状态
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                updateStatus();
-                addTestResult('页面加载完成，Clarity同意系统已初始化', 'success');
-            }, 1000);
         });
+
+        // 数据分析开关 - 初始化状态
+        const analyticsToggle = document.getElementById('analyticsToggle');
+        const consent = localStorage.getItem('ethernos-cookie-consent');
+        if (consent) {
+            const consentData = JSON.parse(consent);
+            if (consentData.type === 'full' || consentData.type === 'partial') {
+                analyticsToggle.classList.add('active');
+            }
+        }
         
-        // 监听同意变化
-        window.CookieConsent.init();
-        const manager = window.CookieConsent.getManager();
-        if (manager) {
-            // 监听存储变化
-            window.addEventListener('storage', (e) => {
-                if (e.key && e.key.includes('consent')) {
-                    addTestResult('检测到同意设置变化', 'info');
-                    updateStatus();
+        // Toggle 开关
+        document.querySelectorAll('.setting-toggle').forEach(toggle => {
+            toggle.addEventListener('click', function() {
+                this.classList.toggle('active');
+                
+                // 如果是数据分析开关，同步更新 Clarity 设置
+                if (this.id === 'analyticsToggle') {
+                    const isActive = this.classList.contains('active');
+                    updateAnalyticsConsent(isActive);
                 }
             });
+        });
+
+        // 主题选择
+        const themeSelect = document.getElementById('themeSelect');
+        const savedTheme = localStorage.getItem('data-theme') || 'dark';
+        themeSelect.value = savedTheme;
+        
+        themeSelect.addEventListener('change', function() {
+            const theme = this.value;
+            if (theme === 'system') {
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+            } else {
+                document.documentElement.setAttribute('data-theme', theme);
+            }
+            localStorage.setItem('data-theme', theme);
+            updateCurrentSettings();
+        });
+
+        // 计算存储使用情况
+        function calculateStorage() {
+            let total = 0;
+            for (let key in localStorage) {
+                if (localStorage.hasOwnProperty(key)) {
+                    total += localStorage[key].length * 2; // UTF-16 encoding
+                }
+            }
+            const usedKB = (total / 1024).toFixed(2);
+            const percentage = Math.min((total / (5 * 1024 * 1024)) * 100, 100); // 假设 5MB 限制
+            
+            document.getElementById('storageUsed').textContent = `${usedKB} KB 已使用`;
+            document.getElementById('storageBar').style.width = `${percentage}%`;
         }
+
+        // 更新当前设置显示
+        function updateCurrentSettings() {
+            const theme = localStorage.getItem('data-theme') || 'dark';
+            const consent = localStorage.getItem('cookieConsent');
+            
+            document.getElementById('currentSettings').innerHTML = `
+                <div>主题: ${theme === 'dark' ? '深色模式' : theme === 'light' ? '浅色模式' : '跟随系统'}</div>
+                <div>Cookie同意: ${consent ? '已设置' : '未设置'}</div>
+                <div>减少动画: 关</div>
+            `;
+        }
+
+        // 功能函数
+        function showConsentSettings() {
+            if (window.CookieConsent) {
+                window.CookieConsent.showSettings();
+            } else {
+                alert('Cookie 同意管理器未加载');
+            }
+        }
+
+        function clearPrivacyData() {
+            if (confirm('确定要清除所有隐私相关的本地存储数据吗？')) {
+                localStorage.removeItem('cookieConsent');
+                localStorage.removeItem('clarity-accepted');
+                alert('隐私数据已清除');
+                location.reload();
+            }
+        }
+
+        function clearThemeSetting() {
+            localStorage.removeItem('data-theme');
+            document.documentElement.setAttribute('data-theme', 'dark');
+            alert('主题设置已重置为默认');
+            location.reload();
+        }
+
+        function clearAllData() {
+            if (confirm('警告：这将删除所有本地存储的数据，包括所有设置。确定要继续吗？')) {
+                localStorage.clear();
+                alert('所有数据已清除');
+                location.reload();
+            }
+        }
+
+        // 更新 Clarity 同意状态
+        function updateAnalyticsConsent(enabled) {
+            const consentKey = 'ethernos-cookie-consent';
+            let consentData = localStorage.getItem(consentKey);
+            
+            if (enabled) {
+                // 启用分析 - 设置为 partial（仅分析）
+                consentData = {
+                    type: 'partial',
+                    version: 'v1.0',
+                    timestamp: new Date().toISOString()
+                };
+                localStorage.setItem(consentKey, JSON.stringify(consentData));
+                
+                // 初始化 Clarity
+                if (window.CookieConsent && window.CookieConsent.getManager()) {
+                    window.CookieConsent.getManager().applyConsent({ type: 'partial' });
+                }
+                console.log('数据分析已启用');
+            } else {
+                // 禁用分析 - 设置为 none
+                consentData = {
+                    type: 'none',
+                    version: 'v1.0',
+                    timestamp: new Date().toISOString()
+                };
+                localStorage.setItem(consentKey, JSON.stringify(consentData));
+                
+                if (window.clarity) {
+                    window.clarity('consentv2', {
+                        ad_Storage: "denied",
+                        analytics_Storage: "denied"
+                    });
+                }
+                console.log('数据分析已禁用');
+            }
+            updateCurrentSettings();
+        }
+
+        // 更新当前设置显示
+        function updateCurrentSettings() {
+            const theme = localStorage.getItem('data-theme') || 'dark';
+            const consent = localStorage.getItem('ethernos-cookie-consent');
+            let analyticsStatus = '未启用';
+            
+            if (consent) {
+                const consentData = JSON.parse(consent);
+                if (consentData.type === 'full' || consentData.type === 'partial') {
+                    analyticsStatus = '已启用';
+                }
+            }
+            
+            document.getElementById('currentSettings').innerHTML = `
+                <div>主题: ${theme === 'dark' ? '深色模式' : theme === 'light' ? '浅色模式' : '跟随系统'}</div>
+                <div>数据分析: ${analyticsStatus}</div>
+                <div>减少动画: 关</div>
+            `;
+        }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            calculateStorage();
+            updateCurrentSettings();
+        });
     </script>
 </body>
 </html>

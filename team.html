@@ -4,100 +4,135 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>团队 - Ethernos Studio</title>
-    
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="cookie-consent.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <div id="nav-placeholder"></div>
 
-    <!-- 主要内容区 -->
     <main class="content">
         <h1 class="page-title">我们的团队</h1>
-        
-        <div class="features">
-            <!-- 团队介绍 -->
-            <div class="feature-card fade-in lazy-load">
-                <h2>关于Ethernos Studio</h2>
-                <p>Ethernos Studio 是一个充满活力的创新工作室，虽然当前规模精干，但我们拥有明确的发展愿景和强大的技术实力。我们相信小团队也能创造大价值。</p>
+
+        <div class="masonry-grid">
+            <!-- 关于工作室 - 大卡片 -->
+            <div class="masonry-item wide">
+                <h2 style="margin: 0 0 16px 0; font-size: 1.25rem; font-weight: 600;">
+                    <i class="fas fa-building" style="color: var(--primary-color); margin-right: 8px;"></i>
+                    关于 Ethernos Studio
+                </h2>
+                <p style="color: var(--text-muted); line-height: 1.7;">
+                    Ethernos Studio 是一个充满活力的创新工作室，虽然当前规模精干，但我们拥有明确的发展愿景和强大的技术实力。我们相信小团队也能创造大价值。
+                </p>
+                <div style="margin-top: 16px; display: flex; gap: 24px;">
+                    <div>
+                        <div style="font-size: 1.5rem; font-weight: 600; color: var(--text-color);">5+</div>
+                        <div style="font-size: 0.875rem; color: var(--text-muted);">开源项目</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 1.5rem; font-weight: 600; color: var(--text-color);">2024</div>
+                        <div style="font-size: 0.875rem; color: var(--text-muted);">成立年份</div>
+                    </div>
+                </div>
             </div>
 
-            <!-- 核心团队成员 -->
-            <div class="feature-card fade-in lazy-load">
-                <h2>核心团队</h2>
-                <div class="member-info">
-                    <div class="member-header">
-                        <i class="fas fa-user-circle fa-3x"></i>
-                        <div>
-                            <h3>dhjs0000</h3>
-                            <p class="member-role">创始人兼首席技术官</p>
-                        </div>
-                    </div>
-                    <p>Ethernos Studio创始人，BCC编程语言和Blender-VMT-Remastered工具的主要开发者。拥有丰富的开源项目经验，致力于推动技术创新和知识共享。</p>
-                    <a href="https://github.com/dhjs0000" class="button outline" target="_blank">
-                        <i class="fab fa-github"></i> GitHub主页
+            <!-- 核心成员 - 正常大小 -->
+            <div class="masonry-item" style="grid-row: span 2;">
+                <div style="text-align: center; padding: 20px 0;">
+                    <i class="fas fa-user-circle" style="font-size: 4rem; color: var(--primary-color);"></i>
+                    <h3 style="margin: 16px 0 4px 0; font-size: 1.125rem;">dhjs0000</h3>
+                    <p style="margin: 0; font-size: 0.875rem; color: var(--text-muted);">创始人 & 首席技术官</p>
+                </div>
+                <p style="font-size: 0.875rem; color: var(--text-muted); line-height: 1.6;">
+                    Ethernos Studio 创始人，BCC 编程语言和 Blender-VMT-Remastered 工具的主要开发者。
+                </p>
+                <div style="text-align: center; margin-top: 16px;">
+                    <a href="https://github.com/dhjs0000" class="button outline">
+                        <i class="fab fa-github"></i> GitHub
                     </a>
                 </div>
             </div>
 
             <!-- 加入我们 -->
-            <div class="feature-card fade-in lazy-load">
-                <h2>加入我们</h2>
-                <p>Ethernos Studio正在寻找志同道合的伙伴。我们欢迎具有以下特质的优秀人才加入我们的团队：</p>
-                <ul class="features-list">
-                    <li><i class="fas fa-check"></i> 热爱技术创新，对开源项目有浓厚兴趣</li>
-                    <li><i class="fas fa-check"></i> 具备扎实的编程基础和项目开发经验</li>
-                    <li><i class="fas fa-check"></i> 具有良好的沟通能力和团队协作精神</li>
-                    <li><i class="fas fa-check"></i> 愿意持续学习新技术，追求技术卓越</li>
+            <div class="masonry-item">
+                <h2 style="margin: 0 0 16px 0; font-size: 1.125rem; font-weight: 600;">
+                    <i class="fas fa-users" style="color: var(--secondary-color); margin-right: 8px;"></i>
+                    加入我们
+                </h2>
+                <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.875rem; color: var(--text-muted);">
+                    <li style="padding: 8px 0; border-bottom: 1px solid var(--border-color);">
+                        <i class="fas fa-check" style="color: var(--secondary-color); margin-right: 8px;"></i>
+                        热爱技术创新
+                    </li>
+                    <li style="padding: 8px 0; border-bottom: 1px solid var(--border-color);">
+                        <i class="fas fa-check" style="color: var(--secondary-color); margin-right: 8px;"></i>
+                        扎实的编程基础
+                    </li>
+                    <li style="padding: 8px 0;">
+                        <i class="fas fa-check" style="color: var(--secondary-color); margin-right: 8px;"></i>
+                        良好的沟通能力
+                    </li>
                 </ul>
-                <a href="mailto:3110197220@qq.com" class="button">
-                    <i class="fas fa-envelope"></i> 联系我们
-                </a>
+                <div style="text-align: center; margin-top: 16px;">
+                    <a href="mailto:3110197220@qq.com" class="button">
+                        <i class="fas fa-envelope"></i> 联系我们
+                    </a>
+                </div>
             </div>
 
-            <!-- 贡献者墙 -->
-            <div class="feature-card fade-in lazy-load">
-                <h2>开源贡献者</h2>
-                <p>感谢所有为Ethernos Studio开源项目做出贡献的开发者！您的每一份贡献都推动着技术创新。欢迎通过GitHub参与我们的项目开发。</p>
-                <div class="button-group">
-                    <a href="https://github.com/dhjs0000/bcc/graphs/contributors" class="button outline" target="_blank">
-                        <i class="fab fa-github"></i> BCC 贡献者
+            <!-- 开源贡献者 -->
+            <div class="masonry-item wide">
+                <h2 style="margin: 0 0 16px 0; font-size: 1.125rem; font-weight: 600;">
+                    <i class="fas fa-code-branch" style="color: var(--primary-color); margin-right: 8px;"></i>
+                    开源贡献者
+                </h2>
+                <p style="color: var(--text-muted); margin: 0 0 16px 0;">
+                    感谢所有为 Ethernos Studio 开源项目做出贡献的开发者！您的每一份贡献都推动着技术创新。
+                </p>
+                <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                    <a href="https://github.com/dhjs0000/bcc/graphs/contributors" class="button outline">
+                        <i class="fab fa-github"></i> BCC
                     </a>
-                    <a href="https://github.com/dhjs0000/Blender-VMT-Remastered/graphs/contributors" class="button outline" target="_blank">
-                        <i class="fab fa-github"></i> Blender-VMT-Remastered 贡献者
+                    <a href="https://github.com/dhjs0000/Blender-VMT-Remastered/graphs/contributors" class="button outline">
+                        <i class="fab fa-github"></i> VMT
                     </a>
                 </div>
             </div>
 
             <!-- 赞助鸣谢 -->
-            <div class="feature-card fade-in lazy-load">
-                <h2>赞助鸣谢</h2>
-                <p>感谢在爱发电平台上支持我们的朋友们！您的每一份赞助都是对我们工作的认可和鼓励，让我们能够持续开发和维护开源项目。</p>
-                <div class="sponsor-thanks" id="sponsor-thanks">
+            <div class="masonry-item">
+                <h2 style="margin: 0 0 16px 0; font-size: 1.125rem; font-weight: 600;">
+                    <i class="fas fa-heart" style="color: #f78166; margin-right: 8px;"></i>
+                    赞助鸣谢
+                </h2>
+                <p style="font-size: 0.875rem; color: var(--text-muted); margin: 0 0 16px 0;">
+                    感谢在爱发电平台上支持我们的朋友们！
+                </p>
+                <div id="sponsor-thanks" style="font-size: 0.875rem; color: var(--text-muted);">
                     <p>正在加载赞助名单...</p>
                 </div>
             </div>
 
             <!-- 特别鸣谢 -->
-            <div class="feature-card fade-in lazy-load">
-                <h2>特别鸣谢</h2>
-                <p class="note-text">（以下排名不分先后）</p>
-                <div class="special-thanks" id="special-thanks">
-                    <p>正在加载特别鸣谢名单...</p>
+            <div class="masonry-item">
+                <h2 style="margin: 0 0 16px 0; font-size: 1.125rem; font-weight: 600;">
+                    <i class="fas fa-star" style="color: #ffc107; margin-right: 8px;"></i>
+                    特别鸣谢
+                </h2>
+                <p style="font-size: 0.75rem; color: var(--text-muted); margin: 0 0 8px 0;">（排名不分先后）</p>
+                <div id="special-thanks" style="font-size: 0.875rem; color: var(--text-muted);">
+                    <p>正在加载...</p>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- 页脚 -->
     <footer class="footer">
         <div class="footer-container">
             <div class="footer-links">
                 <div class="footer-section">
                     <h3>项目</h3>
                     <a href="https://ethernos.cn/bccWeb/">BCC语言</a>
-                    <a href="https://ethernos.cn/Blender-VMT-Remastered/">Blender-VMT-Remastered</a>
                 </div>
                 <div class="footer-section">
                     <h3>资源</h3>
@@ -116,8 +151,13 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>本项目使用GNU通用公共许可协议第三版开源许可证，详情请见（LICENCE_CN）</p>
-                <p>This project is open-sourced under the GNU General Public License Version 3. For detailed information, please refer to （LICENCE).</p>
+                <p>Copyright (C) 2026 Ethernos</p>
+                <p>本程序为自由软件，在自由软件联盟发布的GNU通用公共许可协议的约束下，你可以对其进行再发布及修改。协议版本为第三版或（随你）更新的版本。</p>
+                <p>我们希望发布的这个网站有用，但不保证，甚至不保证它有经济价值和适合特定用途。详情参见GNU通用公共许可协议。</p>
+                
+                <p>This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</p>
+                <p>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</p>
+                <p>You should have received a copy of the GNU General Public License along with this program. If not, see <a href="https://www.gnu.org/licenses/">https://www.gnu.org/licenses/</a>.</p>
             </div>
         </div>
     </footer>
@@ -125,4 +165,4 @@
     <script src="script.js"></script>
     <script src="cookie-consent.js"></script>
 </body>
-</html> 
+</html>

@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-
-    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EP查询 - Ethernos</title>
@@ -15,46 +13,65 @@
             padding: 2rem;
         }
 
-        .query-header {
-            text-align: center;
-            margin-bottom: 3rem;
+        .page-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
         }
 
-        .query-header h1 {
-            font-size: 2.5rem;
+        .page-header h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin: 0 0 0.5rem 0;
+            color: var(--text-color);
+        }
+
+        .page-header h1 i {
             color: var(--primary-color);
-            margin-bottom: 1rem;
+            margin-right: 0.5rem;
         }
 
-        .query-header p {
-            font-size: 1.1rem;
-            opacity: 0.8;
+        .page-header p {
+            color: var(--text-muted);
+            margin: 0;
         }
 
+        /* 不对称布局 */
+        .query-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .query-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 搜索区域 */
         .search-section {
             background: var(--card-bg);
-            border-radius: 16px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            backdrop-filter: blur(10px);
             border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 24px;
         }
 
         .search-box {
             display: flex;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
+            gap: 12px;
+            margin-bottom: 16px;
         }
 
         .search-input {
             flex: 1;
-            padding: 1rem;
-            border: 2px solid var(--border-color);
-            border-radius: 8px;
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
             background: var(--bg-color);
             color: var(--text-color);
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
+            font-size: 0.875rem;
         }
 
         .search-input:focus {
@@ -62,28 +79,9 @@
             border-color: var(--primary-color);
         }
 
-        .search-btn {
-            padding: 1rem 2rem;
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .search-btn:hover {
-            background: var(--secondary-color);
-            transform: translateY(-2px);
-        }
-
         .filter-section {
             display: flex;
-            gap: 1rem;
+            gap: 16px;
             flex-wrap: wrap;
             align-items: center;
         }
@@ -91,16 +89,21 @@
         .filter-group {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 8px;
+        }
+
+        .filter-group label {
+            font-size: 0.875rem;
+            color: var(--text-muted);
         }
 
         .filter-select {
-            padding: 0.5rem 1rem;
-            border: 2px solid var(--border-color);
+            padding: 6px 12px;
+            border: 1px solid var(--border-color);
             border-radius: 6px;
             background: var(--bg-color);
             color: var(--text-color);
-            transition: border-color 0.3s ease;
+            font-size: 0.875rem;
         }
 
         .filter-select:focus {
@@ -108,161 +111,10 @@
             border-color: var(--primary-color);
         }
 
-        .results-section {
-            margin-top: 2rem;
-        }
-
-        .results-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .results-count {
-            font-size: 1.1rem;
-            color: var(--primary-color);
-        }
-
-        .sort-options {
-            display: flex;
-            gap: 0.5rem;
-            align-items: center;
-        }
-
-        .result-card {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 2rem;
-            margin-bottom: 1.5rem;
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--border-color);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .result-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-        }
-
-        .result-title {
-            font-size: 1.5rem;
-            color: var(--primary-color);
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .result-meta {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .meta-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.9rem;
-        }
-
-        .meta-item i {
-            color: var(--primary-color);
-            width: 16px;
-        }
-
-        .result-description {
-            margin-bottom: 1.5rem;
-            line-height: 1.6;
-        }
-
-        .result-actions {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .action-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.8rem 1.5rem;
-            text-decoration: none;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            font-weight: 500;
-        }
-
-        .action-btn.primary {
-            background: var(--primary-color);
-            color: white;
-        }
-
-        .action-btn.primary:hover {
-            background: var(--secondary-color);
-            transform: translateY(-2px);
-        }
-
-        .action-btn.secondary {
-            background: transparent;
-            border: 2px solid var(--primary-color);
-            color: var(--primary-color);
-        }
-
-        .action-btn.secondary:hover {
-            background: var(--primary-color);
-            color: white;
-        }
-
-        .no-results {
-            text-align: center;
-            padding: 3rem;
-            background: var(--card-bg);
-            border-radius: 16px;
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--border-color);
-        }
-
-        .no-results i {
-            font-size: 4rem;
-            color: var(--primary-color);
-            margin-bottom: 1rem;
-            opacity: 0.5;
-        }
-
-        .no-results h3 {
-            margin: 0 0 1rem 0;
-            color: var(--primary-color);
-        }
-
-        .no-results p {
-            margin: 0;
-            opacity: 0.7;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 3rem;
-        }
-
-        .loading i {
-            font-size: 2rem;
-            color: var(--primary-color);
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
+        /* 高级搜索 */
         .advanced-search {
-            margin-top: 1.5rem;
-            padding-top: 1.5rem;
+            margin-top: 16px;
+            padding-top: 16px;
             border-top: 1px solid var(--border-color);
         }
 
@@ -271,19 +123,20 @@
             border: none;
             color: var(--primary-color);
             cursor: pointer;
-            font-size: 1rem;
+            font-size: 0.875rem;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 0;
+            gap: 6px;
+            padding: 0;
         }
 
         .advanced-options {
             display: none;
-            margin-top: 1rem;
-            padding: 1rem;
-            background: rgba(120, 129, 255, 0.1);
-            border-radius: 8px;
+            margin-top: 16px;
+            padding: 16px;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
         }
 
         .advanced-options.show {
@@ -292,54 +145,188 @@
 
         .date-range {
             display: flex;
-            gap: 1rem;
+            gap: 12px;
             align-items: center;
             flex-wrap: wrap;
         }
 
         .date-input {
-            padding: 0.5rem;
-            border: 2px solid var(--border-color);
+            padding: 6px 12px;
+            border: 1px solid var(--border-color);
             border-radius: 6px;
             background: var(--bg-color);
             color: var(--text-color);
+            font-size: 0.875rem;
         }
 
-        @media (max-width: 768px) {
-            .query-container {
-                padding: 1rem;
-            }
+        /* 侧边栏 */
+        .sidebar {
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+        }
 
-            .query-header h1 {
-                font-size: 2rem;
-            }
+        .sidebar-section {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
 
-            .search-box {
-                flex-direction: column;
-            }
+        .sidebar-section h3 {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 0 0 12px 0;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-color);
+        }
 
-            .filter-section {
-                flex-direction: column;
-                align-items: stretch;
-            }
+        /* 结果区域 */
+        .results-section {
+            margin-top: 24px;
+        }
 
-            .results-header {
-                flex-direction: column;
-                gap: 1rem;
-                align-items: stretch;
-            }
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
 
-            .result-meta {
-                grid-template-columns: 1fr;
-            }
+        .results-count {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
 
-            .result-actions {
-                flex-direction: column;
-            }
+        .results-count span {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
 
-            .action-btn {
-                justify-content: center;
-            }
+        .sort-options {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            font-size: 0.875rem;
+        }
+
+        /* 结果卡片 - 使用 info-panel 风格 */
+        .result-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 16px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .result-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .result-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .meta-item i {
+            color: var(--primary-color);
+            width: 16px;
+        }
+
+        .result-description {
+            margin-bottom: 16px;
+            font-size: 0.875rem;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .format-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+
+        .format-tag {
+            display: inline-block;
+            padding: 2px 8px;
+            background: var(--hover-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .result-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        /* 空状态和加载 */
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+
+        .no-results i {
+            font-size: 3rem;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .no-results h3 {
+            margin: 0 0 8px 0;
+            font-size: 1.125rem;
+            color: var(--text-color);
+        }
+
+        .no-results p {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--primary-color);
+        }
+
+        .loading i {
+            font-size: 2rem;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
     <link rel="stylesheet" href="../cookie-consent.css">
@@ -349,78 +336,93 @@
     
     <div class="content">
         <div class="query-container">
-            <div class="query-header">
+            <div class="page-header">
                 <h1><i class="fas fa-search"></i> EP查询系统</h1>
                 <p>搜索和浏览我们的教育资源</p>
             </div>
 
-            <div class="search-section">
-                <div class="search-box">
-                    <input type="text" class="search-input" id="searchInput" placeholder="输入关键词搜索发布内容...">
-                    <button class="search-btn" id="searchBtn">
-                        <i class="fas fa-search"></i>
-                        搜索
-                    </button>
-                </div>
+            <div class="query-layout">
+                <div class="main-content">
+                    <div class="search-section">
+                        <div class="search-box">
+                            <input type="text" class="search-input" id="searchInput" placeholder="输入关键词搜索发布内容...">
+                            <button class="button" id="searchBtn">
+                                <i class="fas fa-search"></i>
+                                搜索
+                            </button>
+                        </div>
 
-                <div class="filter-section">
-                    <div class="filter-group">
-                        <label for="formatFilter">格式:</label>
-                        <select class="filter-select" id="formatFilter">
-                            <option value="">全部格式</option>
-                            <option value="PDF">PDF</option>
-                            <option value="Word">Word</option>
-                        </select>
-                    </div>
-                    <div class="filter-group">
-                        <label for="licenseFilter">许可证:</label>
-                        <select class="filter-select" id="licenseFilter">
-                            <option value="">全部许可证</option>
-                            <option value="CC BY-NC-SA 4.0">CC BY-NC-SA 4.0</option>
-                        </select>
-                    </div>
-                    <div class="filter-group">
-                        <label for="sortBy">排序:</label>
-                        <select class="filter-select" id="sortBy">
-                            <option value="name">按名称</option>
-                            <option value="date">按日期</option>
-                        </select>
-                    </div>
-                </div>
+                        <div class="filter-section">
+                            <div class="filter-group">
+                                <label for="formatFilter">格式:</label>
+                                <select class="filter-select" id="formatFilter">
+                                    <option value="">全部格式</option>
+                                    <option value="PDF">PDF</option>
+                                    <option value="Word">Word</option>
+                                </select>
+                            </div>
+                            <div class="filter-group">
+                                <label for="licenseFilter">许可证:</label>
+                                <select class="filter-select" id="licenseFilter">
+                                    <option value="">全部许可证</option>
+                                    <option value="CC BY-NC-SA 4.0">CC BY-NC-SA 4.0</option>
+                                </select>
+                            </div>
+                            <div class="filter-group">
+                                <label for="sortBy">排序:</label>
+                                <select class="filter-select" id="sortBy">
+                                    <option value="name">按名称</option>
+                                    <option value="date">按日期</option>
+                                </select>
+                            </div>
+                        </div>
 
-                <div class="advanced-search">
-                    <button class="advanced-toggle" id="advancedToggle">
-                        <i class="fas fa-cog"></i>
-                        高级搜索
-                        <i class="fas fa-chevron-down" id="toggleIcon"></i>
-                    </button>
-                    <div class="advanced-options" id="advancedOptions">
-                        <div class="date-range">
-                            <label>发布日期范围:</label>
-                            <input type="date" class="date-input" id="startDate">
-                            <span>至</span>
-                            <input type="date" class="date-input" id="endDate">
+                        <div class="advanced-search">
+                            <button class="advanced-toggle" id="advancedToggle">
+                                <i class="fas fa-cog"></i>
+                                高级搜索
+                                <i class="fas fa-chevron-down" id="toggleIcon"></i>
+                            </button>
+                            <div class="advanced-options" id="advancedOptions">
+                                <div class="date-range">
+                                    <label>发布日期范围:</label>
+                                    <input type="date" class="date-input" id="startDate">
+                                    <span>至</span>
+                                    <input type="date" class="date-input" id="endDate">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="results-section" id="resultsSection">
+                        <div class="results-header">
+                            <div class="results-count">
+                                找到 <span id="resultNumber">0</span> 个结果
+                            </div>
+                            <div class="sort-options">
+                                <label for="sortOrder">排序方式:</label>
+                                <select class="filter-select" id="sortOrder">
+                                    <option value="asc">升序</option>
+                                    <option value="desc">降序</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div id="resultsContainer">
+                            <!-- 搜索结果将在这里显示 -->
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="results-section" id="resultsSection">
-                <div class="results-header">
-                    <div class="results-count" id="resultsCount">
-                        找到 <span id="resultNumber">0</span> 个结果
+                <div class="sidebar">
+                    <div class="sidebar-section">
+                        <h3>关于EP</h3>
+                        <p>EP (Educational Publication) 是我们的教育资源发布平台，提供各类学习资料的下载服务。</p>
                     </div>
-                    <div class="sort-options">
-                        <label for="sortOrder">排序方式:</label>
-                        <select class="filter-select" id="sortOrder">
-                            <option value="asc">升序</option>
-                            <option value="desc">降序</option>
-                        </select>
+                    <div class="sidebar-section">
+                        <h3>使用说明</h3>
+                        <p>支持按格式、许可证和日期范围进行筛选。所有资源均采用标准许可证发布，请遵守使用条款。</p>
                     </div>
-                </div>
-
-                <div id="resultsContainer">
-                    <!-- 搜索结果将在这里显示 -->
                 </div>
             </div>
         </div>
@@ -438,7 +440,6 @@
                 const response = await fetch('json/all.json');
                 const data = await response.json();
                 
-                // 使用all.json中的真实数据，不添加编造信息
                 releases = data.map(item => ({
                     ...item,
                     id: item.publish_id
@@ -448,7 +449,6 @@
                 displayResults();
             } catch (error) {
                 console.error('加载发布数据失败:', error);
-                // 显示错误信息，不使用编造数据
                 document.getElementById('resultsContainer').innerHTML = `
                     <div class="no-results">
                         <i class="fas fa-exclamation-triangle"></i>
@@ -459,7 +459,6 @@
             }
         }
 
-
         // 搜索功能
         function searchReleases() {
             const searchTerm = document.getElementById('searchInput').value.toLowerCase();
@@ -469,19 +468,15 @@
             const endDate = document.getElementById('endDate').value;
 
             filteredReleases = releases.filter(release => {
-                // 搜索关键词
                 const matchesSearch = !searchTerm ||
                     (release.name && release.name.toLowerCase().includes(searchTerm));
 
-                // 格式过滤
                 const matchesFormat = !formatFilter || 
                     release.formats.includes(formatFilter);
 
-                // 许可证过滤
                 const matchesLicense = !licenseFilter || 
                     release.license === licenseFilter;
 
-                // 日期范围过滤（使用注册日期）
                 let matchesDate = true;
                 if (startDate || endDate) {
                     const releaseDate = new Date(release.register_date);
@@ -515,10 +510,6 @@
                     case 'date':
                         aValue = new Date(a.register_date);
                         bValue = new Date(b.register_date);
-                        break;
-                    case 'downloads':
-                        aValue = a.downloads || 0;
-                        bValue = b.downloads || 0;
                         break;
                     default:
                         return 0;
@@ -569,28 +560,27 @@
                             <span>发布日期: ${release.register_date}</span>
                         </div>
                         <div class="meta-item">
-                        <div class="meta-item">
                             <i class="fas fa-balance-scale"></i>
                             <span>许可证: ${release.license}</span>
                         </div>
                     </div>
 
-                    <div class="format-tags" style="margin-bottom: 1rem;">
+                    <div class="format-tags">
                         ${release.formats.map(format => `<span class="format-tag"><i class="fas fa-file"></i> ${format}</span>`).join('')}
                     </div>
 
                     <div class="result-actions">
-                        <a href="release.html" class="action-btn primary">
+                        <a href="release.html" class="button">
                             <i class="fas fa-info-circle"></i>
                             查看详情
                         </a>
                         ${release.formats.map(format => `
-                            <a href="assets/${release.publish_id}/${format === 'PDF' ? 'PDF.pdf' : 'Word.docx'}" class="action-btn secondary" download>
+                            <a href="assets/${release.publish_id}/${format === 'PDF' ? 'PDF.pdf' : 'Word.docx'}" class="button outline" download>
                                 <i class="fas fa-download"></i>
                                 下载${format}
                             </a>
                         `).join('')}
-                        <a href="assets/${release.id}/LICENSE" class="action-btn secondary" target="_blank">
+                        <a href="assets/${release.id}/LICENSE" class="button outline" target="_blank">
                             <i class="fas fa-balance-scale"></i>
                             许可证
                         </a>
@@ -603,27 +593,21 @@
         document.addEventListener('DOMContentLoaded', function() {
             loadReleases();
 
-            // 搜索按钮
             document.getElementById('searchBtn').addEventListener('click', searchReleases);
             
-            // 搜索输入框回车事件
             document.getElementById('searchInput').addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
                     searchReleases();
                 }
             });
 
-            // 过滤器变化
             document.getElementById('formatFilter').addEventListener('change', searchReleases);
             document.getElementById('licenseFilter').addEventListener('change', searchReleases);
             document.getElementById('startDate').addEventListener('change', searchReleases);
             document.getElementById('endDate').addEventListener('change', searchReleases);
-
-            // 排序变化
             document.getElementById('sortBy').addEventListener('change', sortReleases);
             document.getElementById('sortOrder').addEventListener('change', sortReleases);
 
-            // 高级搜索切换
             document.getElementById('advancedToggle').addEventListener('click', function() {
                 const advancedOptions = document.getElementById('advancedOptions');
                 const toggleIcon = document.getElementById('toggleIcon');
@@ -633,7 +617,6 @@
                 toggleIcon.classList.toggle('fa-chevron-up');
             });
 
-            // URL参数处理
             const urlParams = new URLSearchParams(window.location.search);
             const releaseId = urlParams.get('id');
             if (releaseId) {

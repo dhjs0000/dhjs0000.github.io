@@ -4,136 +4,85 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ethernos Studio - 以太诺斯工作室</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 20px;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background: linear-gradient(135deg, #1e1e2e 0%, #2d2d44 100%);
-            color: #eee;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            text-align: center;
-        }
-        
-        .container {
-            max-width: 800px;
-            padding: 30px;
-            background-color: rgba(0,0,0,0.2);
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        }
-        
-        h1 {
-            color: #7881ff;
-            margin-bottom: 10px;
-        }
-        
-        h3 {
-            color: #7881ff;
-            margin-top: 0;
-        }
-        
-        .countdown {
-            font-size: 24px;
-            margin: 20px 0;
-            color: #7881ff;
-            font-weight: bold;
-        }
-        
-        .cancel-button {
-            background: #7881ff;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            margin-bottom: 20px;
-        }
-        
-        .cancel-button:hover {
-            background: #5f55af;
-            transform: translateY(-2px);
-        }
-        
-        a {
-            color: #7881ff;
-            text-decoration: none;
-            font-weight: bold;
-            transition: color 0.2s;
-        }
-        
-        a:hover {
-            color: #5f55af;
-            text-decoration: underline;
-        }
-        
-        .intro {
-            margin: 20px 0;
-            padding: 15px;
-            background-color: rgba(120, 129, 255, 0.1);
-            border-radius: 8px;
-        }
-        
-        .social-links {
-            margin: 20px 0;
-        }
-        
-        .social-links a {
-            margin: 0 5px;
-        }
-        
-        footer {
-            margin-top: 30px;
-            font-size: 14px;
-            color: #aaa;
-        }
-    </style>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="cookie-consent.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Ethernos Studio 以太诺斯工作室</h1>
-        <h3>重定向倒计时</h3>
-        
-        <div class="intro">
+
+    <main class="content">
+        <div class="hero">
+            <h1>Ethernos Studio 以太诺斯工作室</h1>
+            <p>重定向倒计时</p>
+        </div>
+
+        <div class="feature-card">
             <p>Ethernos Studio是一个致力于分享开源技术、推动技术创新的工作室平台。</p>
             <p>我们提供技术教程、开源项目分享和技术交流服务。</p>
         </div>
-        
-        <p>您即将被重定向到我们的新主页。如果您不希望等待，可以直接点击<a href="home.html">这里</a>立即前往。</p>
-        
-        <p>感谢您的支持！我已经入驻爱发电，您可以点击<a href="https://afdian.tv/a/dhjs0000">这里</a>进入我的爱发电主页，我正在开发<a href="https://github.com/Ethernos-Studio/vsenv">vsenv</a>，支持我的项目。</p>
 
-        <p>我们使用<a href="clarity.microsoft.com">Microsoft Clarity</a> 分析页面数据以优化网站体验。访问该网站即表示您同意我们收集数据，我们保证敏感信息将被自动屏蔽。</p>
-        
-        <div id="countdown" class="countdown"></div>
-        <button onclick="cancelCountdown()" class="cancel-button">取消跳转</button>
-        
-        <div class="social-links">
-            <p>关注我们：
-                <a href="https://github.com/dhjs0000" target="_blank">GitHub</a> |
-                <a href="https://space.bilibili.com/430218185" target="_blank">哔哩哔哩</a>
-            </p>
+        <div class="feature-card">
+            <p>您即将被重定向到我们的新主页。如果您不希望等待，可以直接点击<a href="home.html">这里</a>立即前往。</p>
+            <p>感谢您的支持！我已经入驻爱发电，您可以点击<a href="https://afdian.tv/a/dhjs0000">这里</a>进入我的爱发电主页，我正在开发<a href="https://github.com/Ethernos-Studio/vsenv">vsenv</a>，支持我的项目。</p>
+            <p>我们使用<a href="clarity.microsoft.com">Microsoft Clarity</a> 分析页面数据以优化网站体验。访问该网站即表示您同意我们收集数据，我们保证敏感信息将被自动屏蔽。</p>
         </div>
-        
-        <footer>
-            <p>© 2026 Ethernos Studio 以太诺斯工作室 - 保留所有权利</p>
-        </footer>
-    </div>
+
+        <div class="feature-card">
+            <div id="tcountdown" class="tcountdown" style="font-size: 1.5rem; color: var(--primary-color); font-weight: bold; text-align: center;"></div>
+            <div class="button-group">
+                <button onclick="cancelCountdown()" class="button">取消跳转</button>
+            </div>
+        </div>
+
+        <div class="feature-card">
+            <p>关注我们：</p>
+            <div class="button-group">
+                <a href="https://github.com/dhjs0000" target="_blank" class="button outline">GitHub</a>
+                <a href="https://space.bilibili.com/430218185" target="_blank" class="button outline">哔哩哔哩</a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-links">
+                <div class="footer-section">
+                    <h3>项目</h3>
+                    <a href="https://ethernos.cn/bccWeb/">BCC语言</a>
+                </div>
+                <div class="footer-section">
+                    <h3>资源</h3>
+                    <a href="downloads.html">软件下载</a>
+                    <a href="tools.html">开发工具</a>
+                </div>
+                <div class="footer-section">
+                    <h3>服务</h3>
+                    <a href="blog.html">技术博客</a>
+                    <a href="questions.html">技术支持</a>
+                </div>
+                <div class="footer-section">
+                    <h3>关于</h3>
+                    <a href="team.html">团队</a>
+                    <a href="contact.html">联系我们</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>Copyright (C) 2026 Ethernos</p>
+                <p>本程序为自由软件，在自由软件联盟发布的GNU通用公共许可协议的约束下，你可以对其进行再发布及修改。协议版本为第三版或（随你）更新的版本。</p>
+                <p>我们希望发布的这个网站有用，但不保证，甚至不保证它有经济价值和适合特定用途。详情参见GNU通用公共许可协议。</p>
+                
+                <p>This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</p>
+                <p>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</p>
+                <p>You should have received a copy of the GNU General Public License along with this program. If not, see <a href="https://www.gnu.org/licenses/">https://www.gnu.org/licenses/</a>.</p>
+            </div>
+        </div>
+    </footer>
 
     <script>
         let timeLeft = 5;
         let countdownTimer;
 
         function updateCountdown() {
-            const countdownElement = document.getElementById('countdown');
+            const countdownElement = document.getElementById('tcountdown');
             countdownElement.textContent = timeLeft + ' 秒后跳转到主页';
             
             if (timeLeft <= 0) {
@@ -145,13 +94,14 @@
 
         function cancelCountdown() {
             clearInterval(countdownTimer);
-            document.getElementById('countdown').textContent = '跳转已取消';
+            document.getElementById('tcountdown').textContent = '跳转已取消';
         }
 
         // 开始倒计时
         updateCountdown();
         countdownTimer = setInterval(updateCountdown, 1000);
     </script>
+    <script src="script.js"></script>
     <script src="cookie-consent.js"></script>
 </body>
 </html>

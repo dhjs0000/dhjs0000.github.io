@@ -5,28 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>关于我们 - Ethernos Studio</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="cookie-consent.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         .about-hero {
             text-align: center;
             padding: 60px 20px;
-            background: linear-gradient(135deg, rgba(120, 129, 255, 0.1) 0%, rgba(95, 85, 175, 0.1) 100%);
-            border-radius: 20px;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
             margin: 40px 0;
         }
 
         .about-hero h1 {
             font-size: 3rem;
             margin-bottom: 20px;
-            background: linear-gradient(135deg, #7881ff 0%, #5f55af 100%);
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: var(--text-color);
         }
 
         .about-hero p {
             font-size: 1.2rem;
-            color: rgba(255, 255, 255, 0.8);
+            color: var(--text-color);
+            opacity: 0.8;
             max-width: 800px;
             margin: 0 auto;
             line-height: 1.6;
@@ -41,14 +41,9 @@
 
         .mission-card {
             background: var(--card-bg);
-            border-radius: 16px;
+            border-radius: 8px;
             padding: 30px;
             border: 1px solid var(--border-color);
-            transition: transform 0.3s ease;
-        }
-
-        .mission-card:hover {
-            transform: translateY(-5px);
         }
 
         .mission-card h3 {
@@ -108,7 +103,7 @@
             top: 0;
             bottom: 0;
             width: 2px;
-            background: var(--primary-color);
+            background: var(--border-color);
             transform: translateX(-50%);
         }
 
@@ -128,7 +123,7 @@
             width: 45%;
             background: var(--card-bg);
             padding: 20px;
-            border-radius: 12px;
+            border-radius: 8px;
             border: 1px solid var(--border-color);
         }
 
@@ -139,7 +134,7 @@
             background: var(--primary-color);
             color: white;
             padding: 5px 15px;
-            border-radius: 20px;
+            border-radius: 8px;
             font-weight: bold;
         }
 
@@ -164,12 +159,10 @@
             }
         }
     </style>
-    <link rel="stylesheet" href="cookie-consent.css">
 </head>
 <body>
     <div id="nav-placeholder"></div>
 
-    <!-- 主要内容区 -->
     <main class="content">
         <div class="about-hero">
             <h1>关于 Ethernos Studio</h1>
@@ -177,15 +170,15 @@
         </div>
 
         <section class="mission-section">
-            <div class="mission-card">
+            <div class="mission-card feature-card">
                 <h3><i class="fas fa-lightbulb"></i> 我们的使命</h3>
                 <p>通过开源技术创新，降低技术门槛，让更多人能够参与到数字创作中来。我们相信技术的力量能够改变世界，并致力于将这种力量传递给每一个人。</p>
             </div>
-            <div class="mission-card">
+            <div class="mission-card feature-card">
                 <h3><i class="fas fa-target"></i> 我们的愿景</h3>
                 <p>成为全球领先的开源技术工作室，推动技术创新和知识共享，构建一个开放、协作、创新的技术生态系统。</p>
             </div>
-            <div class="mission-card">
+            <div class="mission-card feature-card">
                 <h3><i class="fas fa-handshake"></i> 我们的价值观</h3>
                 <p>开放、创新、专业、协作。我们相信通过开放的合作模式，能够创造出更加优秀的技术产品，为社会创造更大的价值。</p>
             </div>
@@ -260,14 +253,12 @@
         </section>
     </main>
 
-    <!-- 页脚 -->
     <footer class="footer">
         <div class="footer-container">
             <div class="footer-links">
                 <div class="footer-section">
                     <h3>项目</h3>
                     <a href="https://ethernos.cn/bccWeb/">BCC语言</a>
-                    <a href="https://ethernos.cn/Blender-VMT">Blender-VMT-Remastered</a>
                 </div>
                 <div class="footer-section">
                     <h3>资源</h3>
@@ -286,7 +277,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>Copyright (C) 2025 Ethernos Studio</p>
+                <p>Copyright (C) 2026 Ethernos</p>
                 <p>本程序为自由软件，在自由软件联盟发布的GNU通用公共许可协议的约束下，你可以对其进行再发布及修改。协议版本为第三版或（随你）更新的版本。</p>
                 <p>我们希望发布的这个网站有用，但不保证，甚至不保证它有经济价值和适合特定用途。详情参见GNU通用公共许可协议。</p>
                 

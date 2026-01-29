@@ -5,156 +5,246 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>技术博客 - Ethernos Studio</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="blog/blog-style.css">
-    <script type="text/javascript">
-    (function(c,l,a,r,i,t,y){
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-    })(window, document, "clarity", "script", "pe969al7w9");
-</script>
+    <link rel="stylesheet" href="cookie-consent.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        .blog-list {
+        .blog-layout {
             display: grid;
-            gap: 2rem;
-            margin-top: 2rem;
+            grid-template-columns: 1fr 300px;
+            gap: 32px;
+        }
+
+        .blog-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
 
         .blog-card {
             background: var(--card-bg);
-            border-radius: 16px;
-            padding: 2rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px;
+            transition: border-color 0.2s;
         }
 
         .blog-card:hover {
-            transform: translateY(-5px);
+            border-color: var(--primary-color);
         }
 
         .blog-card h2 {
-            font-size: 1.8rem;
-            margin-bottom: 1rem;
+            font-size: 1.25rem;
+            margin: 0 0 12px 0;
+            font-weight: 600;
+        }
+
+        .blog-card h2 a {
+            color: var(--text-color);
+            text-decoration: none;
+        }
+
+        .blog-card h2 a:hover {
             color: var(--primary-color);
         }
 
         .blog-card .meta {
             display: flex;
-            gap: 1rem;
-            margin-bottom: 1rem;
-            font-size: 0.9rem;
-            color: var(--text-color);
-            opacity: 0.8;
+            gap: 16px;
+            margin-bottom: 12px;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .blog-card .meta span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .blog-card .excerpt {
-            margin: 1rem 0;
+            margin: 0 0 16px 0;
             line-height: 1.6;
+            color: var(--text-muted);
         }
 
         .blog-card .read-more {
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 6px;
             color: var(--primary-color);
             text-decoration: none;
+            font-size: 0.875rem;
             font-weight: 500;
-            transition: gap 0.3s ease;
         }
 
         .blog-card .read-more:hover {
-            gap: 0.75rem;
+            text-decoration: underline;
         }
 
         .categories {
             display: flex;
-            gap: 0.5rem;
-            margin-top: 1rem;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-color);
         }
 
-        .category {
-            background: rgba(var(--primary-color-rgb), 0.1);
-            color: var(--primary-color);
-            padding: 0.25rem 0.75rem;
-            border-radius: 100px;
+        .blog-notice {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--primary-color);
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin-bottom: 24px;
+        }
+
+        .blog-notice p {
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
             font-size: 0.9rem;
         }
+
+        .blog-notice a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            .blog-layout {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
-    <link rel="stylesheet" href="cookie-consent.css">
 </head>
 <body>
-    <!-- 导航栏占位符 -->
     <div id="nav-placeholder"></div>
 
-    <!-- 主要内容区 -->
     <main class="content">
         <h1 class="page-title">技术博客</h1>
-        <div style="text-align: center; margin: 2rem auto; padding: 1.5rem; background: rgba(120, 129, 255, 0.1); border-radius: 12px; max-width: 800px; border: 1px solid rgba(120, 129, 255, 0.2); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);">
-            <p style="margin: 0; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 1.1rem;">
-                <i class="fas fa-edit" style="color: #7881ff;"></i>
-                想发布自己的博客？请在 
-                <a href="https://github.com/dhjs0000/dhjs0000.github.io/issues" style="color: #7881ff; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; font-weight: 500;">
-                    <i class="fab fa-github"></i>GitHub
-                </a> 
-                上发布关于blog的issue
-            </p>
-        </div>
-        <div class="blog-list">
-            <!-- 博客文章2 -->
-            <article class="blog-card">
-                <h2>
-                    <span class="post-badge" style="background-color: #7881ff; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.9rem; margin-right: 0.5rem;">
-                        <a href="https://github.com/dhjs0000/dhjs0000.github.io/issues/3" style="color: white; text-decoration: none;">blog #2</a>
-                    </span>
-                    Blender-VMT-Remastered打包问题怎么解决
-                </h2>
-                <div class="meta">
-                    <span><i class="far fa-calendar-alt"></i> 2025-01-17</span>
-                    <span><i class="fas fa-tag"></i> Blender-VMT-Remastered</span>
-                    <span><i class="fas fa-user"></i> dhjs0000</span>
-                </div>
-                <p class="excerpt">最近在使用Blender-VMT-Remastered时遇到了一个严重问题：打开打包后的exe文件会导致进程无限复制，造成系统卡死。请帮我们解决这个问题，并将在下一个版本中发布修复。如果你也遇到了类似的问题，欢迎在GitHub上提交issue或参与讨论。</p>
-                <div class="categories">
-                    <span class="category">问题解决</span>
-                    <span class="category">PyInstaller</span>
-                </div>
-                <a href="blog/2.html" class="read-more">
-                    阅读全文 <i class="fas fa-arrow-right"></i>
-                </a>
-            </article>
 
-            <!-- 博客文章1 -->
-            <article class="blog-card">
-                <h2>
-                    <span class="post-badge" style="background-color: #7881ff; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.9rem; margin-right: 0.5rem;">blog #1</span>
-                    招人，将pyBCC移植到C++
-                </h2>
-                <div class="meta">
-                    <span><i class="far fa-calendar-alt"></i> 2025-01-17</span>
-                    <span><i class="fas fa-tag"></i> BCC</span>
-                    <span><i class="fas fa-user"></i> dhjs0000</span>
+        <div class="blog-layout">
+            <!-- 左侧博客列表 -->
+            <div class="blog-main">
+                <div class="blog-notice">
+                    <p>
+                        <i class="fas fa-edit" style="color: var(--primary-color);"></i>
+                        想发布自己的博客？请在 
+                        <a href="https://github.com/dhjs0000/dhjs0000.github.io/issues">
+                            <i class="fab fa-github"></i> GitHub Issues
+                        </a> 
+                        上发布关于 blog 的 issue
+                    </p>
                 </div>
-                <p class="excerpt">为了提高运行效率，将pyBCC移植到C++，以此获得更高的运行效率和更好的开发体验。我并不擅长C++，所以需要一个擅长C++的人来帮助我。</p>
-                <div class="categories">
-                    <span class="category">招聘</span>
-                    <span class="category">C++</span>
+
+                <div class="blog-list">
+
+                    <article class="blog-card">
+                        <h2>
+                            <span class="tag" style="background: var(--primary-color); color: white; border-color: var(--primary-color);">blog #3</span>
+                            <a href="blog/3.html">关于Blender-VMT，我想说的</a>
+                        </h2>
+                        <div class="meta">
+                            <span><i class="far fa-calendar-alt"></i> 2026-01-06</span>
+                            <span><i class="fas fa-tag"></i> Blender-VMT-Remastered</span>
+                            <span><i class="fas fa-user"></i> dhjs0000</span>
+                        </div>
+                        <p class="excerpt">最近还有很多人来网站看Blender-VMT，首先，我想说声对不起，这个项目早在2025年1月13日就停止了更新。而Blender-VMT-Remastered因为特殊原因选择了删除项目库。</p>
+                        <div class="categories">
+                            <span class="tag">说明</span>
+                            <span class="tag">网站问题</span>
+                        </div>
+                        <a href="blog/3.html" class="read-more">
+                            阅读全文 <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </article>
+
+                    <article class="blog-card">
+                        <h2>
+                            <span class="tag" style="background: var(--primary-color); color: white; border-color: var(--primary-color);">blog #2</span>
+                            <a href="blog/2.html">Blender-VMT-Remastered打包问题怎么解决</a>
+                        </h2>
+                        <div class="meta">
+                            <span><i class="far fa-calendar-alt"></i> 2025-01-17</span>
+                            <span><i class="fas fa-tag"></i> Blender-VMT-Remastered</span>
+                            <span><i class="fas fa-user"></i> dhjs0000</span>
+                        </div>
+                        <p class="excerpt">最近在使用Blender-VMT-Remastered时遇到了一个严重问题：打开打包后的exe文件会导致进程无限复制，造成系统卡死。请帮我们解决这个问题，并将在下一个版本中发布修复。</p>
+                        <div class="categories">
+                            <span class="tag">问题解决</span>
+                            <span class="tag">PyInstaller</span>
+                        </div>
+                        <a href="blog/2.html" class="read-more">
+                            阅读全文 <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </article>
+
+                    <article class="blog-card">
+                        <h2>
+                            <span class="tag" style="background: var(--primary-color); color: white; border-color: var(--primary-color);">blog #1</span>
+                            <a href="blog/1.html">招人：将pyBCC移植到C++</a>
+                        </h2>
+                        <div class="meta">
+                            <span><i class="far fa-calendar-alt"></i> 2025-01-17</span>
+                            <span><i class="fas fa-tag"></i> BCC</span>
+                            <span><i class="fas fa-user"></i> dhjs0000</span>
+                        </div>
+                        <p class="excerpt">为了提高运行效率，将pyBCC移植到C++，以此获得更高的运行效率和更好的开发体验。我并不擅长C++，所以需要一个擅长C++的人来帮助我。</p>
+                        <div class="categories">
+                            <span class="tag">招聘</span>
+                            <span class="tag">C++</span>
+                        </div>
+                        <a href="blog/1.html" class="read-more">
+                            阅读全文 <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </article>
                 </div>
-                <a href="blog/1.html" class="read-more">
-                    阅读全文 <i class="fas fa-arrow-right"></i>
-                </a>
-            </article>
+            </div>
+
+            <!-- 右侧侧边栏 -->
+            <aside class="sidebar" style="position: sticky; top: 100px; height: fit-content;">
+                <div class="sidebar-section">
+                    <h3>关于博客</h3>
+                    <p style="font-size: 0.875rem; color: var(--text-muted); margin: 0;">
+                        这里记录了 Ethernos Studio 的技术分享、项目更新和开发心得。
+                    </p>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3>热门标签</h3>
+                    <div>
+                        <a href="#" class="tag">BCC</a>
+                        <a href="#" class="tag">Blender</a>
+                        <a href="#" class="tag">Python</a>
+                        <a href="#" class="tag">C++</a>
+                        <a href="#" class="tag">招聘</a>
+                        <a href="#" class="tag">问题解决</a>
+                    </div>
+                </div>
+                
+                <!-- 
+                <div class="sidebar-section">
+                    <h3>归档</h3>
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <a href="#"><i class="far fa-folder"></i> 2025年1月 (2)</a>
+                        </li>
+                    </ul>
+                </div>
+                -->
+            </aside>
         </div>
     </main>
 
-    <!-- 页脚 -->
     <footer class="footer">
         <div class="footer-container">
             <div class="footer-links">
                 <div class="footer-section">
                     <h3>项目</h3>
-                    <a href="https://dhjs0000.github.io/bccWeb/">BCC语言</a>
-                    <a href="https://dhjs0000.github.io/Blender-VMT-Remastered/">Blender-VMT-Remastered</a>
+                    <a href="https://ethernos.cn/bccWeb/">BCC语言</a>
                 </div>
                 <div class="footer-section">
                     <h3>资源</h3>
@@ -173,7 +263,13 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>© 2025 Ethernos Studio. All rights reserved.</p>
+                <p>Copyright (C) 2026 Ethernos</p>
+                <p>本程序为自由软件，在自由软件联盟发布的GNU通用公共许可协议的约束下，你可以对其进行再发布及修改。协议版本为第三版或（随你）更新的版本。</p>
+                <p>我们希望发布的这个网站有用，但不保证，甚至不保证它有经济价值和适合特定用途。详情参见GNU通用公共许可协议。</p>
+                
+                <p>This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</p>
+                <p>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</p>
+                <p>You should have received a copy of the GNU General Public License along with this program. If not, see <a href="https://www.gnu.org/licenses/">https://www.gnu.org/licenses/</a>.</p>
             </div>
         </div>
     </footer>
@@ -181,4 +277,4 @@
     <script src="script.js"></script>
     <script src="cookie-consent.js"></script>
 </body>
-</html> 
+</html>

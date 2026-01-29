@@ -5,36 +5,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>开发指南 - Ethernos Studio</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="cookie-consent.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        /* 开发指南特定样式 */
         .guide-section {
-            background: rgba(30, 30, 46, 0.3);
-            border-radius: 16px;
-            padding: 2rem;
-            margin: 2rem 0;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px;
+            margin: 24px 0;
+        }
+
+        .guide-section h1 {
+            margin: 0 0 12px 0;
+            font-size: 1.75rem;
+        }
+
+        .guide-section p {
+            color: var(--text-muted);
+            margin: 0;
         }
 
         .step-list {
             list-style: none;
             padding: 0;
-            counter-reset: step-counter;
+            margin: 0;
         }
 
         .step-item {
-            background: rgba(75,75,75,0.2);
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin: 1rem 0;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 16px 0;
             display: flex;
-            gap: 1.5rem;
+            gap: 16px;
             align-items: flex-start;
-            transition: transform 0.3s ease;
-        }
-
-        .step-item:hover {
-            transform: translateX(10px);
         }
 
         .step-number {
@@ -46,56 +53,70 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
+            font-weight: 600;
             flex-shrink: 0;
+            font-size: 0.875rem;
+        }
+
+        .step-content {
+            flex: 1;
         }
 
         .step-content h3 {
             color: var(--primary-color);
-            margin: 0 0 0.5rem 0;
+            margin: 0 0 8px 0;
+            font-size: 1.125rem;
         }
 
         .step-content p {
             margin: 0;
-            color: var(--text-color);
+            color: var(--text-muted);
             line-height: 1.6;
         }
 
         .sub-steps {
-            margin-top: 1rem;
-            padding-left: 1rem;
-            border-left: 2px solid var(--primary-color);
+            margin-top: 12px;
+            padding-left: 16px;
+            border-left: 2px solid var(--border-color);
         }
 
         .sub-step {
-            margin: 0.5rem 0;
-            padding: 0.5rem 1rem;
-            background: rgba(255, 255, 255, 0.05);
+            margin: 8px 0;
+            padding: 8px 12px;
+            background: var(--bg-color);
             border-radius: 6px;
+            font-size: 0.875rem;
         }
 
         .tips {
-            margin-top: 1rem;
-            padding: 1rem;
-            background: rgba(120, 129, 255, 0.1);
-            border-radius: 8px;
+            margin-top: 16px;
+            padding: 16px;
+            background: var(--hover-bg);
+            border-radius: 6px;
             border-left: 3px solid var(--primary-color);
         }
 
         .tips h4 {
             color: var(--primary-color);
-            margin: 0 0 0.5rem 0;
+            margin: 0 0 8px 0;
+            font-size: 0.875rem;
         }
 
         .tips ul {
             margin: 0;
-            padding-left: 1.5rem;
+            padding-left: 20px;
+        }
+
+        .tips li {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            margin: 4px 0;
         }
     </style>
-    <link rel="stylesheet" href="cookie-consent.css">
 </head>
 <body>
     <div id="nav-placeholder"></div>
+
     <!-- 主要内容区 -->
     <main class="content">
         <div class="guide-section">
@@ -255,33 +276,33 @@
         <div class="footer-container">
             <div class="footer-links">
                 <div class="footer-section">
-                    <h3>文档</h3>
-                    <a href="#">开发指南</a>
-                    <a href="#">API文档</a>
-                    <a href="#">最佳实践</a>
+                    <h3>项目</h3>
+                    <a href="https://ethernos.cn/bccWeb/">BCC语言</a>
                 </div>
                 <div class="footer-section">
-                    <h3>工具</h3>
-                    <a href="#">开发工具</a>
-                    <a href="#">测试工具</a>
-                    <a href="#">部署工具</a>
+                    <h3>资源</h3>
+                    <a href="downloads.html">软件下载</a>
+                    <a href="tools.html">开发工具</a>
                 </div>
                 <div class="footer-section">
-                    <h3>支持</h3>
-                    <a href="#">技术支持</a>
-                    <a href="#">技术博客</a>
-                    <a href="#">反馈建议</a>
+                    <h3>服务</h3>
+                    <a href="blog.html">技术博客</a>
+                    <a href="questions.html">技术支持</a>
                 </div>
                 <div class="footer-section">
                     <h3>关于</h3>
-                    <a href="#">关于我们</a>
-                    <a href="#">联系方式</a>
-                    <a href="#">加入我们</a>
+                    <a href="team.html">团队</a>
+                    <a href="contact.html">联系我们</a>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>本项目使用GNU通用公共许可协议第三版开源许可证，详情请见（LICENCE_CN）</p>
-                <p>This project is open-sourced under the GNU General Public License Version 3. For detailed information, please refer to （LICENCE).</p>
+                <p>Copyright (C) 2026 Ethernos</p>
+                <p>本程序为自由软件，在自由软件联盟发布的GNU通用公共许可协议的约束下，你可以对其进行再发布及修改。协议版本为第三版或（随你）更新的版本。</p>
+                <p>我们希望发布的这个网站有用，但不保证，甚至不保证它有经济价值和适合特定用途。详情参见GNU通用公共许可协议。</p>
+                
+                <p>This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</p>
+                <p>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</p>
+                <p>You should have received a copy of the GNU General Public License along with this program. If not, see <a href="https://www.gnu.org/licenses/">https://www.gnu.org/licenses/</a>.</p>
             </div>
         </div>
     </footer>
@@ -289,4 +310,4 @@
     <script src="script.js"></script>
     <script src="cookie-consent.js"></script>
 </body>
-</html> 
+</html>

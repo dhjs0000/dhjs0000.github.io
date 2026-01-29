@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-
-    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EP发布 - Ethernos</title>
@@ -15,222 +13,242 @@
             padding: 2rem;
         }
 
-        .release-header {
-            text-align: center;
-            margin-bottom: 3rem;
+        .page-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
         }
 
-        .release-header h1 {
-            font-size: 2.5rem;
+        .page-header h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin: 0 0 0.5rem 0;
+            color: var(--text-color);
+        }
+
+        .page-header h1 i {
             color: var(--primary-color);
-            margin-bottom: 1rem;
+            margin-right: 0.5rem;
         }
 
-        .release-header p {
-            font-size: 1.1rem;
-            opacity: 0.8;
+        .page-header p {
+            color: var(--text-muted);
+            margin: 0;
         }
 
+        /* 使用不规则网格布局 */
         .release-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
-            margin-bottom: 3rem;
+            grid-template-columns: repeat(3, 1fr);
+            grid-auto-rows: minmax(200px, auto);
+            gap: 16px;
+            margin-bottom: 32px;
         }
 
+        @media (max-width: 768px) {
+            .release-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 卡片样式 - 使用 feature-card 风格 */
         .release-card {
             background: var(--card-bg);
-            border-radius: 16px;
-            padding: 2rem;
-            backdrop-filter: blur(10px);
             border: 1px solid var(--border-color);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-radius: 8px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
         }
 
-        .release-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        .release-card.wide {
+            grid-column: span 2;
+        }
+
+        @media (max-width: 768px) {
+            .release-card.wide {
+                grid-column: span 1;
+            }
+        }
+
+        .release-card.highlight {
+            border-left: 4px solid var(--primary-color);
         }
 
         .release-title {
-            font-size: 1.5rem;
+            font-size: 1.125rem;
+            font-weight: 600;
             color: var(--primary-color);
-            margin-bottom: 1rem;
+            margin-bottom: 16px;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 8px;
         }
 
         .release-info {
-            margin-bottom: 1.5rem;
+            margin-bottom: 16px;
+            flex: 1;
         }
 
         .release-info p {
-            margin: 0.5rem 0;
+            margin: 8px 0;
+            font-size: 0.875rem;
+            color: var(--text-muted);
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 8px;
         }
 
         .release-info .label {
             font-weight: 500;
             min-width: 80px;
+            color: var(--text-color);
         }
 
         .format-tags {
             display: flex;
-            gap: 0.5rem;
+            gap: 8px;
             flex-wrap: wrap;
-            margin: 1rem 0;
+            margin: 12px 0;
         }
 
         .format-tag {
-            background: var(--primary-color);
-            color: white;
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 500;
+            display: inline-block;
+            padding: 2px 8px;
+            background: var(--hover-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
         }
 
-        .download-section {
-            margin-top: 1.5rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid var(--border-color);
+        .format-tag i {
+            margin-right: 4px;
         }
 
-        .download-buttons {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .download-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.8rem 1.5rem;
-            background: var(--primary-color);
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            font-weight: 500;
-        }
-
-        .download-btn:hover {
-            background: var(--secondary-color);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(120, 129, 255, 0.3);
-        }
-
-        .download-btn.secondary {
-            background: transparent;
-            border: 2px solid var(--primary-color);
-            color: var(--primary-color);
-        }
-
-        .download-btn.secondary:hover {
-            background: var(--primary-color);
-            color: white;
-        }
-
+        /* 许可证区域 */
         .license-section {
-            background: rgba(120, 129, 255, 0.1);
-            border-radius: 8px;
-            padding: 1rem;
-            margin-top: 1rem;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 12px;
+            margin: 12px 0;
         }
 
         .license-section h4 {
-            margin: 0 0 0.5rem 0;
-            color: var(--primary-color);
-            font-size: 1rem;
+            margin: 0 0 8px 0;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .license-section p {
             margin: 0;
-            font-size: 0.9rem;
-            opacity: 0.8;
+            font-size: 0.875rem;
+            color: var(--text-color);
+        }
+
+        /* 下载区域 */
+        .download-section {
+            margin-top: auto;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .download-section h4 {
+            margin: 0 0 12px 0;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .download-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
         }
 
         .preview-section {
-            margin-top: 2rem;
-            text-align: center;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border-color);
         }
 
-        .preview-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.8rem 1.5rem;
-            background: transparent;
-            border: 2px solid var(--primary-color);
-            color: var(--primary-color);
-            text-decoration: none;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            font-weight: 500;
-        }
-
-        .preview-btn:hover {
-            background: var(--primary-color);
-            color: white;
-        }
-
+        /* 统计区域 */
         .stats-section {
             background: var(--card-bg);
-            border-radius: 16px;
-            padding: 2rem;
-            margin-top: 3rem;
-            text-align: center;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px;
+            margin-top: 32px;
+        }
+
+        .stats-section h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 0 0 20px 0;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .stats-section h2 i {
+            color: var(--primary-color);
+            margin-right: 8px;
         }
 
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
         }
 
         .stat-item {
             text-align: center;
+            padding: 20px;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
         }
 
         .stat-number {
-            font-size: 2.5rem;
-            font-weight: bold;
+            font-size: 2rem;
+            font-weight: 600;
             color: var(--primary-color);
             display: block;
         }
 
         .stat-label {
-            font-size: 1rem;
-            opacity: 0.8;
-            margin-top: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-top: 4px;
         }
 
-        @media (max-width: 768px) {
-            .release-container {
-                padding: 1rem;
-            }
+        /* 空状态 */
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            grid-column: 1 / -1;
+        }
 
-            .release-header h1 {
-                font-size: 2rem;
-            }
+        .no-results i {
+            font-size: 3rem;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
 
-            .release-grid {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-            }
+        .no-results h3 {
+            margin: 0 0 8px 0;
+            font-size: 1.125rem;
+            color: var(--text-color);
+        }
 
-            .download-buttons {
-                flex-direction: column;
-            }
-
-            .download-btn {
-                justify-content: center;
-            }
+        .no-results p {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 0.875rem;
         }
     </style>
     <link rel="stylesheet" href="../cookie-consent.css">
@@ -240,7 +258,7 @@
     
     <div class="content">
         <div class="release-container">
-            <div class="release-header">
+            <div class="page-header">
                 <h1><i class="fas fa-book-open"></i> EP发布中心</h1>
                 <p>浏览和下载我们的文字资源</p>
             </div>
@@ -257,10 +275,6 @@
                         <div class="stat-label">总发布数</div>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-number" id="totalDownloads"></span>
-                        <div class="stat-label"></div>
-                    </div>
-                    <div class="stat-item">
                         <span class="stat-number" id="totalFormats">0</span>
                         <div class="stat-label">支持格式</div>
                     </div>
@@ -271,7 +285,7 @@
 
     <script src="../script.js"></script>
     <script>
-        // 发布数据 - 从all.json加载
+        // 发布数据
         let releases = [];
 
         // 格式到文件名的映射
@@ -291,7 +305,6 @@
                 const response = await fetch('json/all.json');
                 const data = await response.json();
                 
-                // 使用all.json中的真实数据，不添加编造信息
                 releases = data.map(item => ({
                     ...item,
                     id: item.publish_id
@@ -301,7 +314,6 @@
                 updateStats();
             } catch (error) {
                 console.error('加载发布数据失败:', error);
-                // 如果加载失败，显示错误信息
                 document.getElementById('releaseGrid').innerHTML = `
                     <div class="no-results">
                         <i class="fas fa-exclamation-triangle"></i>
@@ -316,9 +328,21 @@
         function renderReleases() {
             const releaseGrid = document.getElementById('releaseGrid');
             
-            releases.forEach(release => {
+            if (releases.length === 0) {
+                releaseGrid.innerHTML = `
+                    <div class="no-results">
+                        <i class="fas fa-inbox"></i>
+                        <h3>暂无发布内容</h3>
+                        <p>请稍后再来查看</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            releases.forEach((release, index) => {
                 const releaseCard = document.createElement('div');
-                releaseCard.className = 'release-card';
+                // 第一个卡片使用 wide 样式
+                releaseCard.className = `release-card ${index === 0 ? 'wide highlight' : ''}`;
                 releaseCard.innerHTML = `
                     <div class="release-title">
                         <i class="fas fa-graduation-cap"></i>
@@ -326,9 +350,9 @@
                     </div>
                     
                     <div class="release-info">
-                        <p><span class="label"><i class="fas fa-hashtag"></i> 发布ID:</span> ${release.publish_id}</p>
-                        <p><span class="label"><i class="fas fa-calendar"></i> 注册日期:</span> ${release.register_date || '暂无'}</p>
-                        ${release.final_date ? `<p><span class="label"><i class="fas fa-calendar-check"></i> 完成日期:</span> ${release.final_date}</p>` : ''}
+                        <p><i class="fas fa-hashtag"></i> <span class="label">发布ID:</span> ${release.publish_id}</p>
+                        <p><i class="fas fa-calendar"></i> <span class="label">注册日期:</span> ${release.register_date || '暂无'}</p>
+                        ${release.final_date ? `<p><i class="fas fa-calendar-check"></i> <span class="label">完成日期:</span> ${release.final_date}</p>` : ''}
                     </div>
 
                     <div class="format-tags">
@@ -337,29 +361,29 @@
 
                     <div class="license-section">
                         <h4><i class="fas fa-shield-alt"></i> 许可证信息</h4>
-                        <p>本作品采用 ${release.license} 许可协议。</p>
+                        <p>${release.license}</p>
                     </div>
 
                     <div class="download-section">
                         <h4><i class="fas fa-cloud-download-alt"></i> 下载选项</h4>
                         <div class="download-buttons">
                             ${release.formats.map(format => `
-                                <a href="assets/${release.publish_id}/${formatFileMap[format] || format}" class="download-btn" download>
+                                <a href="assets/${release.publish_id}/${formatFileMap[format] || format}" class="button" download>
                                     <i class="fas fa-download"></i>
-                                    下载${format}版本
+                                    ${format}
                                 </a>
                             `).join('')}
-                            <a href="assets/${release.publish_id}/LICENSE" class="download-btn secondary" target="_blank">
+                            <a href="assets/${release.publish_id}/LICENSE" class="button outline" target="_blank">
                                 <i class="fas fa-balance-scale"></i>
-                                查看许可证
+                                许可证
                             </a>
                         </div>
                     </div>
 
                     <div class="preview-section">
-                        <a href="query.html?id=${release.publish_id}" class="preview-btn">
+                        <a href="query.html?id=${release.publish_id}" class="button outline">
                             <i class="fas fa-eye"></i>
-                            在线预览
+                            查询
                         </a>
                     </div>
                 `;
@@ -374,34 +398,12 @@
             const totalFormats = new Set(releases.flatMap(release => release.formats)).size;
 
             document.getElementById('totalReleases').textContent = totalReleases;
-            document.getElementById('totalDownloads').textContent = ''; // 不使用编造的下载量
             document.getElementById('totalFormats').textContent = totalFormats;
         }
 
         // 页面加载完成后初始化
         document.addEventListener('DOMContentLoaded', function() {
             loadReleases();
-        });
-
-        // 下载计数功能
-        function incrementDownload(releaseId) {
-            const release = releases.find(r => r.id === releaseId);
-            if (release) {
-                release.downloads++;
-                updateStats();
-                // 可以在这里添加保存到本地存储或发送到服务器的逻辑
-            }
-        }
-
-        // 为下载按钮添加点击事件
-        document.addEventListener('click', function(e) {
-            if (e.target.classList.contains('download-btn') && !e.target.classList.contains('secondary')) {
-                const releaseId = e.target.closest('.release-card').querySelector('.release-title').textContent;
-                const release = releases.find(r => r.name === releaseId.trim());
-                if (release) {
-                    incrementDownload(release.id);
-                }
-            }
         });
     </script>
     <script src="../cookie-consent.js"></script>

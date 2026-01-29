@@ -1,16 +1,16 @@
-/* Cookie同意弹窗样式 */
+/* Cookie同意弹窗样式 - GitHub 风格 */
 .cookie-consent-modal {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(0, 0, 0, 0.7);
     display: none;
     justify-content: center;
     align-items: center;
     z-index: 10000;
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(4px);
 }
 
 .cookie-consent-modal.show {
@@ -18,119 +18,145 @@
 }
 
 .cookie-consent-content {
-    background: linear-gradient(135deg, #1e1e2e 0%, #2d2d44 100%);
-    border-radius: 15px;
+    background: var(--bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    max-width: 600px;
+    max-width: 560px;
     width: 90%;
-    max-height: 80vh;
+    max-height: 85vh;
     overflow-y: auto;
-    border: 1px solid rgba(120, 129, 255, 0.3);
 }
 
 .cookie-consent-header {
-    padding: 25px 30px 15px;
-    border-bottom: 1px solid rgba(120, 129, 255, 0.2);
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border-color);
 }
 
 .cookie-consent-header h3 {
     margin: 0;
-    color: #7881ff;
-    font-size: 24px;
+    color: var(--text-color);
+    font-size: 1.25rem;
     font-weight: 600;
 }
 
 .cookie-consent-body {
-    padding: 25px 30px;
+    padding: 20px 24px;
 }
 
 .consent-message {
-    margin: 0 0 25px 0;
-    color: #eee;
-    font-size: 16px;
+    margin: 0 0 20px 0;
+    color: var(--text-muted);
+    font-size: 0.9rem;
     line-height: 1.6;
-    text-align: center;
+}
+
+.clarity-explanation {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 16px;
+    margin-bottom: 20px;
+    font-size: 0.875rem;
+}
+
+.clarity-explanation p {
+    margin: 0 0 12px 0;
+    color: var(--text-muted);
+}
+
+.clarity-explanation p:last-child {
+    margin-bottom: 0;
+}
+
+.clarity-explanation ul {
+    margin: 0 0 12px 0;
+    padding-left: 20px;
+    color: var(--text-muted);
+}
+
+.clarity-explanation li {
+    margin: 6px 0;
 }
 
 .consent-options {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 12px;
 }
 
 .consent-option {
     display: flex;
     align-items: flex-start;
-    padding: 15px;
-    background-color: rgba(120, 129, 255, 0.1);
-    border-radius: 10px;
-    border: 2px solid transparent;
-    transition: all 0.3s ease;
+    padding: 16px;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    transition: all 0.2s;
     cursor: pointer;
 }
 
 .consent-option:hover {
-    background-color: rgba(120, 129, 255, 0.15);
-    border-color: rgba(120, 129, 255, 0.3);
+    border-color: var(--primary-color);
+    background: var(--hover-bg);
 }
 
 .consent-option input[type="radio"] {
-    margin-right: 15px;
-    margin-top: 5px;
-    width: 18px;
-    height: 18px;
-    accent-color: #7881ff;
+    margin-right: 12px;
+    margin-top: 3px;
+    width: 16px;
+    height: 16px;
+    accent-color: var(--primary-color);
 }
 
 .consent-option label {
     flex: 1;
     cursor: pointer;
-    color: #eee;
-    font-size: 15px;
+    color: var(--text-color);
+    font-size: 0.875rem;
 }
 
 .consent-option label strong {
     display: block;
-    color: #7881ff;
-    margin-bottom: 5px;
-    font-size: 16px;
+    color: var(--text-color);
+    margin-bottom: 4px;
+    font-size: 0.95rem;
+    font-weight: 600;
 }
 
 .option-description {
     display: block;
-    color: #aaa;
-    font-size: 13px;
-    margin-top: 3px;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    margin-top: 4px;
 }
 
 .cookie-consent-footer {
-    padding: 20px 30px 25px;
-    border-top: 1px solid rgba(120, 129, 255, 0.2);
+    padding: 16px 24px 20px;
+    border-top: 1px solid var(--border-color);
     display: flex;
-    gap: 15px;
+    gap: 12px;
     justify-content: flex-end;
 }
 
 .consent-btn {
-    padding: 12px 24px;
-    border: none;
+    padding: 8px 16px;
+    border: 1px solid var(--border-color);
     border-radius: 6px;
-    font-size: 14px;
+    font-size: 0.875rem;
     font-weight: 500;
     cursor: pointer;
-    transition: all 0.3s ease;
-    min-width: 120px;
+    transition: all 0.2s;
 }
 
 .consent-save {
-    background-color: rgba(120, 129, 255, 0.2);
-    color: #7881ff;
-    border: 1px solid rgba(120, 129, 255, 0.4);
+    background: var(--bg-color);
+    color: var(--text-color);
 }
 
 .consent-save:hover:not(:disabled) {
-    background-color: rgba(120, 129, 255, 0.3);
-    transform: translateY(-1px);
+    background: var(--hover-bg);
+    border-color: var(--primary-color);
 }
 
 .consent-save:disabled {
@@ -139,31 +165,31 @@
 }
 
 .consent-accept-all {
-    background: linear-gradient(135deg, #7881ff 0%, #5f55af 100%);
+    background: var(--secondary-color);
     color: white;
+    border-color: var(--secondary-color);
 }
 
 .consent-accept-all:hover {
-    background: linear-gradient(135deg, #5f55af 0%, #4a4a8a 100%);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 15px rgba(120, 129, 255, 0.3);
+    background: #2ea043;
+    border-color: #2ea043;
 }
 
 /* 响应式设计 */
 @media (max-width: 768px) {
     .cookie-consent-content {
         width: 95%;
-        margin: 20px;
+        margin: 16px;
     }
     
     .cookie-consent-header,
     .cookie-consent-body {
-        padding: 20px;
+        padding: 16px;
     }
     
     .cookie-consent-footer {
-        padding: 20px;
-        flex-direction: column;
+        padding: 16px;
+        flex-direction: column-reverse;
     }
     
     .consent-btn {
@@ -171,7 +197,7 @@
     }
     
     .consent-options {
-        gap: 12px;
+        gap: 10px;
     }
     
     .consent-option {
@@ -181,25 +207,21 @@
 
 /* 动画效果 */
 .cookie-consent-modal {
-    animation: fadeIn 0.3s ease;
+    animation: fadeIn 0.2s ease;
 }
 
 .cookie-consent-content {
-    animation: slideUp 0.3s ease;
+    animation: slideUp 0.2s ease;
 }
 
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 @keyframes slideUp {
     from {
-        transform: translateY(30px);
+        transform: translateY(20px);
         opacity: 0;
     }
     to {

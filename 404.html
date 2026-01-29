@@ -1,268 +1,62 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="zh-CN">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>页面未找到</title>
-
-<style>
-  body {
-    margin: 0;
-    padding: 0;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background: linear-gradient(135deg, #1e1e2e 0%, #2d2d44 100%);
-    color: #eee;
-    position: relative;
-    overflow: hidden;
-  }
-  
-  /* 背景动画效果 */
-  .background-animation {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    z-index: 0;
-    opacity: 0.1;
-    background: 
-      radial-gradient(circle at 20% 20%, rgba(120, 129, 255, 0.4) 0%, transparent 50%),
-      radial-gradient(circle at 80% 80%, rgba(95, 85, 175, 0.4) 0%, transparent 50%);
-    animation: backgroundPulse 10s ease-in-out infinite;
-  }
-  
-  @keyframes backgroundPulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-  }
-  
-  .error-container {
-    position: relative;
-    z-index: 1;
-    background: rgba(75,75,75,0.2);
-    border-radius: 24px;
-    padding: 40px;
-    text-align: center;
-    backdrop-filter: blur(20px);
-    max-width: 500px;
-    width: 90%;
-    box-shadow: 
-      0 4px 24px -1px rgba(0, 0, 0, 0.2),
-      0 0 1px 0 rgba(255, 255, 255, 0.1) inset;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-  }
-  
-  h1 {
-    font-size: 120px;
-    margin: 0;
-    background: linear-gradient(135deg, #7881ff 0%, #5f55af 100%);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    line-height: 1;
-    text-shadow: 0 2px 10px rgba(120, 129, 255, 0.3);
-  }
-  
-  h3 {
-    font-size: 24px;
-    margin: 20px 0;
-    font-weight: 500;
-    color: rgba(255, 255, 255, 0.9);
-  }
-  
-  .error-message {
-    font-size: 16px;
-    color: rgba(255, 255, 255, 0.7);
-    margin: 10px 0 20px;
-  }
-  
-  .button-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-    margin: 20px 0;
-  }
-  
-  .button {
-    padding: 12px 24px;
-    border-radius: 12px;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  
-  .retry-btn {
-    background: linear-gradient(135deg, #7881ff 0%, #5f55af 100%);
-    color: white;
-    border: none;
-  }
-  
-  .retry-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(120, 129, 255, 0.3);
-  }
-  
-  .feedback-link {
-    background: rgba(120, 129, 255, 0.1);
-    color: #7881ff;
-    text-decoration: none;
-    border: 1px solid rgba(120, 129, 255, 0.3);
-  }
-  
-  .feedback-link:hover {
-    background: rgba(120, 129, 255, 0.2);
-  }
-  
-  .details-btn {
-    background: transparent;
-    color: rgba(255, 255, 255, 0.7);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-  }
-  
-  .details-btn:hover {
-    background: rgba(255, 255, 255, 0.1);
-  }
-  
-  .error-details {
-    max-height: 0;
-    overflow: hidden;
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    text-align: left;
-    margin-top: 20px;
-    color: rgba(255, 255, 255, 0.7);
-    opacity: 0;
-  }
-  
-  .error-details.show {
-    max-height: 500px;
-    opacity: 1;
-  }
-  
-  .error-details p {
-    margin: 10px 0;
-    font-size: 14px;
-    line-height: 1.6;
-  }
-  
-  .error-details code {
-    display: block;
-    background: rgba(0, 0, 0, 0.3);
-    padding: 12px;
-    border-radius: 12px;
-    margin: 10px 0;
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-    font-size: 13px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-  }
-  
-  /* 添加图标 */
-  .icon {
-    width: 20px;
-    height: 20px;
-    fill: currentColor;
-  }
-  
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  .error-container {
-    animation: fadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  
-  /* 响应式设计 */
-  @media (max-width: 480px) {
-    .error-container {
-      padding: 30px 20px;
-    }
-    
-    h1 {
-      font-size: 80px;
-    }
-    
-    h3 {
-      font-size: 20px;
-    }
-    
-    .button {
-      width: 100%;
-      justify-content: center;
-    }
-  }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - 页面未找到</title>
+    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="cookie-consent.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-  <div class="background-animation"></div>
-  
-  <div class="error-container">
-    <h1>404</h1>
-    <h3>页面未找到</h3>
-    <p class="error-message">您访问的页面不存在</p>
-    
-    <div class="button-container">
-      <a href="/" class="button retry-btn">
-        <svg class="icon" viewBox="0 0 24 24">
-          <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-        </svg>
-        返回首页
-      </a>
-      
-      <a href="mailto:3110197220@qq.com" class="button feedback-link">
-        <svg class="icon" viewBox="0 0 24 24">
-          <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
-        </svg>
-        反馈问题
-      </a>
-      
-      <button class="button details-btn" onclick="toggleDetails()">
-        <svg class="icon" viewBox="0 0 24 24">
-          <path d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
-        </svg>
-        查看详细信息
-      </button>
-    </div>
-    
-    <div class="error-details" id="errorDetails">
-      <p><strong>错误代码:</strong> 404 Not Found</p>
-      <p><strong>请求URL:</strong> <code id="requestUrl"></code></p>
-      <p><strong>错误时间:</strong> <code id="errorTime"></code></p>
-      <p><strong>浏览器信息:</strong> <code id="userAgent"></code></p>
-      <p>如果您是通过链接访问此页面，请确认链接是否正确。如果您是手动输入URL，请检查拼写是否正确。</p>
-    </div>
-  </div>
+    <div id="nav-placeholder"></div>
 
-  <script>
-    function toggleDetails() {
-      const details = document.getElementById('errorDetails');
-      details.classList.toggle('show');
-    }
+    <main class="content">
+        <!-- 错误页面内容 - 使用居中的简洁布局 -->
+        <div class="hero" style="text-align: center; padding: 100px 0;">
+            <h1 style="font-size: 120px; margin: 0; color: var(--accent-color);">404</h1>
+            <p style="font-size: 24px; margin: 20px 0; color: var(--text-color);">页面未找到</p>
+            <p style="font-size: 16px; color: var(--text-secondary); margin-bottom: 30px;">您访问的页面不存在</p>
+            <a href="home.html" class="button">返回首页</a>
+        </div>
+    </main>
 
-    // 填充错误详细信息
-    document.getElementById('requestUrl').textContent = window.location.href;
-    document.getElementById('errorTime').textContent = new Date().toLocaleString();
-    document.getElementById('userAgent').textContent = navigator.userAgent;
-  </script>
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-links">
+                <div class="footer-section">
+                    <h3>项目</h3>
+                    <a href="https://ethernos.cn/bccWeb/">BCC语言</a>
+                </div>
+                <div class="footer-section">
+                    <h3>资源</h3>
+                    <a href="downloads.html">软件下载</a>
+                    <a href="tools.html">开发工具</a>
+                </div>
+                <div class="footer-section">
+                    <h3>服务</h3>
+                    <a href="blog.html">技术博客</a>
+                    <a href="questions.html">技术支持</a>
+                </div>
+                <div class="footer-section">
+                    <h3>关于</h3>
+                    <a href="team.html">团队</a>
+                    <a href="contact.html">联系我们</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>Copyright (C) 2026 Ethernos</p>
+                <p>本程序为自由软件，在自由软件联盟发布的GNU通用公共许可协议的约束下，你可以对其进行再发布及修改。协议版本为第三版或（随你）更新的版本。</p>
+                <p>我们希望发布的这个网站有用，但不保证，甚至不保证它有经济价值和适合特定用途。详情参见GNU通用公共许可协议。</p>
+                
+                <p>This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</p>
+                <p>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</p>
+                <p>You should have received a copy of the GNU General Public License along with this program. If not, see <a href="https://www.gnu.org/licenses/">https://www.gnu.org/licenses/</a>.</p>
+            </div>
+        </div>
+    </footer>
 
-  <div class="footer-bottom">
-    <p>© 2025 Ethernos Studio. All rights reserved.</p>
-  </div>
+    <script src="script.js"></script>
     <script src="cookie-consent.js"></script>
 </body>
 </html>

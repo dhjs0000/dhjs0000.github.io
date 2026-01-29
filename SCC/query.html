@@ -7,162 +7,229 @@
     <link rel="stylesheet" href="../style.css">
     <style>
         .certificate-query {
-            max-width: 800px;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 2rem;
         }
-        
-        .query-form {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 30px;
-            border-radius: 10px;
-            margin-bottom: 30px;
-            backdrop-filter: blur(10px);
+
+        .page-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
         }
-        
+
+        .page-header h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin: 0 0 0.5rem 0;
+            color: var(--text-color);
+        }
+
+        .page-header p {
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        /* 使用不对称布局 */
+        .query-layout {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .query-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 查询表单区域 */
+        .query-section {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px;
+        }
+
         .form-group {
             margin-bottom: 20px;
         }
-        
+
         .form-group label {
             display: block;
             margin-bottom: 8px;
-            font-weight: bold;
-            color: #7881ff;
+            font-weight: 500;
+            color: var(--text-color);
+            font-size: 0.875rem;
         }
-        
+
         .form-group input {
             width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-            background: rgba(255, 255, 255, 0.9);
-            color: #333;
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 0.875rem;
+            background: var(--bg-color);
+            color: var(--text-color);
+            box-sizing: border-box;
         }
-        
-        .query-button {
-            background: #7881ff;
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            margin-right: 10px;
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
         }
-        
-        .query-button:hover {
-            background: #5f55af;
-            transform: translateY(-2px);
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
         }
-        
-        .share-button {
-            background: #4CAF50;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            margin-top: 10px;
+
+        /* 侧边栏样式 */
+        .sidebar-section {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 16px;
         }
-        
-        .share-button:hover {
-            background: #45a049;
-            transform: translateY(-1px);
+
+        .sidebar-section h3 {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 0 0 12px 0;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-color);
         }
-        
-        .quick-link {
-            background: rgba(120, 129, 255, 0.1);
-            padding: 15px;
-            border-radius: 5px;
-            margin-top: 20px;
-            border-left: 4px solid #7881ff;
+
+        .sidebar-section p {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin: 0;
+            line-height: 1.6;
         }
-        
-        .quick-link h4 {
-            color: #7881ff;
-            margin-top: 0;
-            margin-bottom: 10px;
+
+        /* 快速链接区域 */
+        .quick-link-section {
+            display: none;
+            margin-top: 24px;
+            padding: 16px;
+            background: var(--hover-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            border-left: 4px solid var(--primary-color);
         }
-        
+
+        .quick-link-section h4 {
+            margin: 0 0 12px 0;
+            font-size: 0.875rem;
+            color: var(--primary-color);
+        }
+
         .link-input {
             width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 3px;
-            background: rgba(255, 255, 255, 0.9);
-            color: #333;
-            font-size: 12px;
-            margin-bottom: 10px;
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--bg-color);
+            color: var(--text-color);
+            font-size: 0.75rem;
+            margin-bottom: 12px;
+            box-sizing: border-box;
         }
-        
-        .query-results {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 30px;
-            border-radius: 10px;
-            backdrop-filter: blur(10px);
+
+        /* 查询结果区域 */
+        .results-section {
+            margin-top: 32px;
         }
-        
+
+        .results-section h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 0 0 16px 0;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        /* 证书卡片 */
         .certificate-card {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 20px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
             border-radius: 8px;
-            margin-bottom: 15px;
-            border-left: 4px solid #7881ff;
+            padding: 20px;
+            margin-bottom: 16px;
+            border-left: 4px solid var(--primary-color);
         }
-        
+
         .certificate-card h3 {
-            color: #7881ff;
-            margin-top: 0;
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin: 0 0 16px 0;
+            color: var(--primary-color);
         }
-        
+
         .certificate-info {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 10px;
-            margin-top: 15px;
+            gap: 12px;
+            margin-bottom: 16px;
         }
-        
+
         .info-item {
             display: flex;
             justify-content: space-between;
             padding: 8px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.875rem;
         }
-        
+
+        .info-item:last-child {
+            border-bottom: none;
+        }
+
         .info-label {
-            font-weight: bold;
-            color: #aaa;
+            color: var(--text-muted);
         }
-        
+
         .info-value {
-            color: #fff;
+            color: var(--text-color);
+            font-weight: 500;
         }
-        
-        .no-results {
-            text-align: center;
-            color: #aaa;
-            font-style: italic;
-            padding: 40px;
-        }
-        
+
+        /* 状态提示 */
         .loading {
             text-align: center;
-            color: #7881ff;
-            padding: 20px;
+            padding: 40px;
+            color: var(--primary-color);
         }
-        
+
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-muted);
+        }
+
         .error {
-            background: rgba(255, 0, 0, 0.1);
-            color: #ff6b6b;
-            padding: 15px;
-            border-radius: 5px;
-            border-left: 4px solid #ff6b6b;
-            margin-bottom: 20px;
+            background: rgba(207, 34, 46, 0.1);
+            color: #f85149;
+            padding: 16px;
+            border-radius: 6px;
+            border: 1px solid rgba(207, 34, 46, 0.3);
+            margin-bottom: 16px;
+        }
+
+        /* 标签样式 */
+        .tag {
+            display: inline-block;
+            padding: 2px 8px;
+            background: var(--hover-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
         }
     </style>
     <link rel="stylesheet" href="../cookie-consent.css">
@@ -170,28 +237,47 @@
 <body>
     <div id="nav-placeholder"></div>
     
-    <div class="certificate-query">
-        <h1>证书查询系统</h1>
-        <p>请输入证书信息进行查询</p>
-        
-        <div class="query-form">
-            <div class="form-group">
-                <label for="queryInput">证书ID、姓名或项目名称：</label>
-                <input type="text" id="queryInput" placeholder="">
+    <div class="content">
+        <div class="certificate-query">
+            <div class="page-header">
+                <h1>证书查询系统</h1>
+                <p>请输入证书ID、姓名或项目名称进行查询</p>
             </div>
-            <button class="query-button" onclick="queryCertificate()">查询证书</button>
-            <button class="query-button" onclick="generateQuickLink()" style="background: #FF9800;">生成快速链接</button>
-        </div>
-        
-        <div id="quickLinkSection" class="quick-link" style="display: none;">
-            <h4>快速查询链接</h4>
-            <input type="text" id="quickLinkInput" class="link-input" readonly>
-            <button class="share-button" onclick="copyQuickLink()">复制链接</button>
-        </div>
-        
-        <div id="queryResults" class="query-results" style="display: none;">
-            <h2>查询结果</h2>
-            <div id="resultsContent"></div>
+            
+            <div class="query-layout">
+                <div class="query-section">
+                    <div class="form-group">
+                        <label for="queryInput">查询内容</label>
+                        <input type="text" id="queryInput" placeholder="输入证书ID、姓名或项目名称...">
+                    </div>
+                    <div class="button-group">
+                        <button class="button" onclick="queryCertificate()">查询证书</button>
+                        <button class="button outline" onclick="generateQuickLink()">生成快速链接</button>
+                    </div>
+                    
+                    <div id="quickLinkSection" class="quick-link-section">
+                        <h4>快速查询链接</h4>
+                        <input type="text" id="quickLinkInput" class="link-input" readonly>
+                        <button class="button" onclick="copyQuickLink()">复制链接</button>
+                    </div>
+                </div>
+                
+                <div class="sidebar">
+                    <div class="sidebar-section">
+                        <h3>查询说明</h3>
+                        <p>支持通过证书ID、获得者姓名或项目名称进行模糊查询。查询结果将显示证书详细信息，包括分数、等级等。</p>
+                    </div>
+                    <div class="sidebar-section">
+                        <h3>快速分享</h3>
+                        <p>生成快速链接后，可以直接分享给他人查看特定证书信息，无需再次输入查询条件。</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="queryResults" class="results-section" style="display: none;">
+                <h2>查询结果</h2>
+                <div id="resultsContent"></div>
+            </div>
         </div>
     </div>
     
@@ -264,7 +350,7 @@
                 return;
             }
             
-            let html = `<p>找到 ${results.length} 个相关证书：</p>`;
+            let html = `<p style="color: var(--text-muted); margin-bottom: 20px;">找到 <span class="tag">${results.length}</span> 个相关证书</p>`;
             
             results.forEach(cert => {
                 html += `
@@ -272,27 +358,27 @@
                         <h3>${cert.item}</h3>
                         <div class="certificate-info">
                             <div class="info-item">
-                                <span class="info-label">证书ID：</span>
+                                <span class="info-label">证书ID</span>
                                 <span class="info-value">${cert.ID}</span>
                             </div>
                             <div class="info-item">
-                                <span class="info-label">证书类型：</span>
+                                <span class="info-label">证书类型</span>
                                 <span class="info-value">${cert.type}</span>
                             </div>
                             <div class="info-item">
-                                <span class="info-label">获得者：</span>
+                                <span class="info-label">获得者</span>
                                 <span class="info-value">${cert.name}</span>
                             </div>
                             <div class="info-item">
-                                <span class="info-label">分数：</span>
+                                <span class="info-label">分数</span>
                                 <span class="info-value">${cert.score}</span>
                             </div>
                             <div class="info-item">
-                                <span class="info-label">等级：</span>
+                                <span class="info-label">等级</span>
                                 <span class="info-value">${cert.level}</span>
                             </div>
                         </div>
-                        <button class="share-button" onclick="shareCertificate('${cert.ID}')">分享此证书</button>
+                        <button class="button outline" onclick="shareCertificate('${cert.ID}')">分享此证书</button>
                     </div>
                 `;
             });
@@ -342,7 +428,6 @@
                     url: shareLink
                 });
             } else {
-                // 如果不支持原生分享，复制链接到剪贴板
                 navigator.clipboard.writeText(shareLink).then(() => {
                     alert(`证书分享链接已复制：${shareLink}`);
                 });

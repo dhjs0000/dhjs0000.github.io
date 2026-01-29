@@ -5,297 +5,522 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MSVR MC服务器联盟 - Ethernos Studio</title>
     <link rel="stylesheet" href="style.css">
-    <script src="script.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
     <link rel="stylesheet" href="cookie-consent.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .server-hero {
+            text-align: center;
+            padding: 60px 0 40px;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .server-hero h1 {
+            font-size: 2.5rem;
+            margin: 0 0 1rem 0;
+        }
+
+        .server-hero .subtitle {
+            font-size: 1.125rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .server-hero .sponsors {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .server-hero .sponsors a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .version-badges {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .version-badge {
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .version-badge.java {
+            background: rgba(83, 130, 161, 0.2);
+            color: #5382a1;
+            border: 1px solid rgba(83, 130, 161, 0.3);
+        }
+
+        .version-badge.bedrock {
+            background: rgba(32, 201, 151, 0.2);
+            color: #20c997;
+            border: 1px solid rgba(32, 201, 151, 0.3);
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .status-badge.online {
+            background: rgba(40, 167, 69, 0.2);
+            color: #28a745;
+        }
+
+        .status-badge.preparing {
+            background: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+        }
+
+        .status-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        .server-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+            margin: 2rem 0;
+        }
+
+        .railway-section {
+            grid-column: span 2;
+            margin-top: 1rem;
+        }
+
+        .railway-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .railway-item {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px 20px;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .railway-item.planning {
+            border-style: dashed;
+            opacity: 0.8;
+        }
+
+        .railway-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .railway-status i {
+            font-size: 1.25rem;
+        }
+
+        .railway-status.online i { color: #28a745; }
+        .railway-status.building i { color: #ffc107; }
+        .railway-status.planning i { color: #6c757d; }
+
+        .railway-info h3 {
+            margin: 0 0 4px 0;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .railway-info p {
+            margin: 0;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .railway-stats {
+            text-align: right;
+        }
+
+        .railway-stats .distance {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .railway-stats .label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .mod-server {
+            grid-column: span 2;
+            margin-top: 1rem;
+        }
+
+        .mod-list {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-top: 1rem;
+        }
+
+        .mod-item {
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 12px;
+            text-align: center;
+            font-size: 0.875rem;
+        }
+
+        .rules-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-top: 2rem;
+        }
+
+        .step-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .step-item {
+            display: flex;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .step-item:last-child {
+            border-bottom: none;
+        }
+
+        .step-number {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-content p {
+            margin: 0;
+            font-size: 0.875rem;
+        }
+
+        @media (max-width: 768px) {
+            .server-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .railway-section,
+            .mod-server {
+                grid-column: span 1;
+            }
+
+            .mod-list {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .rules-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .railway-item {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .railway-stats {
+                text-align: center;
+            }
+        }
+    </style>
 </head>
 <body>
     <div id="nav-placeholder"></div>
 
-    <main class="content server-page">
+    <main class="content">
         <!-- 服务器介绍 -->
-        <section class="server-intro fade-in lazy-load">
-            <div class="stat-item highlight">
-                <i class="fas fa-balance-scale"></i>
-                <span class="stat-value"><i class="fas fa-cube"></i>MSVR MC服务器联盟</span>
-                <span class="stat-label">自由与秩序共生的方块世界<p>MSVR MC由<a href="https://www.rainyun.com/home">雨云</a>提供服务器支持</p><p>BEMSVR MC由<a href="https://simpfun.cn/">简幻欢</a>提供服务器支持</p></span>
-            </div>
-            <div class="stat-item">
-                <i class="fas fa-balance-scale"></i>
-                <span class="stat-value">三大法典</span>
-                <span class="stat-label">宪法 刑法 民法典<p>MTMC不适用</p></span>
-            </div>
+        <div class="server-hero">
+            <h1><i class="fas fa-cube" style="color: var(--primary-color);"></i> MSVR MC服务器联盟</h1>
+            <p class="subtitle">自由与秩序共生的方块世界</p>
+            <p class="sponsors">
+                MSVR MC由<a href="https://www.rainyun.com/home">雨云</a>提供服务器支持 |
+                BEMSVR MC由<a href="https://simpfun.cn/">简幻欢</a>提供服务器支持
+            </p>
             <div class="version-badges">
-                <span class="version-java">JE 1.21.4</span>
-                <span class="version-bedrock">BE 1.21.44.01</span>
-                <a href="MSVRMC/CR.html" class="admin-link" style="display: inline-block; margin-left: 10px; padding: 8px 15px; background-color: #e74c3c; color: white; border-radius: 5px; text-decoration: none; font-weight: bold; transition: all 0.3s ease;"><i class="fas fa-clipboard-list"></i> 中央管理组发布处</a>
+                <span class="version-badge java">JE 1.21.4</span>
+                <span class="version-badge bedrock">BE 1.21.44.01</span>
             </div>
-        </section>
+            <div>
+                <a href="MSVRMC/CR.html" class="button">
+                    <i class="fas fa-clipboard-list"></i> 中央管理组
+                </a>
+            </div>
+        </div>
 
-        <!-- 服务器特性网格 -->
-        <div class="server-features">
+        <!-- 服务器网格 -->
+        <div class="server-grid">
             <!-- Java服务器 -->
-            <!-- 优化Java服务器区块 -->
-            <div class="feature-card fade-in lazy-load">
-                <div class="server-bubble">
-                    <div class="server-header">
-                        <i class="fab fa-java"></i>
-                        <h2>MSVR主服（Java版）</h2>
-                        <span class="status-badge preparing">筹备中</span>
+            <div class="info-panel">
+                <div class="info-panel-header">
+                    <i class="fab fa-java" style="color: #5382a1;"></i>
+                    <h2>MSVR主服（Java版）</h2>
+                    <span class="status-badge preparing">筹备中</span>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px;">
+                    <div style="text-align: center; padding: 16px; background: var(--bg-color); border-radius: 6px;">
+                        <div style="font-size: 1.25rem; font-weight: 600; font-family: monospace;">JE1.20.4</div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">核心版本</div>
                     </div>
-                    <div class="server-stats">
-                        <div class="stat-item">
-                            <i class="fas fa-code-branch"></i>
-                            <span class="stat-value">JE1.20.4</span>
-                            <span class="stat-label">核心版本</span>
-                        </div>
-                        
-                    </div>
-                    <div class="server-stats">
-                        <div class="stat-item highlight">
-                            <i class="fas fa-cube"></i>
-                            <span class="stat-value">1012493078</span>
-                            <span class="stat-label">QQ群号</span>
-                        </div>
+                    <div style="text-align: center; padding: 16px; background: var(--bg-color); border-radius: 6px;">
+                        <div style="font-size: 1.25rem; font-weight: 600; font-family: monospace;">1012493078</div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">QQ群号</div>
                     </div>
                 </div>
             </div>
 
-            <!-- 优化基岩版服务器区块 -->
-            <div class="feature-card fade-in lazy-load">
-                <div class="server-bubble">
-                    <div class="server-header">
-                        <i class="fas fa-mobile-alt"></i>
-                        <h2>BEMSVR基岩版</h2>
-                        <span class="status-badge online">在线</span>
+            <!-- 基岩版服务器 -->
+            <div class="info-panel">
+                <div class="info-panel-header">
+                    <i class="fas fa-mobile-alt" style="color: #20c997;"></i>
+                    <h2>BEMSVR基岩版</h2>
+                    <span class="status-badge online">在线</span>
+                </div>
+                <div style="margin-top: 16px;">
+                    <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+                        <span class="tag">半无政府</span>
+                        <span class="tag">行政区保护</span>
                     </div>
-                    <div class="server-stats">
-                        <div class="stat-item">
-                            <i class="fas fa-code-branch"></i>
-                            <span class="stat-value">BE1.21.93.01</span>
-                            <span class="stat-label">核心版本(年更)</span>
-                        </div>
-                        
-                    </div>
-                    <div class="server-detail-grid">
-                        <div class="detail-item">
-                            <h3><i class="fas fa-unlock"></i> 外服特性</h3>
-                            <ul class="feature-list">
-                                <li><i class="fas fa-hand-rock"></i> 半无政府模式</li>
-                                <li><i class="fas fa-drafting-compass"></i> 自由建造</li>
-                            </ul>
-                        </div>
-                        <div class="detail-item">
-                            <h3><i class="fas fa-shield-alt"></i> 内服特性</h3>
-                            <ul class="feature-list">
-                                <li><i class="fas fa-landmark"></i> 行政区保护</li>
-                                <li><i class="fas fa-gavel"></i> 严格规范</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="server-stats">
-                        <div class="stat-item highlight">
-                            <i class="fas fa-cube"></i>
-                            <span class="stat-value">QQ群：993664837</span>
-                            <span class="stat-label">外服地址：SSNG-Te7F.aternos.me:42669</span>
-                        </div>
+                    <div style="font-size: 0.875rem; color: var(--text-muted);">
+                        <p style="margin: 4px 0;"><i class="fas fa-cube"></i> QQ群：993664837</p>
+                        <p style="margin: 4px 0;"><i class="fas fa-server"></i> SSNG-Te7F.aternos.me:42669</p>
                     </div>
                 </div>
             </div>
 
-            <!-- 铁路系统区块 -->
-            <!-- 铁路系统区块 -->
-            <div class="feature-card railway-system fade-in lazy-load">
-                <div class="server-header">
-                    <i class="fas fa-subway"></i>
-                    <h2>史诗高铁网络</h2>
-                </div>
-                <div class="railway-map">
-                    <!-- 中央北站 ↔ DAD站 -->
-                    <div class="route completed">
-                        <div class="route-bubble">
-                            <div class="route-header">
-                                <div class="route-marker">
-                                    <i class="fas fa-check-circle"></i>
-                                    <span class="route-phase">已通车</span>
-                                    <h3 class="route-title">中央北站 ↔ DAD站</h3>
-                                </div>
-                            </div>
-                            <div class="route-stats">
-                                <div class="stat-item highlight">
-                                    <i class="fas fa-cube"></i>
-                                    <span class="stat-value">250格</span>
-                                    <span class="stat-label">大概距离</span>
-                                </div>
-                                <div class="stat-item">
-                                    <i class="fas fa-train"></i>
-                                    <span class="stat-value">中央北站1,2站台 DAD北站1,2站台</span>
-                                    <span class="stat-label">站台</span>
-                                </div>
-                            </div>
+            <!-- 铁路系统 -->
+            <div class="railway-section">
+                <h2 style="margin: 0 0 16px 0; font-size: 1.25rem; font-weight: 600;">
+                    <i class="fas fa-subway" style="color: var(--primary-color); margin-right: 8px;"></i>
+                    史诗高铁网络
+                </h2>
+                <div class="railway-list">
+                    <div class="railway-item">
+                        <div class="railway-status online">
+                            <i class="fas fa-check-circle"></i>
+                            <span class="tag" style="background: rgba(40, 167, 69, 0.2); color: #28a745; border-color: rgba(40, 167, 69, 0.3);">已通车</span>
+                        </div>
+                        <div class="railway-info">
+                            <h3>中央北站 ↔ DAD站</h3>
+                            <p>中央北站1,2站台 DAD北站1,2站台</p>
+                        </div>
+                        <div class="railway-stats">
+                            <div class="distance">250格</div>
+                            <div class="label">距离</div>
                         </div>
                     </div>
 
-                    <!-- 中央北站 ↔ 活动区 -->
-                    <div class="route completed">
-                        <div class="route-bubble">
-                            <div class="route-header">
-                                <div class="route-marker">
-                                    <i class="fas fa-check-circle"></i>
-                                    <span class="route-phase">已通车</span>
-                                    <h3 class="route-title">中央北站 ↔ 活动区</h3>
-                                </div>
-                            </div>
-                            <div class="route-stats">
-                                <div class="stat-item highlight">
-                                    <i class="fas fa-cube"></i>
-                                    <span class="stat-value">500格</span>
-                                    <span class="stat-label">大概距离</span>
-                                </div>
-                                <div class="stat-item">
-                                    <i class="fas fa-train"></i>
-                                    <span class="stat-value">中央北站3,4站台 活动区站1,2站台</span>
-                                    <span class="stat-label">站台</span>
-                                </div>
-                            </div>
+                    <div class="railway-item">
+                        <div class="railway-status online">
+                            <i class="fas fa-check-circle"></i>
+                            <span class="tag" style="background: rgba(40, 167, 69, 0.2); color: #28a745; border-color: rgba(40, 167, 69, 0.3);">已通车</span>
+                        </div>
+                        <div class="railway-info">
+                            <h3>中央北站 ↔ 活动区</h3>
+                            <p>中央北站3,4站台 活动区站1,2站台</p>
+                        </div>
+                        <div class="railway-stats">
+                            <div class="distance">500格</div>
+                            <div class="label">距离</div>
                         </div>
                     </div>
 
-                    <!-- 中央北站 ↔ 世界东北站 -->
-                    <div class="route in-progress">
-                        <div class="route-bubble">
-                            <div class="route-header">
-                                <div class="route-marker">
-                                    <i class="fas fa-hard-hat"></i>
-                                    <span class="route-phase">建设中</span>
-                                    <h3 class="route-title">中央北站 ↔ 世界东北站</h3>
-                                </div>
-                            </div>
-                            <div class="route-stats">
-                                <div class="stat-item highlight">
-                                    <i class="fas fa-cube"></i>
-                                    <span class="stat-value">3800/20000格</span>
-                                    <span class="stat-label">当前进度（大概）</span>
-                                </div>
-                                <div class="stat-item ">
-                                    <div class="progress-bar"><div class="progress" style="width: 19%"></div></div>
-                                    
-                                    <span class="stat-value">19%</span>
-                                    <span class="stat-label">当前进度（可视化）</span>
-                                </div>
-                            </div>
+                    <div class="railway-item">
+                        <div class="railway-status building">
+                            <i class="fas fa-hard-hat"></i>
+                            <span class="tag" style="background: rgba(255, 193, 7, 0.2); color: #ffc107; border-color: rgba(255, 193, 7, 0.3);">建设中</span>
+                        </div>
+                        <div class="railway-info">
+                            <h3>中央北站 ↔ 世界东北站</h3>
+                            <p>当前进度 19% (3800/20000格)</p>
+                        </div>
+                        <div class="railway-stats">
+                            <div class="distance">19%</div>
+                            <div class="label">进度</div>
                         </div>
                     </div>
 
-                    <!-- 世界中央站 ↔ 中央北站 -->
-                    <div class="route planned">
-                        <div class="route-bubble">
-                            <div class="route-header">
-                                <div class="route-marker">
-                                    <i class="fas fa-map-marked"></i>
-                                    <span class="route-phase">规划中</span>
-                                    <h3 class="route-title">世界中央站 ↔ 中央北站</h3>
-                                </div>
-                            </div>
-                            <div class="route-stats">
-                                <div class="stat-item highlight">
-                                    <i class="fas fa-cube"></i>
-                                    <span class="stat-value">1500格</span>
-                                    <span class="stat-label">规划距离</span>
-                                </div>
-                                <div class="stat-item">
-                                    <i class="fas fa-clock"></i>
-                                    <span class="stat-value">2025/5</span>
-                                    <span class="stat-label">预计开工</span>
-                                </div>
-                            </div>
+                    <div class="railway-item planning">
+                        <div class="railway-status planning">
+                            <i class="fas fa-map-marked"></i>
+                            <span class="tag" style="background: rgba(108, 117, 125, 0.2); color: #6c757d; border-color: rgba(108, 117, 125, 0.3);">规划中</span>
+                        </div>
+                        <div class="railway-info">
+                            <h3>世界中央站 ↔ 中央北站</h3>
+                            <p>预计2025年5月开工</p>
+                        </div>
+                        <div class="railway-stats">
+                            <div class="distance">1500格</div>
+                            <div class="label">规划</div>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- 模组服 -->
-            <div class="feature-card mod-server fade-in lazy-load">
-                <div class="server-header">
-                    <i class="fas fa-cogs"></i>
-                    <h2>MTMC模组服</h2>
-                </div>
-                <div class="server-detail">
-                    <div class="server-stats">
-                        <div class="stat-item highlight">
-                            <i class="fas fa-clock"></i>
-                            <span class="stat-value"><span id="countdown">2026-05-01</span></span>
-                            <span class="stat-label">开服倒计时</span>
-                        </div>
+            <div class="mod-server">
+                <div class="info-panel">
+                    <div class="info-panel-header">
+                        <i class="fas fa-cogs" style="color: var(--accent-color);"></i>
+                        <h2>MTMC模组服</h2>
+                        <span class="tag" style="background: rgba(247, 129, 102, 0.2); color: #f78166;">即将开服</span>
                     </div>
-                    <div class="mod-list">
-                        <div class="stat-item">
-                        <span class="stat-value"><i class="fas fa-box-open"></i> 模组全家桶</span>
-                        <div class="stat-item">我的世界铁路</div>
-                            <div class="stat-item">永恒枪械工坊：零</div>
-                                <div class="stat-item">机械动力+通用机械</div>
-                                    <div class="stat-item">格雷科技</div>
-                    </div></div>
-                    <div class="requirements">
-                        <div class="stat-item">
-                        <p><i class="fas fa-exclamation-triangle"></i> 推荐配置：i5 8代/16G内存/GTX1060</p></div>
+                    <div style="display: grid; grid-template-columns: auto 1fr; gap: 24px; margin-top: 16px;">
+                        <div style="text-align: center; padding: 20px; background: var(--bg-color); border-radius: 8px; min-width: 120px;">
+                            <i class="fas fa-clock" style="font-size: 2rem; color: var(--primary-color); margin-bottom: 8px;"></i>
+                            <div style="font-size: 1.125rem; font-weight: 600;" id="countdown">2026-05-01</div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted);">开服倒计时</div>
+                        </div>
+                        <div>
+                            <h3 style="margin: 0 0 12px 0; font-size: 1rem;">模组全家桶</h3>
+                            <div class="mod-list">
+                                <div class="mod-item">我的世界铁路</div>
+                                <div class="mod-item">永恒枪械工坊：零</div>
+                                <div class="mod-item">机械动力</div>
+                                <div class="mod-item">格雷科技</div>
+                            </div>
+                            <div style="margin-top: 12px; padding: 12px; background: rgba(255, 193, 7, 0.1); border-left: 3px solid #ffc107; border-radius: 4px;">
+                                <p style="margin: 0; font-size: 0.875rem;">
+                                    <i class="fas fa-exclamation-triangle" style="color: #ffc107;"></i>
+                                    推荐配置：i5 8代 / 16G内存 / GTX1060
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- 规则与招募 -->
-         
-        <div class="server-rules-recruitment">
+        <div class="rules-grid">
             <!-- 入服规则 -->
-            <div class="feature-card mod-server fade-in lazy-load">
-            <section class="rules-section fade-in lazy-load">
-                <h2><i class="fas fa-scroll"></i> 入服规则</h2>
-                <div class="rule-steps">
-                    <div class="step">
-                        <div class="step-icon">1</div>
-                        <p>发送邮件至 3110197220@qq.com</p>
-                    </div>
-                    <div class="step">
-                        <div class="step-icon">2</div>
-                        <p>基岩外服1个月观察期</p>
-                    </div>
-                    <div class="step">
-                        <div class="step-icon">3</div>
-                        <p>解锁内服完整权限</p>
-                    </div>
+            <div class="info-panel">
+                <div class="info-panel-header">
+                    <i class="fas fa-scroll" style="color: var(--secondary-color);"></i>
+                    <h2>入服规则</h2>
                 </div>
-                <div class="notice">
-                    <i class="fas fa-info-circle"></i> 处理周期：20个工作日
+                <ul class="step-list">
+                    <li class="step-item">
+                        <span class="step-number">1</span>
+                        <div class="step-content">
+                            <p>发送邮件至 <code>3110197220@qq.com</code></p>
+                        </div>
+                    </li>
+                    <li class="step-item">
+                        <span class="step-number">2</span>
+                        <div class="step-content">
+                            <p>基岩外服1个月观察期</p>
+                        </div>
+                    </li>
+                    <li class="step-item">
+                        <span class="step-number">3</span>
+                        <div class="step-content">
+                            <p>解锁内服完整权限</p>
+                        </div>
+                    </li>
+                </ul>
+                <div style="margin-top: 16px; padding: 12px; background: var(--hover-bg); border-radius: 6px; font-size: 0.875rem;">
+                    <i class="fas fa-info-circle" style="color: var(--primary-color);"></i>
+                    处理周期：20个工作日
                 </div>
-            </section>
             </div>
 
             <!-- 管理招募 -->
-            <div class="feature-card mod-server fade-in lazy-load">
-            <section class="recruitment fade-in lazy-load">
-                <h2><i class="fas fa-users-cog"></i> 管理团队招募</h2>
-                <div class="recruitment-details">
-                    <div class="current-team">
-                        <i class="fas fa-user-clock"></i> 当前团队：初中生主力（工作日时间有限）
-                    </div>
-                    <div class="requirements">
-                        <h3><i class="fas fa-clipboard-check"></i> 要求：</h3>
-                        <ul>
-                            <li>每周至少10小时在线</li>
-                            <li>熟悉服务器运维基础</li>
-                            <li>良好的沟通能力</li>
-                        </ul>
-                    </div>
-                    <a href="mailto:3110197220@qq.com" class="button outline">
-                        <i class="fas fa-envelope"></i> 立即申请
-                    </a>
+            <div class="info-panel">
+                <div class="info-panel-header">
+                    <i class="fas fa-users-cog" style="color: var(--primary-color);"></i>
+                    <h2>管理团队招募</h2>
                 </div>
-            </section>
-        </div>
+                <div style="padding: 16px; background: var(--bg-color); border-radius: 6px; margin-bottom: 16px;">
+                    <p style="margin: 0; font-size: 0.875rem; color: var(--text-muted);">
+                        <i class="fas fa-user-clock"></i> 当前团队：初中生主力（工作日时间有限）
+                    </p>
+                </div>
+                <h3 style="font-size: 0.875rem; margin: 0 0 12px 0;">要求：</h3>
+                <ul style="margin: 0 0 16px 0; padding-left: 20px; font-size: 0.875rem; color: var(--text-muted);">
+                    <li>每周至少10小时在线</li>
+                    <li>熟悉服务器运维基础</li>
+                    <li>良好的沟通能力</li>
+                </ul>
+                <a href="mailto:3110197220@qq.com" class="button">
+                    <i class="fas fa-envelope"></i> 立即申请
+                </a>
+            </div>
         </div>
     </main>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-links">
+                <div class="footer-section">
+                    <h3>项目</h3>
+                    <a href="https://ethernos.cn/bccWeb/">BCC语言</a>
+                </div>
+                <div class="footer-section">
+                    <h3>资源</h3>
+                    <a href="downloads.html">软件下载</a>
+                    <a href="tools.html">开发工具</a>
+                </div>
+                <div class="footer-section">
+                    <h3>服务</h3>
+                    <a href="blog.html">技术博客</a>
+                    <a href="questions.html">技术支持</a>
+                </div>
+                <div class="footer-section">
+                    <h3>关于</h3>
+                    <a href="team.html">团队</a>
+                    <a href="contact.html">联系我们</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>Copyright (C) 2026 Ethernos</p>
+                <p>本程序为自由软件，在自由软件联盟发布的GNU通用公共许可协议的约束下，你可以对其进行再发布及修改。协议版本为第三版或（随你）更新的版本。</p>
+                <p>我们希望发布的这个网站有用，但不保证，甚至不保证它有经济价值和适合特定用途。详情参见GNU通用公共许可协议。</p>
+                
+                <p>This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</p>
+                <p>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</p>
+                <p>You should have received a copy of the GNU General Public License along with this program. If not, see <a href="https://www.gnu.org/licenses/">https://www.gnu.org/licenses/</a>.</p>
+            </div>
+        </div>
+    </footer>
 
     <script src="script.js"></script>
     <script src="cookie-consent.js"></script>
