@@ -339,6 +339,249 @@
             background: var(--primary-hover, #2563eb);
         }
 
+        .release-asset-speedup {
+            padding: 8px 14px;
+            background: var(--secondary-color, #10b981);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            margin-left: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .release-asset-speedup:hover {
+            background: #059669;
+        }
+
+        .btn-speedup {
+            background: var(--secondary-color, #10b981);
+            border-color: var(--secondary-color, #10b981);
+        }
+
+        .btn-speedup:hover {
+            background: #059669;
+            border-color: #059669;
+        }
+
+        /* 加速加载弹窗 */
+        .speedup-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10001;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .speedup-modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .speedup-modal {
+            width: 560px;
+            max-height: 80vh;
+            background: var(--card-bg, #1a1a2e);
+            border-radius: 12px;
+            border: 1px solid var(--border-color, #2d2d44);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+
+        .speedup-modal-overlay.active .speedup-modal {
+            transform: scale(1);
+        }
+
+        .speedup-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color, #2d2d44);
+            background: var(--bg-color, #16162a);
+        }
+
+        .speedup-modal-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-color, #e4e4e7);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .speedup-modal-title i {
+            color: var(--secondary-color, #10b981);
+        }
+
+        .speedup-modal-close {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            border: none;
+            background: transparent;
+            color: var(--text-muted, #a1a1aa);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .speedup-modal-close:hover {
+            background: var(--border-color, #2d2d44);
+            color: var(--text-color, #e4e4e7);
+        }
+
+        .speedup-modal-body {
+            padding: 20px 24px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .speedup-modal-footer {
+            padding: 16px 24px;
+            border-top: 1px solid var(--border-color, #2d2d44);
+            background: var(--bg-color, #16162a);
+            text-align: center;
+        }
+
+        .speedup-modal-footer a {
+            color: var(--primary-color, #3b82f6);
+            text-decoration: none;
+        }
+
+        .speedup-modal-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .speedup-node-item {
+            padding: 16px;
+            background: var(--bg-color, #16162a);
+            border: 1px solid var(--border-color, #2d2d44);
+            border-radius: 10px;
+            margin-bottom: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .speedup-node-item:hover {
+            border-color: var(--primary-color, #3b82f6);
+        }
+
+        .speedup-node-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .speedup-node-name {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-color, #e4e4e7);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .speedup-node-name i {
+            color: var(--secondary-color, #10b981);
+        }
+
+        .speedup-node-desc {
+            font-size: 0.8125rem;
+            color: var(--text-muted, #a1a1aa);
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        .speedup-node-url {
+            font-size: 0.75rem;
+            color: var(--primary-color, #3b82f6);
+            background: var(--card-bg, #1a1a2e);
+            padding: 8px 12px;
+            border-radius: 6px;
+            word-break: break-all;
+            margin-bottom: 10px;
+            border: 1px solid var(--border-color, #2d2d44);
+        }
+
+        .speedup-node-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .speedup-node-btn {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid var(--border-color, #2d2d44);
+            background: transparent;
+            color: var(--text-color, #e4e4e7);
+            border-radius: 6px;
+            font-size: 0.8125rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .speedup-node-btn:hover {
+            background: var(--card-bg, #1a1a2e);
+            border-color: var(--primary-color, #3b82f6);
+        }
+
+        .speedup-node-btn.primary {
+            background: var(--primary-color, #3b82f6);
+            border-color: var(--primary-color, #3b82f6);
+            color: white;
+        }
+
+        .speedup-node-btn.primary:hover {
+            background: var(--primary-hover, #2563eb);
+        }
+
+        /* Toast 提示 */
+        .toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--secondary-color, #10b981);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            z-index: 10002;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            animation: fadeInOut 2s ease;
+        }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+            20% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            80% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            100% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+        }
+
         .release-asset-badge {
             display: inline-flex;
             align-items: center;
@@ -538,6 +781,30 @@
             </div>
         </div>
     </footer>
+
+    <!-- 加速加载弹窗 -->
+    <div class="speedup-modal-overlay" id="speedupModal">
+        <div class="speedup-modal">
+            <div class="speedup-modal-header">
+                <div class="speedup-modal-title">
+                    <i class="fas fa-rocket"></i>
+                    <span>选择加速节点</span>
+                </div>
+                <button class="speedup-modal-close" onclick="closeSpeedupModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="speedup-modal-body" id="speedupModalBody">
+                <!-- 动态生成节点列表 -->
+            </div>
+            <div class="speedup-modal-footer">
+                <span style="color: var(--text-muted); font-size: 0.8125rem;">
+                    <i class="fas fa-heart" style="color: #ef4444;"></i>
+                    感谢 <a href="https://gh-proxy.com" target="_blank">gh-proxy.com</a> 提供加速服务，前往这个网站可以支持他们
+                </span>
+            </div>
+        </div>
+    </div>
 
     <!-- 版本历史模态框 -->
     <div class="release-modal-overlay" id="releaseModal">
@@ -802,6 +1069,9 @@
                         <a href="#" id="${softwareId}-download" class="button download-recommended" target="_blank">
                             <i class="fas fa-download"></i> 下载
                         </a>
+                        <button class="button btn-speedup" id="${softwareId}-speedup" onclick="openSpeedupModalForSoftware('${softwareId}')">
+                            <i class="fas fa-rocket"></i> 快速下载
+                        </button>
                         <button class="button outline btn-history" onclick="openReleaseModal('${software.name}', '${software.relatively_url}')">
                             <i class="fas fa-history"></i> 版本历史
                         </button>
@@ -864,6 +1134,8 @@
                         if (recommended.analysis.confidence > 0.3) {
                             downloadBtn.classList.add('download-recommended');
                         }
+                        // 存储下载URL用于加速
+                        softwareDownloadUrls[softwareId] = recommended.asset.browser_download_url;
                     } else {
                         downloadBtn.href = data.html_url;
                         downloadBtn.innerHTML = `<i class="fas fa-download"></i> 下载 ${data.tag_name}`;
@@ -1093,9 +1365,14 @@
                                             <div class="release-asset-size">${formatFileSize(asset.size)} · ${asset.download_count} 次下载</div>
                                         </div>
                                     </div>
-                                    <a href="${asset.browser_download_url}" class="release-asset-download" target="_blank">
-                                        <i class="fas fa-download"></i> 下载
-                                    </a>
+                                    <div>
+                                        <a href="${asset.browser_download_url}" class="release-asset-download" target="_blank">
+                                            <i class="fas fa-download"></i> 下载
+                                        </a>
+                                        <button class="release-asset-speedup" onclick="openSpeedupModal('${asset.browser_download_url}')">
+                                            <i class="fas fa-rocket"></i> 加速
+                                        </button>
+                                    </div>
                                 </div>
                             `}).join('')}
                         </div>
@@ -1107,6 +1384,113 @@
             if (selectedItem) {
                 selectedItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             }
+        }
+
+        // 加速节点配置
+        const speedupNodes = [
+            {
+                name: 'cloudflare',
+                icon: 'fa-cloud',
+                desc: '主站，全球加速！国内优选和V6支持请使用：https://v6.gh-proxy.org/',
+                prefix: 'https://gh-proxy.org/'
+            },
+            {
+                name: '香港',
+                icon: 'fa-building',
+                desc: '国内线路优化,secbit.ai&Sharon CDN赞助(大文件下载不建议使用！)',
+                prefix: 'https://hk.gh-proxy.org/'
+            },
+            {
+                name: 'Fastly',
+                icon: 'fa-bolt',
+                desc: 'Fastly CDN',
+                prefix: 'https://cdn.gh-proxy.org/'
+            },
+            {
+                name: 'edgeone',
+                icon: 'fa-globe',
+                desc: '全球加速，数据统计',
+                prefix: 'https://edgeone.gh-proxy.org/'
+            }
+        ];
+
+        // 存储每个软件的下载URL
+        let softwareDownloadUrls = {};
+
+        // 打开加速弹窗
+        function openSpeedupModal(originalUrl) {
+            const modalBody = document.getElementById('speedupModalBody');
+            modalBody.innerHTML = speedupNodes.map(node => {
+                const speedupUrl = node.prefix + originalUrl;
+                return `
+                    <div class="speedup-node-item">
+                        <div class="speedup-node-header">
+                            <span class="speedup-node-name"><i class="fas ${node.icon}"></i> ${node.name}</span>
+                        </div>
+                        <div class="speedup-node-desc">${node.desc}</div>
+                        <div class="speedup-node-url">${speedupUrl}</div>
+                        <div class="speedup-node-actions">
+                            <button class="speedup-node-btn" onclick="copySpeedupUrl('${speedupUrl}')"><i class="fas fa-copy"></i> 复制</button>
+                            <button class="speedup-node-btn primary" onclick="openSpeedupUrl('${speedupUrl}')"><i class="fas fa-external-link-alt"></i> 打开</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            document.getElementById('speedupModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // 为软件卡片打开加速弹窗
+        function openSpeedupModalForSoftware(softwareId) {
+            const downloadUrl = softwareDownloadUrls[softwareId];
+            if (downloadUrl && downloadUrl.includes('github.com')) {
+                openSpeedupModal(downloadUrl);
+            } else {
+                showToast('暂无可加速的下载链接');
+            }
+        }
+
+        // 关闭加速弹窗
+        function closeSpeedupModal() {
+            document.getElementById('speedupModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // 点击遮罩层关闭
+        document.getElementById('speedupModal').addEventListener('click', (e) => {
+            if (e.target.id === 'speedupModal') {
+                closeSpeedupModal();
+            }
+        });
+
+        // 复制加速链接
+        function copySpeedupUrl(url) {
+            navigator.clipboard.writeText(url).then(() => {
+                showToast('链接已复制到剪贴板');
+            }).catch(() => {
+                // 降级方案
+                const input = document.createElement('input');
+                input.value = url;
+                document.body.appendChild(input);
+                input.select();
+                document.execCommand('copy');
+                document.body.removeChild(input);
+                showToast('链接已复制到剪贴板');
+            });
+        }
+
+        // 打开加速链接
+        function openSpeedupUrl(url) {
+            window.open(url, '_blank');
+        }
+
+        // 显示提示
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 2000);
         }
 
         // 更新侧边栏快速链接
@@ -1161,6 +1545,7 @@
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 closeReleaseModal();
+                closeSpeedupModal();
             }
         });
 
