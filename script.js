@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             let modifiedContent = content;
             if (pathDepth > 0) {
                 const prefix = '../'.repeat(pathDepth);
-                modifiedContent = content.replace(/href="([^"]+\.html)"/g, (match, p1) => {
+                modifiedContent = content.replace(/href="([^"])"/g, (match, p1) => {
                     if (!p1.startsWith('http')) {
                         return `href="${prefix}${p1}"`;
                     }
@@ -141,7 +141,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             navPlaceholder.innerHTML = modifiedContent;
             
             // 设置当前页面的导航链接为激活状态
-            const currentPage = window.location.pathname.split('/').pop() || 'home.html';
+            const currentPage = window.location.pathname.split('/').pop() || 'home';
             const navLinks = document.querySelectorAll('.nav-links a');
             navLinks.forEach(link => {
                 const href = link.getAttribute('href');
