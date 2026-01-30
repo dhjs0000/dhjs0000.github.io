@@ -606,19 +606,14 @@
             // 删除线 - 使用两个波浪号
             processed = processed.replace(/~~(.+?)~~/g, '<del>$1</del>');
             
-            // 下标 - 使用单个波浪号（排除行内代码中的波浪号）
-            processed = processed.replace(/~([^~\s]+)~/g, '<sub>$1</sub>');
-            
-            // 上标 - 使用脱字符号（排除行内代码中的脱字符）
-            processed = processed.replace(/\^([^\^\s]+)\^/g, '<sup>$1</sup>');
-
-            // 处理脚注
+            // 处理脚注（必须在下标/上标之前处理，避免 [^n] 被上标正则匹配）
             const footnotes = {};
             let footnoteHtml = '';
             
-            // 收集脚注定义 [^n]: 内容
-            processed = processed.replace(/^\[\^(\d+)\]:\s*(.+)$/gm, (match, num, content) => {
-                footnotes[num] = content;
+            // 收集脚注定义 [^n]: 内容（允许行首有空格）
+            // 注意：这里使用 [^...] 来匹配方括号中的 ^
+            processed = processed.replace(/^\s*\[\^(\d+)\]:\s*(.+)$/gm, (match, num, content) => {
+                footnotes[num] = content.trim();
                 return ''; // 移除定义行
             });
             
