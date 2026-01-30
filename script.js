@@ -141,12 +141,33 @@ document.addEventListener('DOMContentLoaded', async function() {
             navPlaceholder.innerHTML = modifiedContent;
             
             // 设置当前页面的导航链接为激活状态
-            const currentPage = window.location.pathname.split('/').pop() || 'home.html';
+            // 处理 GitHub Pages 省略 .html 后缀的情况
+            const pathParts = window.location.pathname.split('/');
+            let currentPage = pathParts.pop() || 'home.html';
+            
+            // 如果当前路径为空（如 /blog/），取倒数第二个
+            if (!currentPage && pathParts.length > 0) {
+                currentPage = pathParts.pop() || 'home.html';
+            }
+            
+            // 如果没有后缀，添加 .html 用于匹配
+            if (currentPage && !currentPage.includes('.')) {
+                currentPage += '.html';
+            }
+            
             const navLinks = document.querySelectorAll('.nav-links a');
             navLinks.forEach(link => {
                 const href = link.getAttribute('href');
-                if (href && href.endsWith(currentPage)) {
-                    link.classList.add('active');
+                if (href) {
+                    // 提取链接中的页面名称（去掉路径）
+                    const linkPage = href.split('/').pop() || 'home.html';
+                    // 比较时忽略 .html 后缀
+                    const currentBase = currentPage.replace('.html', '');
+                    const linkBase = linkPage.replace('.html', '');
+                    
+                    if (currentBase === linkBase) {
+                        link.classList.add('active');
+                    }
                 }
             });
         } catch (error) {
