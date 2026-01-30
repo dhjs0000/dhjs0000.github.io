@@ -392,6 +392,39 @@
             color: #333;
         }
 
+        /* 脚注样式 */
+        .footnote-ref {
+            font-size: 0.75em;
+            vertical-align: super;
+        }
+
+        .footnote-ref a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .footnotes {
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .footnotes ol {
+            padding-left: 1.5rem;
+        }
+
+        .footnotes li {
+            margin: 0.5rem 0;
+        }
+
+        .footnote-backref {
+            color: var(--primary-color);
+            text-decoration: none;
+            margin-left: 0.5rem;
+        }
+
         .loading {
             display: flex;
             justify-content: center;
@@ -552,6 +585,34 @@
             // 其他扩展语法
             processed = processed.replace(/==(.+?)==/g, '<mark>$1</mark>');
             processed = processed.replace(/\+\+(.+?)\+\+/g, '<ins>$1</ins>');
+
+            // 处理脚注
+            const footnotes = {};
+            let footnoteHtml = '';
+            
+            // 收集脚注定义 [^n]: 内容
+            processed = processed.replace(/^\[\^(\d+)\]:\s*(.+)$/gm, (match, num, content) => {
+                footnotes[num] = content;
+                return ''; // 移除定义行
+            });
+            
+            // 替换脚注引用 [^n]
+            processed = processed.replace(/\[\^(\d+)\]/g, (match, num) => {
+                if (footnotes[num]) {
+                    return `<sup class="footnote-ref"><a href="#fn${num}" id="fnref${num}" onclick="event.preventDefault(); scrollToFootnote('fn${num}')">${num}</a></sup>`;
+                }
+                return match;
+            });
+            
+            // 生成脚注列表
+            if (Object.keys(footnotes).length > 0) {
+                footnoteHtml = '<div class="footnotes"><hr><ol>';
+                Object.keys(footnotes).sort((a, b) => a - b).forEach(num => {
+                    footnoteHtml += `<li id="fn${num}">${footnotes[num]} <a href="#fnref${num}" class="footnote-backref" onclick="event.preventDefault(); scrollToFootnote('fnref${num}')">↩</a></li>`;
+                });
+                footnoteHtml += '</ol></div>';
+                processed += '\n\n' + footnoteHtml;
+            }
 
             // 处理缩写 *[缩写]: 全称
             const abbreviations = {};
@@ -810,6 +871,19 @@
 
         function smoothScroll(id) {
             document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function scrollToFootnote(id) {
+            const element = document.getElementById(id);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                // 添加高亮效果
+                element.style.backgroundColor = 'rgba(var(--primary-color-rgb), 0.2)';
+                setTimeout(() => {
+                    element.style.backgroundColor = '';
+                    element.style.transition = 'background-color 0.5s ease';
+                }, 1000);
+            }
         }
 
         function toggleTOC() {

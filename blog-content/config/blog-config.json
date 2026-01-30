@@ -6,7 +6,7 @@
   "posts": [
     {
       "id": "004-markdown-demo",
-      "file": "blog-content/posts/004-markdown-demo.md",
+      "file": "blog-content/posts/004-markdown-demo.txt",
       "title": "Markdown 高级语法演示",
       "date": "2026-01-30",
       "category": "技术文档",
@@ -17,7 +17,7 @@
     },
     {
       "id": "003-about-blender-vmt",
-      "file": "blog-content/posts/003-about-blender-vmt.md",
+      "file": "blog-content/posts/003-about-blender-vmt.txt",
       "title": "关于Blender-VMT，我想说的",
       "date": "2026-01-06",
       "category": "Blender-VMT-Remastered",
@@ -28,7 +28,7 @@
     },
     {
       "id": "002-blender-vmt-issue",
-      "file": "blog-content/posts/002-blender-vmt-issue.md",
+      "file": "blog-content/posts/002-blender-vmt-issue.txt",
       "title": "Blender-VMT-Remastered打包问题怎么解决",
       "date": "2025-01-17",
       "category": "Blender-VMT-Remastered",
@@ -40,7 +40,7 @@
     },
     {
       "id": "001-recruitment-cpp",
-      "file": "blog-content/posts/001-recruitment-cpp.md",
+      "file": "blog-content/posts/001-recruitment-cpp.txt",
       "title": "招人：将pyBCC移植到C++",
       "date": "2025-01-17",
       "category": "BCC",
