@@ -1,0 +1,54 @@
+{
+  "site": {
+    "title": "Ethernos Studio 技术博客",
+    "description": "记录 Ethernos Studio 的技术分享、项目更新和开发心得"
+  },
+  "posts": [
+    {
+      "id": "004-markdown-demo",
+      "file": "blog-content/posts/004-markdown-demo.md",
+      "title": "Markdown 高级语法演示",
+      "date": "2026-01-30",
+      "category": "技术文档",
+      "author": "dhjs0000",
+      "tags": ["Markdown", "教程", "LaTeX"],
+      "excerpt": "展示博客系统支持的各种高级Markdown语法，包括LaTeX公式、警示框、任务列表等。",
+      "blog_number": 4
+    },
+    {
+      "id": "003-about-blender-vmt",
+      "file": "blog-content/posts/003-about-blender-vmt.md",
+      "title": "关于Blender-VMT，我想说的",
+      "date": "2026-01-06",
+      "category": "Blender-VMT-Remastered",
+      "author": "dhjs0000",
+      "tags": ["说明", "网站问题"],
+      "excerpt": "最近还有很多人来网站看Blender-VMT，首先，我想说声对不起，这个项目早在2025年1月13日就停止了更新。",
+      "blog_number": 3
+    },
+    {
+      "id": "002-blender-vmt-issue",
+      "file": "blog-content/posts/002-blender-vmt-issue.md",
+      "title": "Blender-VMT-Remastered打包问题怎么解决",
+      "date": "2025-01-17",
+      "category": "Blender-VMT-Remastered",
+      "author": "dhjs0000",
+      "tags": ["问题解决", "PyInstaller"],
+      "excerpt": "最近在使用Blender-VMT-Remastered时遇到了一个严重问题：打开打包后的exe文件会导致进程无限复制，造成系统卡死。",
+      "blog_number": 2,
+      "github_issue": 3
+    },
+    {
+      "id": "001-recruitment-cpp",
+      "file": "blog-content/posts/001-recruitment-cpp.md",
+      "title": "招人：将pyBCC移植到C++",
+      "date": "2025-01-17",
+      "category": "BCC",
+      "author": "dhjs0000",
+      "tags": ["招聘", "C++"],
+      "excerpt": "为了提高运行效率，将pyBCC移植到C++，以此获得更高的运行效率和更好的开发体验。",
+      "blog_number": 1
+    }
+  ],
+  "popular_tags": ["BCC", "Blender", "Python", "C++", "招聘", "问题解决"]
+}

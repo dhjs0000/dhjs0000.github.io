@@ -5,9 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>技术博客 - Ethernos Studio</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="blog/blog-style.css">
     <link rel="stylesheet" href="cookie-consent.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- 引入 KaTeX 用于 LaTeX 公式渲染 -->
+    <link rel="stylesheet" href="blog-content/katex.min.css">
+    <script src="blog-content/katex.min.js"></script>
+    <script src="blog-content/auto-render.min.js"></script>
+    
+    <!-- 引入 Prism.js 用于代码高亮 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    
+    <!-- 引入 marked.js 用于 Markdown 解析 -->
+    <script src="blog-content/marked.min.js"></script>
+    
     <style>
+        :root {
+            --toc-collapsed-width: 48px;
+            --toc-expanded-width: 280px;
+        }
+
         .blog-layout {
             display: grid;
             grid-template-columns: 1fr 300px;
@@ -26,6 +48,7 @@
             border-radius: 8px;
             padding: 24px;
             transition: border-color 0.2s;
+            cursor: pointer;
         }
 
         .blog-card:hover {
@@ -43,51 +66,19 @@
             text-decoration: none;
         }
 
-        .blog-card h2 a:hover {
-            color: var(--primary-color);
-        }
-
         .blog-card .meta {
             display: flex;
             gap: 16px;
             margin-bottom: 12px;
             font-size: 0.875rem;
             color: var(--text-muted);
-        }
-
-        .blog-card .meta span {
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            flex-wrap: wrap;
         }
 
         .blog-card .excerpt {
             margin: 0 0 16px 0;
             line-height: 1.6;
             color: var(--text-muted);
-        }
-
-        .blog-card .read-more {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            color: var(--primary-color);
-            text-decoration: none;
-            font-size: 0.875rem;
-            font-weight: 500;
-        }
-
-        .blog-card .read-more:hover {
-            text-decoration: underline;
-        }
-
-        .categories {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin-top: 16px;
-            padding-top: 16px;
-            border-top: 1px solid var(--border-color);
         }
 
         .blog-notice {
@@ -99,18 +90,333 @@
             margin-bottom: 24px;
         }
 
-        .blog-notice p {
-            margin: 0;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.9rem;
+        /* 博客文章查看器样式 */
+        .blog-viewer {
+            display: none;
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: relative;
         }
 
-        .blog-notice a {
+        .blog-viewer.active {
+            display: block;
+        }
+
+        .blog-viewer.with-toc {
+            margin-left: calc(var(--toc-collapsed-width) + 16px);
+        }
+
+        .blog-list.hidden {
+            display: none;
+        }
+
+        .viewer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .viewer-title {
+            font-size: 2rem;
+            margin: 0 0 1rem 0;
             color: var(--primary-color);
+        }
+
+        .viewer-meta {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .viewer-controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .control-button {
+            padding: 8px 16px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            color: var(--text-color);
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .control-button:hover {
+            border-color: var(--primary-color);
+            background: rgba(var(--primary-color-rgb), 0.1);
+        }
+
+        /* 毛玻璃目录面板 - 左侧悬浮 */
+        .toc-sidebar {
+            position: fixed;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: var(--toc-collapsed-width);
+            max-height: 70vh;
+            background: rgba(var(--card-bg-rgb, 30, 30, 40), 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-left: none;
+            border-radius: 0 16px 16px 0;
+            padding: 16px 12px;
+            z-index: 100;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+            box-shadow: 4px 0 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .toc-sidebar:hover,
+        .toc-sidebar.expanded {
+            width: var(--toc-expanded-width);
+            padding: 20px;
+            background: rgba(var(--card-bg-rgb, 30, 30, 40), 0.85);
+        }
+
+        .toc-toggle {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            padding: 8px 0;
+            margin-bottom: 16px;
+            white-space: nowrap;
+        }
+
+        .toc-toggle i {
+            font-size: 20px;
+            color: var(--primary-color);
+            transition: transform 0.3s ease;
+        }
+
+        .toc-sidebar:hover .toc-toggle i,
+        .toc-sidebar.expanded .toc-toggle i {
+            transform: rotate(90deg);
+        }
+
+        .toc-toggle span {
+            font-weight: 600;
+            color: var(--text-color);
+            opacity: 0;
+            transition: opacity 0.3s ease 0.1s;
+        }
+
+        .toc-sidebar:hover .toc-toggle span,
+        .toc-sidebar.expanded .toc-toggle span {
+            opacity: 1;
+        }
+
+        .toc-content {
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .toc-sidebar:hover .toc-content,
+        .toc-sidebar.expanded .toc-content {
+            opacity: 1;
+            max-height: calc(70vh - 80px);
+            overflow-y: auto;
+        }
+
+        .toc-content ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .toc-content li {
+            margin: 8px 0;
+        }
+
+        .toc-content a {
+            color: var(--text-muted);
             text-decoration: none;
-            font-weight: 500;
+            font-size: 0.9rem;
+            display: block;
+            padding: 6px 12px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .toc-content a:hover {
+            color: var(--primary-color);
+            background: rgba(var(--primary-color-rgb), 0.1);
+        }
+
+        .toc-content .toc-h2 { padding-left: 12px; }
+        .toc-content .toc-h3 { padding-left: 24px; font-size: 0.85rem; }
+
+        /* Markdown 内容样式 */
+        .markdown-content {
+            font-size: 16px;
+            line-height: 1.8;
+        }
+
+        .markdown-content h1 {
+            color: var(--primary-color);
+            font-size: 28px;
+            margin: 30px 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .markdown-content h2 {
+            color: var(--text-color);
+            font-size: 22px;
+            margin: 25px 0 15px 0;
+            padding-bottom: 5px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .markdown-content h3 {
+            color: var(--text-color);
+            font-size: 18px;
+            margin: 20px 0 10px 0;
+        }
+
+        .markdown-content code {
+            background: rgba(var(--primary-color-rgb), 0.1);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Consolas', monospace;
+            font-size: 14px;
+            color: var(--primary-color);
+        }
+
+        .markdown-content pre {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        .markdown-content pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+        }
+
+        .markdown-content blockquote {
+            border-left: 4px solid var(--primary-color);
+            padding: 15px 20px;
+            margin: 20px 0;
+            background: rgba(var(--primary-color-rgb), 0.05);
+            border-radius: 0 8px 8px 0;
+        }
+
+        /* LaTeX 公式样式 */
+        .katex-display {
+            overflow-x: auto;
+            padding: 10px 0;
+            margin: 20px 0;
+        }
+
+        .katex {
+            font-size: 1.1em;
+        }
+
+        /* 警示框 */
+        .admonition {
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin: 20px 0;
+            border-left: 4px solid;
+        }
+
+        .admonition-info { background: rgba(99, 102, 241, 0.1); border-color: #6366f1; }
+        .admonition-tip { background: rgba(16, 185, 129, 0.1); border-color: #10b981; }
+        .admonition-warning { background: rgba(245, 158, 11, 0.1); border-color: #f59e0b; }
+        .admonition-danger { background: rgba(239, 68, 68, 0.1); border-color: #ef4444; }
+
+        .admonition-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        /* 任务列表 */
+        .task-list-item {
+            list-style: none;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .task-list-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.3rem;
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 3px;
+        }
+
+        .task-list-item.checked::before {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        /* 键盘按键样式 */
+        .markdown-content kbd {
+            background: linear-gradient(to bottom, #f0f0f0, #e0e0e0);
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-family: monospace;
+            font-size: 0.9em;
+            box-shadow: 0 1px 0 #bbb;
+            color: #333;
+        }
+
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+            color: var(--text-muted);
+        }
+
+        .error {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+            color: #e74c3c;
+            text-align: center;
+            padding: 20px;
+        }
+
+        @media (max-width: 1024px) {
+            .toc-sidebar {
+                display: none;
+            }
+            .blog-viewer.with-toc {
+                margin-left: 0;
+            }
         }
 
         @media (max-width: 768px) {
@@ -127,7 +433,6 @@
         <h1 class="page-title">技术博客</h1>
 
         <div class="blog-layout">
-            <!-- 左侧博客列表 -->
             <div class="blog-main">
                 <div class="blog-notice">
                     <p>
@@ -140,71 +445,26 @@
                     </p>
                 </div>
 
-                <div class="blog-list">
+                <div class="blog-list" id="blogList"></div>
 
-                    <article class="blog-card">
-                        <h2>
-                            <span class="tag" style="background: var(--primary-color); color: white; border-color: var(--primary-color);">blog #3</span>
-                            <a href="blog/3.html">关于Blender-VMT，我想说的</a>
-                        </h2>
-                        <div class="meta">
-                            <span><i class="far fa-calendar-alt"></i> 2026-01-06</span>
-                            <span><i class="fas fa-tag"></i> Blender-VMT-Remastered</span>
-                            <span><i class="fas fa-user"></i> dhjs0000</span>
+                <div class="blog-viewer" id="blogViewer">
+                    <div class="viewer-header">
+                        <div>
+                            <h2 class="viewer-title" id="viewerTitle">文章标题</h2>
+                            <div class="viewer-meta" id="viewerMeta"></div>
                         </div>
-                        <p class="excerpt">最近还有很多人来网站看Blender-VMT，首先，我想说声对不起，这个项目早在2025年1月13日就停止了更新。而Blender-VMT-Remastered因为特殊原因选择了删除项目库。</p>
-                        <div class="categories">
-                            <span class="tag">说明</span>
-                            <span class="tag">网站问题</span>
+                        <div class="viewer-controls">
+                            <button class="control-button" onclick="closeBlog()">
+                                <i class="fas fa-arrow-left"></i> 返回列表
+                            </button>
                         </div>
-                        <a href="blog/3.html" class="read-more">
-                            阅读全文 <i class="fas fa-arrow-right"></i>
-                        </a>
-                    </article>
-
-                    <article class="blog-card">
-                        <h2>
-                            <span class="tag" style="background: var(--primary-color); color: white; border-color: var(--primary-color);">blog #2</span>
-                            <a href="blog/2.html">Blender-VMT-Remastered打包问题怎么解决</a>
-                        </h2>
-                        <div class="meta">
-                            <span><i class="far fa-calendar-alt"></i> 2025-01-17</span>
-                            <span><i class="fas fa-tag"></i> Blender-VMT-Remastered</span>
-                            <span><i class="fas fa-user"></i> dhjs0000</span>
-                        </div>
-                        <p class="excerpt">最近在使用Blender-VMT-Remastered时遇到了一个严重问题：打开打包后的exe文件会导致进程无限复制，造成系统卡死。请帮我们解决这个问题，并将在下一个版本中发布修复。</p>
-                        <div class="categories">
-                            <span class="tag">问题解决</span>
-                            <span class="tag">PyInstaller</span>
-                        </div>
-                        <a href="blog/2.html" class="read-more">
-                            阅读全文 <i class="fas fa-arrow-right"></i>
-                        </a>
-                    </article>
-
-                    <article class="blog-card">
-                        <h2>
-                            <span class="tag" style="background: var(--primary-color); color: white; border-color: var(--primary-color);">blog #1</span>
-                            <a href="blog/1.html">招人：将pyBCC移植到C++</a>
-                        </h2>
-                        <div class="meta">
-                            <span><i class="far fa-calendar-alt"></i> 2025-01-17</span>
-                            <span><i class="fas fa-tag"></i> BCC</span>
-                            <span><i class="fas fa-user"></i> dhjs0000</span>
-                        </div>
-                        <p class="excerpt">为了提高运行效率，将pyBCC移植到C++，以此获得更高的运行效率和更好的开发体验。我并不擅长C++，所以需要一个擅长C++的人来帮助我。</p>
-                        <div class="categories">
-                            <span class="tag">招聘</span>
-                            <span class="tag">C++</span>
-                        </div>
-                        <a href="blog/1.html" class="read-more">
-                            阅读全文 <i class="fas fa-arrow-right"></i>
-                        </a>
-                    </article>
+                    </div>
+                    <div class="markdown-content" id="markdownContent">
+                        <div class="loading"><i class="fas fa-spinner fa-spin"></i> 正在加载文章...</div>
+                    </div>
                 </div>
             </div>
 
-            <!-- 右侧侧边栏 -->
             <aside class="sidebar" style="position: sticky; top: 100px; height: fit-content;">
                 <div class="sidebar-section">
                     <h3>关于博客</h3>
@@ -212,32 +472,22 @@
                         这里记录了 Ethernos Studio 的技术分享、项目更新和开发心得。
                     </p>
                 </div>
-
                 <div class="sidebar-section">
                     <h3>热门标签</h3>
-                    <div>
-                        <a href="#" class="tag">BCC</a>
-                        <a href="#" class="tag">Blender</a>
-                        <a href="#" class="tag">Python</a>
-                        <a href="#" class="tag">C++</a>
-                        <a href="#" class="tag">招聘</a>
-                        <a href="#" class="tag">问题解决</a>
-                    </div>
+                    <div id="popularTags"></div>
                 </div>
-                
-                <!-- 
-                <div class="sidebar-section">
-                    <h3>归档</h3>
-                    <ul class="list-group">
-                        <li class="list-group-item">
-                            <a href="#"><i class="far fa-folder"></i> 2025年1月 (2)</a>
-                        </li>
-                    </ul>
-                </div>
-                -->
             </aside>
         </div>
     </main>
+
+    <!-- 毛玻璃目录面板 -->
+    <div class="toc-sidebar" id="tocSidebar" style="display: none;">
+        <div class="toc-toggle" onclick="toggleTOC()">
+            <i class="fas fa-bars"></i>
+            <span>目录</span>
+        </div>
+        <div class="toc-content" id="tocContent"></div>
+    </div>
 
     <footer class="footer">
         <div class="footer-container">
@@ -247,34 +497,353 @@
                     <a href="https://ethernos.cn/bccWeb/">BCC语言</a>
                 </div>
                 <div class="footer-section">
-                    <h3>资源</h3>
-                    <a href="downloads.html">软件下载</a>
-                    <a href="tools.html">开发工具</a>
-                </div>
-                <div class="footer-section">
                     <h3>服务</h3>
                     <a href="blog.html">技术博客</a>
-                    <a href="questions.html">技术支持</a>
-                </div>
-                <div class="footer-section">
-                    <h3>关于</h3>
-                    <a href="team.html">团队</a>
-                    <a href="contact.html">联系我们</a>
                 </div>
             </div>
             <div class="footer-bottom">
                 <p>Copyright (C) 2026 Ethernos</p>
-                <p>本程序为自由软件，在自由软件联盟发布的GNU通用公共许可协议的约束下，你可以对其进行再发布及修改。协议版本为第三版或（随你）更新的版本。</p>
-                <p>我们希望发布的这个网站有用，但不保证，甚至不保证它有经济价值和适合特定用途。详情参见GNU通用公共许可协议。</p>
-                
-                <p>This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</p>
-                <p>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</p>
-                <p>You should have received a copy of the GNU General Public License along with this program. If not, see <a href="https://www.gnu.org/licenses/">https://www.gnu.org/licenses/</a>.</p>
+                <p>本程序为自由软件，在自由软件联盟发布的GNU通用公共许可协议的约束下，你可以对其进行再发布及修改。</p>
             </div>
         </div>
     </footer>
 
     <script src="script.js"></script>
     <script src="cookie-consent.js"></script>
+    <script>
+        let blogConfig = null;
+        let currentBlog = null;
+
+        // 处理 Markdown 扩展语法
+        function preprocessMarkdown(markdown) {
+            let processed = markdown;
+
+            // 保护 LaTeX 公式 - 使用 span 标签包装，防止 marked 处理
+            const mathExpressions = [];
+            let mathIndex = 0;
+            
+            // 保护块级公式 $$...$$
+            processed = processed.replace(/\$\$([\s\S]*?)\$\$/g, (match, formula) => {
+                const placeholder = `MATHPLACEHOLDER${mathIndex++}`;
+                mathExpressions.push({ placeholder, formula: formula.trim(), display: true });
+                return placeholder;
+            });
+            
+            // 保护行内公式 $...$
+            processed = processed.replace(/\$([^$\n]+?)\$/g, (match, formula) => {
+                const placeholder = `MATHPLACEHOLDER${mathIndex++}`;
+                mathExpressions.push({ placeholder, formula: formula.trim(), display: false });
+                return placeholder;
+            });
+
+            // 处理警示框
+            processed = processed.replace(
+                /:::\s*(tip|note|warning|danger|info)\s*\n([\s\S]*?)\n:::/g,
+                (match, type, content) => {
+                    const icons = { tip: '💡', note: '📝', warning: '⚠️', danger: '🚨', info: 'ℹ️' };
+                    const titles = { tip: '提示', note: '注意', warning: '警告', danger: '危险', info: '信息' };
+                    return `<div class="admonition admonition-${type}">
+                        <div class="admonition-title">${icons[type]} ${titles[type]}</div>
+                        <div class="admonition-content">${content}</div>
+                    </div>`;
+                }
+            );
+
+            // 其他扩展语法
+            processed = processed.replace(/==(.+?)==/g, '<mark>$1</mark>');
+            processed = processed.replace(/\+\+(.+?)\+\+/g, '<ins>$1</ins>');
+
+            // 处理缩写 *[缩写]: 全称
+            const abbreviations = {};
+            processed = processed.replace(/^\*\[([^\]]+)\]:\s*(.+)$/gm, (match, abbr, full) => {
+                abbreviations[abbr] = full;
+                return ''; // 移除定义行
+            });
+            
+            // 替换文中的缩写
+            Object.keys(abbreviations).forEach(abbr => {
+                const regex = new RegExp(`\\b${abbr}\\b`, 'g');
+                processed = processed.replace(regex, `<abbr title="${abbreviations[abbr]}">${abbr}</abbr>`);
+            });
+
+            // 处理定义列表 - 支持多个定义
+            // 格式: 术语\n: 定义1\n: 定义2
+            const lines = processed.split('\n');
+            let result = [];
+            let i = 0;
+            while (i < lines.length) {
+                const line = lines[i];
+                // 检查是否是术语行（下一行以:开头）
+                if (i + 1 < lines.length && lines[i + 1].match(/^:\s+/)) {
+                    const term = line;
+                    const defs = [];
+                    i++;
+                    // 收集所有以:开头的定义行
+                    while (i < lines.length && lines[i].match(/^:\s+/)) {
+                        defs.push(lines[i].replace(/^:\s+/, ''));
+                        i++;
+                    }
+                    result.push(`<dl><dt>${term}</dt>${defs.map(d => `<dd>${d}</dd>`).join('')}</dl>`);
+                } else {
+                    result.push(line);
+                    i++;
+                }
+            }
+            processed = result.join('\n');
+
+            // 处理键盘按键 <kbd>标签
+            processed = processed.replace(/<kbd>(.+?)<\/kbd>/g, '<kbd>$1</kbd>');
+
+            // 将占位符存储供后续渲染使用
+            window._mathExpressions = mathExpressions;
+
+            return processed;
+        }
+
+        // 渲染数学公式
+        function renderMathInContent(element) {
+            if (!window._mathExpressions) return;
+            
+            window._mathExpressions.forEach(({ placeholder, formula, display }) => {
+                const nodes = element.querySelectorAll('*');
+                for (const node of nodes) {
+                    for (const child of node.childNodes) {
+                        if (child.nodeType === Node.TEXT_NODE && child.textContent.includes(placeholder)) {
+                            try {
+                                const html = katex.renderToString(formula, {
+                                    displayMode: display,
+                                    throwOnError: false
+                                });
+                                const span = document.createElement('span');
+                                span.innerHTML = html;
+                                child.parentNode.replaceChild(span, child);
+                            } catch (e) {
+                                console.warn('KaTeX render error:', e);
+                                child.textContent = child.textContent.replace(placeholder, display ? `$$${formula}$$` : `$${formula}$`);
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // 清理已渲染的表达式
+            delete window._mathExpressions;
+        }
+
+        // 配置 marked.js
+        marked.setOptions({
+            gfm: true,
+            breaks: true,
+            headerIds: true,
+            mangle: false
+        });
+
+        // 获取URL参数
+        function getUrlParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        // 更新URL参数
+        function updateUrlParam(param, value) {
+            const url = new URL(window.location);
+            if (value) {
+                url.searchParams.set(param, value);
+            } else {
+                url.searchParams.delete(param);
+            }
+            window.history.pushState({}, '', url);
+        }
+
+        // 初始化
+        async function initBlog() {
+            try {
+                const response = await fetch('blog-content/config/blog-config.json');
+                if (!response.ok) throw new Error('无法加载博客配置');
+                blogConfig = await response.json();
+                
+                // 检查URL参数 - 优先使用 id，其次使用 bn (blog_number)
+                const blogId = getUrlParam('id');
+                const blogNumber = getUrlParam('bn');
+                
+                if (blogId) {
+                    // 通过 id 打开
+                    const post = blogConfig.posts.find(p => p.id === blogId);
+                    if (post) {
+                        openBlog(post.id);
+                        return;
+                    }
+                } else if (blogNumber) {
+                    // 通过 blog_number 打开
+                    const post = blogConfig.posts.find(p => p.blog_number == blogNumber);
+                    if (post) {
+                        openBlog(post.id);
+                        return;
+                    }
+                }
+                
+                renderBlogList();
+                renderPopularTags();
+            } catch (error) {
+                document.getElementById('blogList').innerHTML =
+                    `<div class="error">加载博客列表失败: ${error.message}</div>`;
+            }
+        }
+
+        // 浏览器后退/前进按钮处理
+        window.addEventListener('popstate', () => {
+            const blogId = getUrlParam('id');
+            const blogNumber = getUrlParam('bn');
+            
+            if (blogId && blogConfig?.posts.find(p => p.id === blogId)) {
+                openBlog(blogId);
+            } else if (blogNumber) {
+                const post = blogConfig?.posts.find(p => p.blog_number == blogNumber);
+                if (post) openBlog(post.id);
+            } else {
+                closeBlog();
+            }
+        });
+
+        function renderBlogList() {
+            const blogList = document.getElementById('blogList');
+            if (!blogConfig?.posts) {
+                blogList.innerHTML = '<div class="error">暂无博客文章</div>';
+                return;
+            }
+
+            blogList.innerHTML = blogConfig.posts.map(post => `
+                <article class="blog-card" onclick="openBlog('${post.id}')">
+                    <h2>
+                        <span class="tag" style="background: var(--primary-color); color: white;">blog #${post.blog_number}</span>
+                        ${post.title}
+                    </h2>
+                    <div class="meta">
+                        <span><i class="far fa-calendar-alt"></i> ${post.date}</span>
+                        <span><i class="fas fa-tag"></i> ${post.category}</span>
+                    </div>
+                    <p class="excerpt">${post.excerpt}</p>
+                </article>
+            `).join('');
+        }
+
+        function renderPopularTags() {
+            const container = document.getElementById('popularTags');
+            if (!blogConfig?.popular_tags) return;
+            container.innerHTML = blogConfig.popular_tags.map(tag => 
+                `<a href="#" class="tag" onclick="filterByTag('${tag}'); return false;">${tag}</a>`
+            ).join('');
+        }
+
+        async function openBlog(blogId) {
+            const post = blogConfig.posts.find(p => p.id === blogId);
+            if (!post) return;
+
+            currentBlog = post;
+            
+            // 更新URL参数
+            updateUrlParam('id', blogId);
+            
+            document.getElementById('blogList').classList.add('hidden');
+            document.getElementById('blogViewer').classList.add('active');
+
+            document.getElementById('viewerTitle').textContent = post.title;
+            document.getElementById('viewerMeta').innerHTML = `
+                <span><i class="far fa-calendar-alt"></i> ${post.date}</span>
+                <span><i class="fas fa-tag"></i> ${post.category}</span>
+                <span><i class="fas fa-user"></i> ${post.author}</span>
+            `;
+
+            const contentDiv = document.getElementById('markdownContent');
+            contentDiv.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> 正在加载...</div>';
+
+            try {
+                const response = await fetch(post.file);
+                if (!response.ok) throw new Error(`无法加载: ${response.status}`);
+
+                let markdown = await response.text();
+                markdown = markdown.replace(/^---\s*\n[\s\S]*?\n---\s*\n/, '');
+                markdown = preprocessMarkdown(markdown);
+
+                contentDiv.innerHTML = marked.parse(markdown);
+
+                // 渲染 KaTeX 公式
+                if (typeof katex !== 'undefined') {
+                    renderMathInContent(contentDiv);
+                }
+
+                // 代码高亮
+                if (typeof Prism !== 'undefined') Prism.highlightAll();
+
+                // 生成目录
+                generateTOC();
+
+            } catch (error) {
+                contentDiv.innerHTML = `<div class="error">加载失败: ${error.message}</div>`;
+            }
+        }
+
+        function generateTOC() {
+            const headings = document.querySelectorAll('#markdownContent h1, #markdownContent h2, #markdownContent h3');
+            const tocSidebar = document.getElementById('tocSidebar');
+            const tocContent = document.getElementById('tocContent');
+
+            if (headings.length < 2) {
+                tocSidebar.style.display = 'none';
+                document.getElementById('blogViewer').classList.remove('with-toc');
+                return;
+            }
+
+            let html = '<ul>';
+            headings.forEach((heading, i) => {
+                const level = heading.tagName.toLowerCase();
+                const id = `heading-${i}`;
+                heading.id = id;
+                html += `<li class="toc-${level}"><a href="#${id}" onclick="smoothScroll('${id}'); return false;">${heading.textContent}</a></li>`;
+            });
+            html += '</ul>';
+
+            tocContent.innerHTML = html;
+            tocSidebar.style.display = 'block';
+            document.getElementById('blogViewer').classList.add('with-toc');
+        }
+
+        function smoothScroll(id) {
+            document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function toggleTOC() {
+            document.getElementById('tocSidebar').classList.toggle('expanded');
+        }
+
+        function closeBlog() {
+            document.getElementById('blogViewer').classList.remove('active');
+            document.getElementById('blogViewer').classList.remove('with-toc');
+            document.getElementById('blogList').classList.remove('hidden');
+            document.getElementById('tocSidebar').style.display = 'none';
+            currentBlog = null;
+            
+            // 清除所有URL参数
+            updateUrlParam('id', null);
+            updateUrlParam('bn', null);
+            
+            // 重新渲染博客列表
+            renderBlogList();
+        }
+
+        function filterByTag(tag) {
+            const filtered = blogConfig.posts.filter(p => p.tags.includes(tag));
+            const blogList = document.getElementById('blogList');
+            blogList.innerHTML = filtered.map(post => `
+                <article class="blog-card" onclick="openBlog('${post.id}')">
+                    <h2><span class="tag" style="background: var(--primary-color); color: white;">blog #${post.blog_number}</span> ${post.title}</h2>
+                    <div class="meta"><span>${post.date}</span><span>${post.category}</span></div>
+                    <p class="excerpt">${post.excerpt}</p>
+                </article>
+            `).join('') + `<div style="text-align: center; margin-top: 20px;"><button class="control-button" onclick="renderBlogList()"><i class="fas fa-times"></i> 清除筛选</button></div>`;
+        }
+
+        document.addEventListener('DOMContentLoaded', initBlog);
+    </script>
 </body>
 </html>
