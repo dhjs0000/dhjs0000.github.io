@@ -425,6 +425,23 @@
             margin-left: 0.5rem;
         }
 
+        /* 上下标样式 */
+        .markdown-content sub,
+        .markdown-content sup {
+            font-size: 0.75em;
+            line-height: 0;
+            position: relative;
+            vertical-align: baseline;
+        }
+
+        .markdown-content sub {
+            bottom: -0.25em;
+        }
+
+        .markdown-content sup {
+            top: -0.5em;
+        }
+
         .loading {
             display: flex;
             justify-content: center;
@@ -582,9 +599,18 @@
                 }
             );
 
-            // 其他扩展语法
+            // 其他扩展语法 - 注意顺序：先处理双符号，再处理单符号
             processed = processed.replace(/==(.+?)==/g, '<mark>$1</mark>');
             processed = processed.replace(/\+\+(.+?)\+\+/g, '<ins>$1</ins>');
+            
+            // 删除线 - 使用两个波浪号
+            processed = processed.replace(/~~(.+?)~~/g, '<del>$1</del>');
+            
+            // 下标 - 使用单个波浪号（排除行内代码中的波浪号）
+            processed = processed.replace(/~([^~\s]+)~/g, '<sub>$1</sub>');
+            
+            // 上标 - 使用脱字符号（排除行内代码中的脱字符）
+            processed = processed.replace(/\^([^\^\s]+)\^/g, '<sup>$1</sup>');
 
             // 处理脚注
             const footnotes = {};
