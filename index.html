@@ -152,7 +152,7 @@
             <div class="countdown-text">秒后自动跳转到主页</div>
             
             <div class="button-group" style="justify-content: center;">
-                <a href="home.html" class="button">
+                <a href="home" class="button">
                     <i class="fas fa-arrow-right"></i> 立即进入
                 </a>
                 <button onclick="cancelCountdown()" class="button outline">
@@ -195,11 +195,11 @@
 
         <!-- 快速链接 -->
         <div class="quick-links">
-            <a href="home.html" class="quick-link">首页</a>
-            <a href="downloads.html" class="quick-link">下载</a>
-            <a href="blog.html" class="quick-link">博客</a>
-            <a href="team.html" class="quick-link">团队</a>
-            <a href="contact.html" class="quick-link">联系</a>
+            <a href="home" class="quick-link">首页</a>
+            <a href="downloads" class="quick-link">下载</a>
+            <a href="blog" class="quick-link">博客</a>
+            <a href="team" class="quick-link">团队</a>
+            <a href="contact" class="quick-link">联系</a>
         </div>
 
         <!-- 页脚 -->
@@ -223,7 +223,7 @@
             
             if (timeLeft <= 0) {
                 clearInterval(countdownTimer);
-                window.location.href = 'home.html';
+                window.location.href = 'home';
             }
             timeLeft--;
         }

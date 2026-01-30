@@ -439,7 +439,7 @@
             'PDF': 'PDF.pdf',
             'Word': 'Word.docx',
             'Pub': 'Pub.pub',
-            'html': 'html.html'
+            'html': 'html'
         };
 
         // 从JSON文件加载数据（兼容IE6-8）
@@ -609,7 +609,7 @@
                    // 只有HTML格式才显示在线预览，点击后跳转到实际HTML页面
                    (release.formats.indexOf('html') !== -1 ?
                    '<div class="preview-section">' +
-                   '<a href="../EP/assets/' + release.publish_id + '/html.html" class="preview-btn" target="_blank">' +
+                   '<a href="../EP/assets/' + release.publish_id + '/html" class="preview-btn" target="_blank">' +
                    '<i>👁</i> 在线预览</a>' +
                    '</div>' : '') +
                    '</div>';
