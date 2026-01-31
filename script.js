@@ -176,17 +176,36 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
 
     // 移动端菜单切换
-    const menuToggle = document.querySelector('.menu-toggle');
-    const navLinks = document.querySelector('.nav-links');
+    const menuToggle = document.getElementById('menuToggle');
+    const navLinks = document.getElementById('navLinks');
     
-    if (menuToggle) {
+    if (menuToggle && navLinks) {
         menuToggle.addEventListener('click', function() {
             navLinks.classList.toggle('active');
             menuToggle.classList.toggle('active');
+            const icon = menuToggle.querySelector('i');
+            if (icon) {
+                icon.classList.toggle('fa-bars');
+                icon.classList.toggle('fa-times');
+            }
+        });
+        
+        // 点击导航链接后关闭菜单
+        const navLinkItems = navLinks.querySelectorAll('a:not(#projectDropdownToggleMobile)');
+        navLinkItems.forEach(link => {
+            link.addEventListener('click', function() {
+                navLinks.classList.remove('active');
+                menuToggle.classList.remove('active');
+                const icon = menuToggle.querySelector('i');
+                if (icon) {
+                    icon.classList.add('fa-bars');
+                    icon.classList.remove('fa-times');
+                }
+            });
         });
     }
     
-    // 项目下拉菜单切换（所有设备）
+    // 项目下拉菜单切换（桌面端）
     const projectDropdown = document.querySelector('.project-dropdown');
     const projectDropdownToggle = document.getElementById('projectDropdownToggle');
     
@@ -209,6 +228,38 @@ document.addEventListener('DOMContentLoaded', async function() {
         dropdownLinks.forEach(link => {
             link.addEventListener('click', function() {
                 projectDropdown.classList.remove('active');
+            });
+        });
+    }
+    
+    // 移动端项目下拉菜单切换
+    const projectDropdownMobile = document.querySelector('.project-dropdown-mobile');
+    const projectDropdownToggleMobile = document.getElementById('projectDropdownToggleMobile');
+    
+    if (projectDropdownMobile && projectDropdownToggleMobile) {
+        projectDropdownToggleMobile.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            projectDropdownMobile.classList.toggle('active');
+        });
+        
+        // 点击下拉菜单内的链接后关闭菜单
+        const dropdownLinksMobile = projectDropdownMobile.querySelectorAll('.dropdown-content-mobile a');
+        dropdownLinksMobile.forEach(link => {
+            link.addEventListener('click', function() {
+                projectDropdownMobile.classList.remove('active');
+                // 同时也关闭主导航菜单
+                if (navLinks) {
+                    navLinks.classList.remove('active');
+                }
+                if (menuToggle) {
+                    menuToggle.classList.remove('active');
+                    const icon = menuToggle.querySelector('i');
+                    if (icon) {
+                        icon.classList.add('fa-bars');
+                        icon.classList.remove('fa-times');
+                    }
+                }
             });
         });
     }

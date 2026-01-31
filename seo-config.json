@@ -1,0 +1,148 @@
+{
+  "site": {
+    "name": "Ethernos Studio",
+    "alternateName": "以太诺斯工作室",
+    "url": "https://ethernos.cn",
+    "logo": "https://ethernos.cn/assets/logo.png",
+    "favicon": "/favicon.ico",
+    "language": "zh-CN",
+    "charset": "UTF-8",
+    "viewport": "width=device-width, initial-scale=1.0"
+  },
+  "keywords": {
+    "global": [
+      "Ethernos Studio",
+      "以太诺斯工作室",
+      "开源项目",
+      "开发者工具",
+      "编程工具",
+      "技术博客"
+    ],
+    "products": [
+      "VSCode隔离工具",
+      "VSenv",
+      "BCC编程语言",
+      "ECL编程语言",
+      "Blender插件",
+      "Blender-VMT"
+    ],
+    "categories": [
+      "开源软件",
+      "开发工具",
+      "编程语言",
+      "VSCode扩展",
+      "Blender工具",
+      "代码隔离",
+      "插件开发"
+    ],
+    "longTail": [
+      "VSCode实例隔离工具下载",
+      "开源编程语言推荐",
+      "Blender VMT插件使用教程",
+      "开发者效率工具",
+      "编程工具对比评测"
+    ]
+  },
+  "social": {
+    "github": "https://github.com/Ethernos-Studio",
+    "bilibiliStudio": "https://space.bilibili.com/3546980420684160",
+    "bilibiliPersonal": "https://space.bilibili.com/430218185",
+    "email": "studio@ethernos.cn"
+  },
+  "pages": {
+    "home": {
+      "title": "Ethernos Studio | 开源技术工作室 - VSCode隔离工具、BCC编程语言、Blender插件",
+      "description": "探索Ethernos Studio的开源项目：VSenv内核级VSCode实例隔离工具、BCC基于Rust的编程语言、Blender-VMT专业插件。获取最新技术博客、软件下载与开发资源。",
+      "priority": 1.0,
+      "changefreq": "weekly"
+    },
+    "blog": {
+      "title": "技术博客 | Ethernos Studio - 编程教程、开发经验、开源项目分享",
+      "description": "Ethernos Studio技术博客，分享VSCode隔离工具使用教程、BCC编程语言开发经验、Blender插件开发技巧、开源项目实战经验等高质量技术文章。",
+      "priority": 0.9,
+      "changefreq": "daily"
+    },
+    "downloads": {
+      "title": "软件下载 | Ethernos Studio - VSenv、Blender-VMT、开发工具合集",
+      "description": "免费下载Ethernos Studio开源工具：VSenv VSCode隔离工具、Blender-VMT插件、各类开发者实用工具。安全、快速、免费获取最新版本。",
+      "priority": 0.8,
+      "changefreq": "weekly"
+    },
+    "about": {
+      "title": "关于我们 | Ethernos Studio - 开源技术工作室简介与使命",
+      "description": "了解Ethernos Studio（以太诺斯工作室）的创立故事、技术理念与开源使命。专注于为开发者提供高质量的隔离工具、编程语言和Blender插件。",
+      "priority": 0.8,
+      "changefreq": "monthly"
+    },
+    "team": {
+      "title": "团队介绍 | Ethernos Studio - 核心成员与开源贡献者",
+      "description": "认识Ethernos Studio的核心团队成员，了解我们的技术背景和开源贡献。加入我们的开发者社区，共同推动技术创新。",
+      "priority": 0.7,
+      "changefreq": "monthly"
+    },
+    "contact": {
+      "title": "联系我们 | Ethernos Studio - 技术支持与商务合作",
+      "description": "联系Ethernos Studio获取技术支持、提交项目建议或探讨合作机会。通过GitHub、邮件、QQ等多种方式与我们取得联系。",
+      "priority": 0.7,
+      "changefreq": "monthly"
+    },
+    "docs": {
+      "title": "文档中心 | Ethernos Studio - 使用指南与API文档",
+      "description": "Ethernos Studio完整文档中心，包含VSenv使用指南、BCC编程语言文档、Blender-VMT教程、API参考手册等详细技术文档。",
+      "priority": 0.8,
+      "changefreq": "weekly"
+    }
+  },
+  "structuredData": {
+    "organization": {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Ethernos Studio",
+      "alternateName": "以太诺斯工作室",
+      "url": "https://ethernos.cn",
+      "logo": "https://ethernos.cn/assets/logo.png",
+      "foundingDate": "2024",
+      "email": "studio@ethernos.cn",
+      "sameAs": [
+        "https://github.com/Ethernos-Studio",
+        "https://space.bilibili.com/3546980420684160"
+      ]
+    }
+  },
+  "images": {
+    "ogDefault": "https://ethernos.cn/assets/og-image.jpg",
+    "ogHome": "https://ethernos.cn/assets/og-home.jpg",
+    "ogBlog": "https://ethernos.cn/assets/og-blog.jpg",
+    "logo": "https://ethernos.cn/assets/logo.png",
+    "favicon": {
+      "16": "/favicon-16x16.png",
+      "32": "/favicon-32x32.png",
+      "180": "/apple-touch-icon.png"
+    }
+  },
+  "performance": {
+    "preconnect": [
+      "https://cdnjs.cloudflare.com",
+      "https://cdn.jsdelivr.net",
+      "https://ethernos.cn"
+    ],
+    "dnsPrefetch": [
+      "https://github.com",
+      "https://space.bilibili.com"
+    ],
+    "lazyLoading": true,
+    "imageOptimization": true
+  },
+  "accessibility": {
+    "skipLink": true,
+    "ariaLabels": true,
+    "focusIndicators": true,
+    "semanticHTML": true,
+    "altTextRequired": true
+  },
+  "legal": {
+    "cookieConsent": true,
+    "privacyPolicy": "/privacy.html",
+    "termsOfService": "/terms.html"
+  }
+}

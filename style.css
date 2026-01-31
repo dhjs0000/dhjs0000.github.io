@@ -668,6 +668,62 @@ body {
     font-size: 1.5rem;
     cursor: pointer;
     padding: 0.5rem;
+    margin-left: auto;
+}
+
+/* 移动端专属的导航项目容器 */
+.nav-links-mobile-only {
+    display: none;
+}
+
+/* 移动端下拉菜单样式 */
+.project-dropdown-mobile {
+    position: relative;
+    width: 100%;
+}
+
+.project-dropdown-mobile > a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 0.8rem 1rem;
+    color: var(--text-color);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.project-dropdown-mobile > a i {
+    transition: transform 0.2s;
+}
+
+.project-dropdown-mobile.active > a i {
+    transform: rotate(180deg);
+}
+
+.dropdown-content-mobile {
+    display: none;
+    background: var(--dropdown-bg);
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    margin: 0 1rem;
+}
+
+.project-dropdown-mobile.active .dropdown-content-mobile {
+    display: flex;
+    flex-direction: column;
+}
+
+.dropdown-content-mobile a {
+    padding: 0.6rem 1rem !important;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    text-align: center !important;
+}
+
+.dropdown-content-mobile a:hover {
+    color: var(--primary-color);
 }
 
 @media (max-width: 768px) {
@@ -676,20 +732,30 @@ body {
     }
 
     .nav-container {
-        padding: 0.5rem 1rem;
+        padding: 0 1rem;
+        flex-wrap: wrap;
+    }
+    
+    .nav-left {
+        flex: 1;
+        justify-content: space-between;
     }
     
     .nav-links {
         display: none;
         position: absolute;
-        top: 100%;
+        top: 64px;
         left: 0;
         right: 0;
         background: var(--nav-bg);
-        padding: 1rem;
+        padding: 0.5rem 0;
         flex-direction: column;
-        align-items: center;
+        align-items: stretch;
         backdrop-filter: blur(10px);
+        border-bottom: 1px solid var(--border-color);
+        max-height: calc(100vh - 64px);
+        overflow-y: auto;
+        z-index: 999;
     }
     
     .nav-links.active {
@@ -697,9 +763,23 @@ body {
     }
     
     .nav-links a {
-        padding: 0.8rem 1rem;
+        padding: 0.8rem 1.5rem;
         width: 100%;
-        text-align: center;
+        text-align: left;
+        box-sizing: border-box;
+    }
+    
+    .nav-links-mobile-only {
+        display: flex;
+        flex-direction: column;
+        border-top: 1px solid var(--border-color);
+        margin-top: 0.5rem;
+        padding-top: 0.5rem;
+    }
+    
+    /* 桌面端的右侧项目在移动端隐藏 */
+    .nav-right {
+        display: none;
     }
 
     /* 内容区域移动端优化 */

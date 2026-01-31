@@ -1,0 +1,53 @@
+# robots.txt for Ethernos Studio
+# https://ethernos.cn/robots.txt
+
+# 允许所有搜索引擎爬虫访问
+User-agent: *
+Allow: /
+
+# 禁止访问的目录和文件
+Disallow: /24/
+Disallow: /cookie-consent.html
+Disallow: /test-cookie-consent.html
+Disallow: /error.html
+Disallow: /MSVRMC/
+Disallow: /compatible/
+Disallow: /blog-content/
+
+# 禁止爬取特定文件类型
+Disallow: /*.json$
+Disallow: /*.txt$
+Disallow: /*.md$
+
+# 网站地图位置
+Sitemap: https://ethernos.cn/sitemap.xml
+
+# 爬取速率限制（礼貌性建议）
+# Crawl-delay: 10
+
+# 百度爬虫特殊规则
+User-agent: Baiduspider
+Allow: /
+Disallow: /24/
+Disallow: /cookie-consent.html
+Disallow: /test-cookie-consent.html
+Disallow: /MSVRMC/
+Disallow: /compatible/
+
+# Google爬虫特殊规则
+User-agent: Googlebot
+Allow: /
+Disallow: /24/
+Disallow: /cookie-consent.html
+Disallow: /test-cookie-consent.html
+Disallow: /MSVRMC/
+Disallow: /compatible/
+
+# Bing爬虫特殊规则
+User-agent: Bingbot
+Allow: /
+Disallow: /24/
+Disallow: /cookie-consent.html
+Disallow: /test-cookie-consent.html
+Disallow: /MSVRMC/
+Disallow: /compatible/
