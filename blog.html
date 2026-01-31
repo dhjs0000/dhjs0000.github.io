@@ -613,8 +613,16 @@
             processed = processed.replace(/==(.+?)==/g, '<mark>$1</mark>');
             processed = processed.replace(/\+\+(.+?)\+\+/g, '<ins>$1</ins>');
             
-            // 删除线 - 使用两个波浪号
+            // 删除线 - 使用两个波浪号 ~~文本~~
             processed = processed.replace(/~~(.+?)~~/g, '<del>$1</del>');
+            
+            // 下标 - 使用单个波浪号 ~文本~ （需要前后有非空格字符）
+            // 排除行内代码中的波浪号
+            processed = processed.replace(/(?<!`)~([^~\s]+)~(?!`)/g, '<sub>$1</sub>');
+            
+            // 上标 - 使用脱字符号 ^文本^ （需要前后有非空格字符）
+            // 排除行内代码中的脱字符，且不能是脚注 [^n]
+            processed = processed.replace(/(?<!\[)\^([^\^\s]+)\^(?!\])/g, '<sup>$1</sup>');
             
             // 处理脚注（必须在下标/上标之前处理，避免 [^n] 被上标正则匹配）
             const footnotes = {};
@@ -696,27 +704,78 @@
         function renderMathInContent(element) {
             if (!window._mathExpressions) return;
             
-            window._mathExpressions.forEach(({ placeholder, formula, display }) => {
-                const nodes = element.querySelectorAll('*');
-                for (const node of nodes) {
-                    for (const child of node.childNodes) {
-                        if (child.nodeType === Node.TEXT_NODE && child.textContent.includes(placeholder)) {
-                            try {
-                                const html = katex.renderToString(formula, {
-                                    displayMode: display,
-                                    throwOnError: false
-                                });
-                                const span = document.createElement('span');
-                                span.innerHTML = html;
-                                child.parentNode.replaceChild(span, child);
-                            } catch (e) {
-                                console.warn('KaTeX render error:', e);
-                                child.textContent = child.textContent.replace(placeholder, display ? `$$${formula}$$` : `$${formula}$`);
-                            }
-                        }
+            // 使用 TreeWalker 遍历所有文本节点
+            const walker = document.createTreeWalker(
+                element,
+                NodeFilter.SHOW_TEXT,
+                null,
+                false
+            );
+            
+            const textNodes = [];
+            let node;
+            while (node = walker.nextNode()) {
+                textNodes.push(node);
+            }
+            
+            // 倒序处理，避免修改 DOM 影响遍历
+            for (let i = textNodes.length - 1; i >= 0; i--) {
+                const textNode = textNodes[i];
+                let text = textNode.textContent;
+                
+                // 检查是否包含任何占位符
+                let hasPlaceholder = false;
+                for (const { placeholder } of window._mathExpressions) {
+                    if (text.includes(placeholder)) {
+                        hasPlaceholder = true;
+                        break;
                     }
                 }
-            });
+                
+                if (!hasPlaceholder) continue;
+                
+                // 按占位符分割文本
+                const parent = textNode.parentNode;
+                let lastIndex = 0;
+                
+                for (const { placeholder, formula, display } of window._mathExpressions) {
+                    const index = text.indexOf(placeholder, lastIndex);
+                    if (index === -1) continue;
+                    
+                    // 插入占位符前的文本
+                    if (index > lastIndex) {
+                        const beforeText = text.slice(lastIndex, index);
+                        parent.insertBefore(document.createTextNode(beforeText), textNode);
+                    }
+                    
+                    // 渲染 KaTeX 并插入
+                    try {
+                        const html = katex.renderToString(formula, {
+                            displayMode: display,
+                            throwOnError: false
+                        });
+                        const span = document.createElement('span');
+                        span.innerHTML = html;
+                        parent.insertBefore(span, textNode);
+                    } catch (e) {
+                        console.warn('KaTeX render error:', e);
+                        parent.insertBefore(
+                            document.createTextNode(display ? `$$${formula}$$` : `$${formula}$`),
+                            textNode
+                        );
+                    }
+                    
+                    lastIndex = index + placeholder.length;
+                }
+                
+                // 插入剩余的文本
+                if (lastIndex < text.length) {
+                    parent.insertBefore(document.createTextNode(text.slice(lastIndex)), textNode);
+                }
+                
+                // 删除原文本节点
+                parent.removeChild(textNode);
+            }
             
             // 清理已渲染的表达式
             delete window._mathExpressions;
