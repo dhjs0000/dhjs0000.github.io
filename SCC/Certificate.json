@@ -7,5 +7,23 @@
         "level": "三等",
         "name": "邓哲轩",
         "date": "2026-1-11"
+    },
+    {
+        "ID": "JHCMACpre-20261002",
+        "type": "JHCMACpre",
+        "item": "JHCMAC(初中数学能力竞赛)体验届",
+        "score": "38/100",
+        "level": "🥇金牌",
+        "name": "刘耀成",
+        "date": "2026-1-25"
+    },
+    {
+        "ID": "JHCMACpre-20261004",
+        "type": "JHCMACpre",
+        "item": "JHCMAC(初中数学能力竞赛)体验届",
+        "score": "31/100",
+        "level": "🥈银牌",
+        "name": "李泽瑞",
+        "date": "2026-1-25"
     }
 ]
