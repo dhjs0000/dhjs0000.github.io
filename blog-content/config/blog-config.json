@@ -5,6 +5,160 @@
   },
   "posts": [
     {
+      "id": "018-forge-advanced-topics",
+      "file": "blog-content/posts/forge-16.进阶主题.md",
+      "title": "Forge 1.20.1开发文档-16 进阶主题",
+      "date": "2026-01-30",
+      "category": "技术文档",
+      "author": "Community",
+      "tags": ["Forge", "教程"],
+      "excerpt": "Forge 1.20.1开发文档",
+      "blog_number": 18
+    },
+    {
+      "id": "017-forge-misc-features",
+      "file": "blog-content/posts/forge-15.杂项功能.md",
+      "title": "Forge 1.20.1开发文档-15 杂项功能",
+      "date": "2026-01-30",
+      "category": "技术文档",
+      "author": "Community",
+      "tags": ["Forge", "教程"],
+      "excerpt": "Forge 1.20.1开发文档",
+      "blog_number": 17
+    },
+    {
+      "id": "016-forge-data-generation",
+      "file": "blog-content/posts/forge-14.数据生成.md",
+      "title": "Forge 1.20.1开发文档-14 数据生成",
+      "date": "2026-01-30",
+      "category": "技术文档",
+      "author": "Community",
+      "tags": ["Forge", "教程"],
+      "excerpt": "Forge 1.20.1开发文档",
+      "blog_number": 16
+    },
+    {
+      "id": "015-forge-resources",
+      "file": "blog-content/posts/forge-13.资源.md",
+      "title": "Forge 1.20.1开发文档-13 资源",
+      "date": "2026-01-30",
+      "category": "技术文档",
+      "author": "Community",
+      "tags": ["Forge", "教程"],
+      "excerpt": "Forge 1.20.1开发文档",
+      "blog_number": 15
+    },
+    {
+      "id": "014-forge-rendering",
+      "file": "blog-content/posts/forge-12.渲染.md",
+      "title": "Forge 1.20.1开发文档-12 渲染",
+      "date": "2026-01-30",
+      "category": "技术文档",
+      "author": "Community",
+      "tags": ["Forge", "教程"],
+      "excerpt": "Forge 1.20.1开发文档",
+      "blog_number": 14
+    },
+    {
+      "id": "013-forge-gui",
+      "file": "blog-content/posts/forge-11.GUI.md",
+      "title": "Forge 1.20.1开发文档-11 GUI",
+      "date": "2026-01-30",
+      "category": "技术文档",
+      "author": "Community",
+      "tags": ["Forge", "教程"],
+      "excerpt": "Forge 1.20.1开发文档",
+      "blog_number": 13
+    },
+    {
+      "id": "012-forge-capability",
+      "file": "blog-content/posts/forge-10.Capability系统.md",
+      "title": "Forge 1.20.1开发文档-10 Capability系统",
+      "date": "2026-01-30",
+      "category": "技术文档",
+      "author": "Community",
+      "tags": ["Forge", "教程"],
+      "excerpt": "Forge 1.20.1开发文档",
+      "blog_number": 12
+    },
+    {
+      "id": "011-forge-particles",
+      "file": "blog-content/posts/forge-9.粒子效果.md",
+      "title": "Forge 1.20.1开发文档-9 粒子效果",
+      "date": "2026-01-30",
+      "category": "技术文档",
+      "author": "Community",
+      "tags": ["Forge", "教程"],
+      "excerpt": "Forge 1.20.1开发文档",
+      "blog_number": 11
+    },
+    {
+      "id": "010-forge-block-entity",
+      "file": "blog-content/posts/forge-8.方块实体.md",
+      "title": "Forge 1.20.1开发文档-8 方块实体",
+      "date": "2026-01-30",
+      "category": "技术文档",
+      "author": "Community",
+      "tags": ["Forge", "教程"],
+      "excerpt": "Forge 1.20.1开发文档",
+      "blog_number": 10
+    },
+    {
+      "id": "009-forge-networking",
+      "file": "blog-content/posts/forge-7.网络.md",
+      "title": "Forge 1.20.1开发文档-7 网络",
+      "date": "2026-01-30",
+      "category": "技术文档",
+      "author": "Community",
+      "tags": ["Forge", "教程"],
+      "excerpt": "Forge 1.20.1开发文档",
+      "blog_number": 9
+    },
+    {
+      "id": "008-forge-items",
+      "file": "blog-content/posts/forge-6.物品.md",
+      "title": "Forge 1.20.1开发文档-6 物品",
+      "date": "2026-01-30",
+      "category": "技术文档",
+      "author": "Community",
+      "tags": ["Forge", "教程"],
+      "excerpt": "Forge 1.20.1开发文档",
+      "blog_number": 8
+    },
+    {
+      "id": "007-forge-blocks",
+      "file": "blog-content/posts/forge-5.方块.md",
+      "title": "Forge 1.20.1开发文档-5 方块",
+      "date": "2026-01-30",
+      "category": "技术文档",
+      "author": "Community",
+      "tags": ["Forge", "教程"],
+      "excerpt": "Forge 1.20.1开发文档",
+      "blog_number": 7
+    },
+    {
+      "id": "006-forge-core-concepts",
+      "file": "blog-content/posts/forge-4.核心概念.md",
+      "title": "Forge 1.20.1开发文档-4 开发概念",
+      "date": "2026-01-30",
+      "category": "技术文档",
+      "author": "Community",
+      "tags": ["Forge", "教程"],
+      "excerpt": "Forge 1.20.1开发文档",
+      "blog_number": 6
+    },
+    {
+      "id": "005-forge-getting-started",
+      "file": "blog-content/posts/forge-3.开发入门.md",
+      "title": "Forge 1.20.1开发文档-3 开发入门",
+      "date": "2026-01-30",
+      "category": "技术文档",
+      "author": "Community",
+      "tags": ["Forge", "教程"],
+      "excerpt": "Forge 1.20.1开发文档",
+      "blog_number": 5
+    },
+    {
       "id": "004-markdown-demo",
       "file": "blog-content/posts/004-markdown-demo.txt",
       "title": "Markdown 高级语法演示",
@@ -50,5 +204,5 @@
       "blog_number": 1
     }
   ],
-  "popular_tags": ["BCC", "Blender", "Python", "C++", "招聘", "问题解决"]
+  "popular_tags": ["BCC", "Blender", "Python", "C++", "招聘", "问题解决", "Forge", "教程"]
 }

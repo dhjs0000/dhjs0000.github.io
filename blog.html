@@ -460,6 +460,86 @@
             color: var(--text-muted);
         }
 
+        /* 搜索框样式 */
+        .search-section {
+            margin-bottom: 24px;
+        }
+
+        .search-box {
+            position: relative;
+            display: flex;
+            align-items: center;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0 16px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .search-box:focus-within {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.1);
+        }
+
+        .search-icon {
+            color: var(--text-muted);
+            font-size: 1rem;
+            margin-right: 12px;
+        }
+
+        .search-box input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 12px 0;
+            font-size: 0.95rem;
+            color: var(--text-color);
+            outline: none;
+        }
+
+        .search-box input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .search-clear {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 4px 8px;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        .search-clear:hover {
+            color: var(--text-color);
+        }
+
+        .search-results-info {
+            margin-top: 12px;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            min-height: 20px;
+        }
+
+        .search-highlight {
+            background: rgba(var(--primary-color-rgb), 0.3);
+            padding: 0 2px;
+            border-radius: 2px;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-muted);
+        }
+
+        .no-results i {
+            font-size: 3rem;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
         .error {
             display: flex;
             justify-content: center;
@@ -503,6 +583,18 @@
                         </a> 
                         上发布关于 blog 的 issue
                     </p>
+                </div>
+
+                <!-- 搜索框 -->
+                <div class="search-section" id="searchSection">
+                    <div class="search-box">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" id="searchInput" placeholder="搜索博客标题、内容或标签..." oninput="searchBlogs(this.value)">
+                        <button class="search-clear" id="searchClear" onclick="clearSearch()" style="display: none;">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="search-results-info" id="searchResultsInfo"></div>
                 </div>
 
                 <div class="blog-list" id="blogList"></div>
@@ -1006,6 +1098,151 @@
                 </article>
             `).join('') + `<div style="text-align: center; margin-top: 20px;"><button class="control-button" onclick="renderBlogList()"><i class="fas fa-times"></i> 清除筛选</button></div>`;
         }
+
+        // 搜索功能
+        let searchCache = new Map(); // 缓存已加载的博客内容
+
+        async function searchBlogs(searchTerm) {
+            const searchInput = document.getElementById('searchInput');
+            const searchClear = document.getElementById('searchClear');
+            const resultsInfo = document.getElementById('searchResultsInfo');
+            const blogList = document.getElementById('blogList');
+
+            // 显示/隐藏清除按钮
+            searchClear.style.display = searchTerm ? 'block' : 'none';
+
+            if (!searchTerm.trim()) {
+                resultsInfo.textContent = '';
+                renderBlogList();
+                return;
+            }
+
+            const term = searchTerm.toLowerCase().trim();
+            resultsInfo.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 搜索中...';
+
+            // 搜索匹配的博客
+            const matchedPosts = [];
+            
+            for (const post of blogConfig.posts) {
+                let matchScore = 0;
+                let matchReasons = [];
+
+                // 1. 标题匹配 (权重最高)
+                if (post.title.toLowerCase().includes(term)) {
+                    matchScore += 10;
+                    matchReasons.push('标题');
+                }
+
+                // 2. 标签匹配
+                if (post.tags && post.tags.some(tag => tag.toLowerCase().includes(term))) {
+                    matchScore += 8;
+                    matchReasons.push('标签');
+                }
+
+                // 3. 分类匹配
+                if (post.category && post.category.toLowerCase().includes(term)) {
+                    matchScore += 6;
+                    matchReasons.push('分类');
+                }
+
+                // 4. 摘要匹配
+                if (post.excerpt && post.excerpt.toLowerCase().includes(term)) {
+                    matchScore += 4;
+                    matchReasons.push('摘要');
+                }
+
+                // 5. 内容匹配 (需要加载文件内容)
+                if (post.file) {
+                    try {
+                        let content = searchCache.get(post.id);
+                        if (!content) {
+                            const response = await fetch(post.file);
+                            if (response.ok) {
+                                content = await response.text();
+                                searchCache.set(post.id, content);
+                            }
+                        }
+                        if (content && content.toLowerCase().includes(term)) {
+                            matchScore += 2;
+                            matchReasons.push('正文');
+                        }
+                    } catch (e) {
+                        // 忽略加载错误
+                    }
+                }
+
+                if (matchScore > 0) {
+                    matchedPosts.push({ ...post, matchScore, matchReasons });
+                }
+            }
+
+            // 按匹配分数排序
+            matchedPosts.sort((a, b) => b.matchScore - a.matchScore);
+
+            // 显示结果
+            if (matchedPosts.length === 0) {
+                blogList.innerHTML = `
+                    <div class="no-results">
+                        <i class="fas fa-search"></i>
+                        <h3>未找到相关博客</h3>
+                        <p>尝试使用其他关键词搜索</p>
+                    </div>
+                `;
+                resultsInfo.textContent = `未找到 "${searchTerm}" 的相关结果`;
+            } else {
+                blogList.innerHTML = matchedPosts.map(post => `
+                    <article class="blog-card" onclick="openBlog('${post.id}')">
+                        <h2>
+                            <span class="tag" style="background: var(--primary-color); color: white;">blog #${post.blog_number}</span>
+                            ${highlightText(post.title, term)}
+                        </h2>
+                        <div class="meta">
+                            <span><i class="far fa-calendar-alt"></i> ${post.date}</span>
+                            <span><i class="fas fa-tag"></i> ${post.category}</span>
+                            <span><i class="fas fa-bullseye"></i> 匹配: ${post.matchReasons.join(', ')}</span>
+                        </div>
+                        <p class="excerpt">${highlightText(post.excerpt, term)}</p>
+                        <div style="margin-top: 12px;">
+                            ${post.tags.map(tag =>
+                                `<span class="tag" style="font-size: 0.75rem; ${tag.toLowerCase().includes(term) ? 'background: var(--primary-color); color: white;' : ''}">${highlightText(tag, term)}</span>`
+                            ).join('')}
+                        </div>
+                    </article>
+                `).join('');
+                resultsInfo.textContent = `找到 ${matchedPosts.length} 篇相关博客`;
+            }
+        }
+
+        function highlightText(text, term) {
+            if (!text) return '';
+            const regex = new RegExp(`(${escapeRegex(term)})`, 'gi');
+            return text.replace(regex, '<span class="search-highlight">$1</span>');
+        }
+
+        function escapeRegex(string) {
+            return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        }
+
+        function clearSearch() {
+            const searchInput = document.getElementById('searchInput');
+            searchInput.value = '';
+            document.getElementById('searchClear').style.display = 'none';
+            document.getElementById('searchResultsInfo').textContent = '';
+            renderBlogList();
+            searchInput.focus();
+        }
+
+        // 绑定回车键搜索
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        searchBlogs(this.value);
+                    }
+                });
+            }
+        });
 
         document.addEventListener('DOMContentLoaded', initBlog);
     </script>
