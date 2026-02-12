@@ -5,6 +5,17 @@
   },
   "posts": [
     {
+      "id": "Cavvy_Language_Reference",
+      "file": "blog-content/posts/Cavvy_Language_Reference.md",
+      "title": "Cavvy 语言参考文档",
+      "date": "2026-01-30",
+      "category": "技术文档",
+      "author": "Community",
+      "tags": ["Cavvy", "教程"],
+      "excerpt": "Cavvy 语言参考文档",
+      "blog_number": 19
+    },
+    {
       "id": "018-forge-advanced-topics",
       "file": "blog-content/posts/forge-16.进阶主题.md",
       "title": "Forge 1.20.1开发文档-16 进阶主题",
