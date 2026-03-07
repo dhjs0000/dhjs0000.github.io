@@ -1,5 +1,22 @@
 [
     {
+        "name": "Cavvy编程语言",
+        "description": "基于Rust与LLVM的编译型编程语言",
+        "repo_url": "https://github.com/cavvy-lang/Cavvy",
+        "relatively_url": "cavvy-lang/Cavvy",
+        "icon": "fa-code",
+        "features": ["基于Rust", "基于LLVM", "编译型"],
+        "asset_config": {
+            "priority_patterns": ["cavvy", "Cavvy", "setup", "installer"],
+            "ignore_patterns": ["source", "src", "docs", "test", "runtime"],
+            "platform_keywords": {
+                "windows": ["windows", "win", ".exe", "amd64-windows", "x86_64-windows", "win86-64"],
+                "macos": ["mac", "macos", "darwin", ".dmg"],
+                "linux": ["linux", ".tar.gz", ".deb"]
+            }
+        }
+    },
+    {
         "name": "vsenv",
         "description": "内核级VSCode实例隔离工具，所有插件信息全部完全隔离。",
         "repo_url": "https://github.com/Ethernos-Studio/vsenv",
