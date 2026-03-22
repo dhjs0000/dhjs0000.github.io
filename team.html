@@ -17,188 +17,1499 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="cookie-consent.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* ============================================
+           全屏滚动页面基础样式
+        ============================================ */
+        html, body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            height: 100%;
+        }
+
+        .page-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .section {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 1s cubic-bezier(0.23, 1, 0.32, 1);
+            transform: translateY(100px) scale(0.95);
+            overflow: hidden;
+        }
+
+        .section.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+            z-index: 10;
+        }
+
+        .section.prev {
+            transform: translateY(-100px) scale(0.95);
+            opacity: 0;
+        }
+
+        /* ============================================
+           滚动指示器
+        ============================================ */
+        .scroll-indicator {
+            position: fixed;
+            right: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .scroll-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            position: relative;
+        }
+
+        .scroll-dot::before {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            border: 1px solid transparent;
+            transition: all 0.4s ease;
+        }
+
+        .scroll-dot.active {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            transform: scale(1.3);
+            box-shadow: 0 0 20px var(--primary-color);
+        }
+
+        .scroll-dot.active::before {
+            border-color: rgba(88, 166, 255, 0.3);
+            animation: dotPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes dotPulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0; }
+        }
+
+        .scroll-dot:hover {
+            background: rgba(88, 166, 255, 0.5);
+            transform: scale(1.2);
+        }
+
+        /* ============================================
+           页面导航提示
+        ============================================ */
+        .page-hint {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            opacity: 0.6;
+            transition: opacity 0.3s ease;
+        }
+
+        .page-hint:hover {
+            opacity: 1;
+        }
+
+        .page-hint-text {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--text-muted);
+        }
+
+        .page-hint-arrow {
+            width: 24px;
+            height: 24px;
+            border-right: 2px solid var(--text-muted);
+            border-bottom: 2px solid var(--text-muted);
+            transform: rotate(45deg);
+            animation: hintBounce 2s ease-in-out infinite;
+        }
+
+        @keyframes hintBounce {
+            0%, 100% { transform: rotate(45deg) translateY(0); }
+            50% { transform: rotate(45deg) translateY(8px); }
+        }
+
+        .page-hint.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* ============================================
+           背景效果
+        ============================================ */
+        .section-bg {
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+        }
+
+        .gradient-bg {
+            background: radial-gradient(ellipse at 30% 20%, rgba(88, 166, 255, 0.15) 0%, transparent 50%),
+                        radial-gradient(ellipse at 70% 80%, rgba(35, 134, 54, 0.1) 0%, transparent 50%),
+                        radial-gradient(ellipse at 50% 50%, rgba(247, 129, 102, 0.05) 0%, transparent 70%);
+        }
+
+        .grid-overlay {
+            position: absolute;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(88, 166, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(88, 166, 255, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%);
+        }
+
+        /* ============================================
+           第1页：Hero 标题页
+        ============================================ */
+        .hero-section {
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            padding: 0 40px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 24px;
+            background: rgba(88, 166, 255, 0.1);
+            border: 1px solid rgba(88, 166, 255, 0.3);
+            border-radius: 50px;
+            font-size: 0.875rem;
+            color: var(--primary-color);
+            margin-bottom: 40px;
+            animation: badgeGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes badgeGlow {
+            0%, 100% { box-shadow: 0 0 20px rgba(88, 166, 255, 0.2); }
+            50% { box-shadow: 0 0 40px rgba(88, 166, 255, 0.4); }
+        }
+
+        .hero-title {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 800;
+            margin: 0 0 24px 0;
+            line-height: 1.1;
+            background: linear-gradient(135deg, #fff 0%, var(--primary-color) 50%, #20c997 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: titleShine 5s ease-in-out infinite;
+        }
+
+        @keyframes titleShine {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.2); }
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.125rem, 2.5vw, 1.5rem);
+            color: var(--text-muted);
+            margin: 0 0 48px 0;
+            line-height: 1.7;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin-top: 60px;
+        }
+
+        .hero-stat {
+            text-align: center;
+        }
+
+        .hero-stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-color), #20c997);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+        }
+
+        .hero-stat-label {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 8px;
+        }
+
+        /* ============================================
+           第2页：工作室介绍
+        ============================================ */
+        .about-section .section-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            max-width: 1200px;
+            padding: 0 40px;
+            align-items: center;
+        }
+
+        .about-visual {
+            position: relative;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .about-logo {
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, var(--primary-color), #20c997);
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+            color: white;
+            position: relative;
+            animation: logoFloat 6s ease-in-out infinite;
+            box-shadow: 0 40px 80px rgba(88, 166, 255, 0.3);
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        .about-orbit {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border: 1px solid rgba(88, 166, 255, 0.2);
+            border-radius: 50%;
+            animation: orbitRotate 20s linear infinite;
+        }
+
+        .about-orbit::before,
+        .about-orbit::after {
+            content: '';
+            position: absolute;
+            border: 1px solid rgba(88, 166, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        .about-orbit::before {
+            inset: 40px;
+        }
+
+        .about-orbit::after {
+            inset: 80px;
+        }
+
+        @keyframes orbitRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .about-text h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0 0 24px 0;
+        }
+
+        .about-text p {
+            font-size: 1.125rem;
+            color: var(--text-muted);
+            line-height: 1.8;
+            margin: 0 0 32px 0;
+        }
+
+        .about-features {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .about-feature {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .about-feature:hover {
+            background: rgba(88, 166, 255, 0.1);
+            border-color: rgba(88, 166, 255, 0.2);
+            transform: translateX(10px);
+        }
+
+        .about-feature i {
+            width: 40px;
+            height: 40px;
+            background: rgba(88, 166, 255, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+        }
+
+        /* ============================================
+           第3页：创始人
+        ============================================ */
+        .founder-section .section-content {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 100px;
+            max-width: 1200px;
+            padding: 0 40px;
+            align-items: center;
+        }
+
+        .founder-card {
+            position: relative;
+            width: 350px;
+            height: 450px;
+            margin: 0 auto;
+        }
+
+        .founder-avatar-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            border-radius: 30px;
+            background: linear-gradient(135deg, rgba(88, 166, 255, 0.2), rgba(88, 166, 255, 0.05));
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(88, 166, 255, 0.3);
+            box-shadow: 0 40px 80px rgba(88, 166, 255, 0.2);
+            overflow: hidden;
+        }
+
+        .founder-avatar {
+            width: 150px;
+            height: 150px;
+            background: linear-gradient(135deg, var(--primary-color), #20c997);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: white;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 60px rgba(88, 166, 255, 0.4);
+            animation: avatarPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes avatarPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .founder-glow {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(88, 166, 255, 0.3) 0%, transparent 60%);
+            animation: glowRotate 10s linear infinite;
+        }
+
+        @keyframes glowRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .founder-name-card {
+            text-align: center;
+            z-index: 1;
+        }
+
+        .founder-name-card h3 {
+            font-size: 2rem;
+            margin: 0 0 8px 0;
+        }
+
+        .founder-name-card .role {
+            display: inline-block;
+            padding: 8px 20px;
+            background: rgba(88, 166, 255, 0.2);
+            border-radius: 20px;
+            color: var(--primary-color);
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .founder-info h2 {
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--primary-color);
+            margin: 0 0 16px 0;
+        }
+
+        .founder-info h3 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin: 0 0 24px 0;
+        }
+
+        .founder-info p {
+            font-size: 1.125rem;
+            color: var(--text-muted);
+            line-height: 1.8;
+            margin: 0 0 32px 0;
+        }
+
+        .founder-projects {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .project-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+        }
+
+        .project-tag:hover {
+            background: rgba(88, 166, 255, 0.1);
+            border-color: rgba(88, 166, 255, 0.3);
+            transform: translateY(-3px);
+        }
+
+        .project-tag i {
+            color: var(--primary-color);
+        }
+
+        /* ============================================
+           第4页：团队成员
+        ============================================ */
+        .team-section .section-content {
+            text-align: center;
+            max-width: 1000px;
+            padding: 0 40px;
+        }
+
+        .team-section h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0 0 16px 0;
+        }
+
+        .team-section .subtitle {
+            font-size: 1.125rem;
+            color: var(--text-muted);
+            margin: 0 0 60px 0;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+        }
+
+        .team-member {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 40px;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .team-member::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--secondary-color), #20c997);
+            transform: scaleX(0);
+            transition: transform 0.5s ease;
+        }
+
+        .team-member:hover {
+            transform: translateY(-10px);
+            border-color: rgba(35, 134, 54, 0.3);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .team-member:hover::before {
+            transform: scaleX(1);
+        }
+
+        .team-member-avatar {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, rgba(35, 134, 54, 0.2), rgba(35, 134, 54, 0.4));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: var(--secondary-color);
+            margin: 0 auto 24px;
+            box-shadow: 0 0 40px rgba(35, 134, 54, 0.3);
+        }
+
+        .team-member h4 {
+            font-size: 1.5rem;
+            margin: 0 0 8px 0;
+        }
+
+        .team-member .role {
+            display: inline-block;
+            padding: 6px 16px;
+            background: rgba(35, 134, 54, 0.15);
+            border-radius: 20px;
+            color: var(--secondary-color);
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .team-member p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* ============================================
+           第5页：开源贡献
+        ============================================ */
+        .opensource-section .section-content {
+            text-align: center;
+            max-width: 900px;
+            padding: 0 40px;
+        }
+
+        .opensource-icon {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, rgba(88, 166, 255, 0.2), rgba(88, 166, 255, 0.05));
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin: 0 auto 40px;
+            border: 1px solid rgba(88, 166, 255, 0.3);
+            animation: iconRotate 10s linear infinite;
+        }
+
+        @keyframes iconRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .opensource-section h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0 0 20px 0;
+        }
+
+        .opensource-section > .section-content > p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            margin: 0 0 50px 0;
+            line-height: 1.7;
+        }
+
+        .repo-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+        }
+
+        .repo-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: left;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .repo-card:hover {
+            background: rgba(88, 166, 255, 0.05);
+            border-color: rgba(88, 166, 255, 0.3);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .repo-card-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .repo-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(88, 166, 255, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .repo-card h4 {
+            font-size: 1.25rem;
+            margin: 0;
+        }
+
+        .repo-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* ============================================
+           第6页：鸣谢
+        ============================================ */
+        .thanks-section .section-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            max-width: 1000px;
+            padding: 0 40px;
+        }
+
+        .thanks-block {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 40px;
+        }
+
+        .thanks-block.sponsor {
+            border-color: rgba(247, 129, 102, 0.2);
+            background: linear-gradient(135deg, rgba(247, 129, 102, 0.05), rgba(255, 255, 255, 0.02));
+        }
+
+        .thanks-block.special {
+            border-color: rgba(255, 193, 7, 0.2);
+            background: linear-gradient(135deg, rgba(255, 193, 7, 0.05), rgba(255, 255, 255, 0.02));
+        }
+
+        .thanks-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+
+        .thanks-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+        }
+
+        .thanks-block.sponsor .thanks-icon {
+            background: rgba(247, 129, 102, 0.15);
+            color: #f78166;
+            animation: heartBeat 1.5s ease-in-out infinite;
+        }
+
+        .thanks-block.special .thanks-icon {
+            background: rgba(255, 193, 7, 0.15);
+            color: #ffc107;
+            animation: starTwinkle 2s ease-in-out infinite;
+        }
+
+        @keyframes heartBeat {
+            0%, 100% { transform: scale(1); }
+            14% { transform: scale(1.2); }
+            28% { transform: scale(1); }
+            42% { transform: scale(1.2); }
+            70% { transform: scale(1); }
+        }
+
+        @keyframes starTwinkle {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(0.9); }
+        }
+
+        .thanks-header h3 {
+            font-size: 1.5rem;
+            margin: 0;
+        }
+
+        .thanks-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .thanks-item {
+            padding: 14px 18px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .thanks-item::before {
+            content: '•';
+            color: var(--text-muted);
+        }
+
+        .thanks-block.sponsor .thanks-item:hover {
+            background: rgba(247, 129, 102, 0.1);
+            color: #f78166;
+            transform: translateX(5px);
+        }
+
+        .thanks-block.special .thanks-item:hover {
+            background: rgba(255, 193, 7, 0.1);
+            color: #ffc107;
+            transform: translateX(5px);
+        }
+
+        /* ============================================
+           第7页：加入我们
+        ============================================ */
+        .join-section .section-content {
+            text-align: center;
+            max-width: 700px;
+            padding: 0 40px;
+        }
+
+        .join-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 28px;
+            background: rgba(35, 134, 54, 0.15);
+            border: 1px solid rgba(35, 134, 54, 0.4);
+            border-radius: 50px;
+            color: var(--secondary-color);
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 40px;
+            animation: joinPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes joinPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(35, 134, 54, 0.4); }
+            50% { box-shadow: 0 0 30px 10px rgba(35, 134, 54, 0.2); }
+        }
+
+        .join-section h2 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin: 0 0 24px 0;
+            background: linear-gradient(135deg, #fff, var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .join-section > .section-content > p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            margin: 0 0 50px 0;
+            line-height: 1.7;
+        }
+
+        .join-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 20px 48px;
+            background: linear-gradient(135deg, var(--secondary-color), #2ea043);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-size: 1.125rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            box-shadow: 0 10px 40px rgba(35, 134, 54, 0.4);
+            text-decoration: none;
+        }
+
+        .join-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 20px 60px rgba(35, 134, 54, 0.5);
+        }
+
+        .join-btn i {
+            font-size: 1.25rem;
+        }
+
+        .join-features {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        .join-feature {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .join-feature i {
+            color: var(--secondary-color);
+        }
+
+        /* ============================================
+           模态框
+        ============================================ */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(20px);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            width: 100%;
+            max-width: 900px;
+            max-height: 85vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transform: scale(0.9) translateY(30px);
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 30px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            font-size: 1.35rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .modal-close {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: none;
+            background: var(--bg-color);
+            color: var(--text-color);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+        }
+
+        .modal-close:hover {
+            background: var(--accent-color);
+            color: white;
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .modal-body iframe {
+            width: 100%;
+            height: 100%;
+            min-height: 600px;
+            border: none;
+        }
+
+        /* ============================================
+           响应式
+        ============================================ */
+        @media (max-width: 900px) {
+            .scroll-indicator {
+                right: 20px;
+            }
+
+            .about-section .section-content,
+            .founder-section .section-content,
+            .thanks-section .section-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .about-visual {
+                height: 250px;
+            }
+
+            .about-logo {
+                width: 150px;
+                height: 150px;
+                font-size: 3.5rem;
+            }
+
+            .founder-card {
+                width: 280px;
+                height: 350px;
+            }
+
+            .founder-info h3 {
+                font-size: 2rem;
+            }
+
+            .team-grid,
+            .repo-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .join-section h2 {
+                font-size: 2.5rem;
+            }
+
+            .join-features {
+                flex-direction: column;
+                gap: 20px;
+                align-items: center;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .hero-stats {
+                flex-direction: column;
+                gap: 30px;
+            }
+
+            .scroll-indicator {
+                display: none;
+            }
+        }
+    </style>
 </head>
 <body>
     <div id="nav-placeholder"></div>
 
-    <main class="content">
-        <h1 class="page-title">我们的团队</h1>
+    <div class="page-container">
+        <!-- 滚动指示器 -->
+        <div class="scroll-indicator">
+            <div class="scroll-dot active" data-section="0"></div>
+            <div class="scroll-dot" data-section="1"></div>
+            <div class="scroll-dot" data-section="2"></div>
+            <div class="scroll-dot" data-section="3"></div>
+            <div class="scroll-dot" data-section="4"></div>
+            <div class="scroll-dot" data-section="5"></div>
+            <div class="scroll-dot" data-section="6"></div>
+        </div>
 
-        <div class="masonry-grid">
-            <!-- 关于工作室 - 大卡片 -->
-            <div class="masonry-item wide">
-                <h2 style="margin: 0 0 16px 0; font-size: 1.25rem; font-weight: 600;">
-                    <i class="fas fa-building" style="color: var(--primary-color); margin-right: 8px;"></i>
-                    关于 Ethernos Studio
-                </h2>
-                <p style="color: var(--text-muted); line-height: 1.7;">
-                    Ethernos Studio 是一个充满活力的创新工作室，虽然当前规模精干，但我们拥有明确的发展愿景和强大的技术实力。我们相信小团队也能创造大价值。
-                </p>
-                <div style="margin-top: 16px; display: flex; gap: 24px;">
-                    <div>
-                        <div style="font-size: 1.5rem; font-weight: 600; color: var(--text-color);">5+</div>
-                        <div style="font-size: 0.875rem; color: var(--text-muted);">开源项目</div>
+        <!-- 滚动提示 -->
+        <div class="page-hint" id="pageHint">
+            <span class="page-hint-text">向下滚动</span>
+            <div class="page-hint-arrow"></div>
+        </div>
+
+        <!-- 第1页：Hero -->
+        <section class="section hero-section active" data-index="0">
+            <div class="section-bg gradient-bg"></div>
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <i class="fas fa-users"></i>
+                    认识我们的团队
+                </div>
+                <h1 class="hero-title">Ethernos Studio</h1>
+                <p class="hero-subtitle">一个充满活力的创新工作室，用代码构建未来<br>我们相信小团队也能创造大价值</p>
+                <div class="hero-stats">
+                    <div class="hero-stat">
+                        <div class="hero-stat-number">5+</div>
+                        <div class="hero-stat-label">开源项目</div>
                     </div>
-                    <div>
-                        <div style="font-size: 1.5rem; font-weight: 600; color: var(--text-color);">2024</div>
-                        <div style="font-size: 0.875rem; color: var(--text-muted);">成立年份</div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-number">2024</div>
+                        <div class="hero-stat-label">成立年份</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-number">∞</div>
+                        <div class="hero-stat-label">创新可能</div>
                     </div>
                 </div>
             </div>
+        </section>
 
-            <!-- 工作室成员 -->
-            <div class="masonry-item wide" style="grid-row: span 2;">
-                <h2 style="margin: 0 0 20px 0; font-size: 1.125rem; font-weight: 600;">
-                    <i class="fas fa-users" style="color: var(--primary-color); margin-right: 8px;"></i>
-                    工作室成员
-                </h2>
-                <div style="display: flex; flex-direction: column; gap: 16px;">
-                    <!-- dhjs0000 - 创始人 -->
-                    <div style="display: flex; align-items: center; gap: 16px; padding: 16px; background: var(--bg-secondary); border-radius: 8px;">
-                        <i class="fas fa-user-circle" style="font-size: 3rem; color: var(--primary-color);"></i>
-                        <div style="flex: 1;">
-                            <h3 style="margin: 0 0 4px 0; font-size: 1rem;">dhjs0000</h3>
-                            <p style="margin: 0 0 4px 0; font-size: 0.75rem; color: var(--primary-color); font-weight: 500;">创始人</p>
-                            <p style="margin: 0; font-size: 0.75rem; color: var(--text-muted);">Ethernos Studio 创始人，负责整体战略规划与技术架构设计。</p>
-                        </div>
-                        <a href="https://github.com/dhjs0000" class="button outline" style="padding: 6px 12px; font-size: 0.75rem;">
-                            <i class="fab fa-github"></i>
-                        </a>
+        <!-- 第2页：关于工作室 -->
+        <section class="section about-section" data-index="1">
+            <div class="section-bg gradient-bg">
+                <div class="grid-overlay"></div>
+            </div>
+            <div class="section-content">
+                <div class="about-visual">
+                    <div class="about-orbit"></div>
+                    <div class="about-logo">
+                        <i class="fas fa-building"></i>
                     </div>
-                    <!-- ywhdzrb - 开发者 -->
-                    <div style="display: flex; align-items: center; gap: 16px; padding: 16px; background: var(--bg-secondary); border-radius: 8px;">
-                        <i class="fas fa-user-circle" style="font-size: 3rem; color: var(--secondary-color);"></i>
-                        <div style="flex: 1;">
-                            <h3 style="margin: 0 0 4px 0; font-size: 1rem;">ywhdzrb</h3>
-                            <p style="margin: 0 0 4px 0; font-size: 0.75rem; color: var(--secondary-color); font-weight: 500;">开发者</p>
-                            <p style="margin: 0; font-size: 0.75rem; color: var(--text-muted);"></p>
+                </div>
+                <div class="about-text">
+                    <h2>关于工作室</h2>
+                    <p>Ethernos Studio 是一个充满活力的创新工作室，虽然当前规模精干，但我们拥有明确的发展愿景和强大的技术实力。</p>
+                    <div class="about-features">
+                        <div class="about-feature">
+                            <i class="fas fa-rocket"></i>
+                            <span>追求极致的技术创新</span>
                         </div>
-                        <a href="https://github.com/ywhdzrb" class="button outline" style="padding: 6px 12px; font-size: 0.75rem;">
-                            <i class="fab fa-github"></i>
-                        </a>
-                    </div>
-                    <!-- toryalaska - 其他 -->
-                    <div style="display: flex; align-items: center; gap: 16px; padding: 16px; background: var(--bg-secondary); border-radius: 8px;">
-                        <i class="fas fa-user-circle" style="font-size: 3rem; color: var(--text-muted);"></i>
-                        <div style="flex: 1;">
-                            <h3 style="margin: 0 0 4px 0; font-size: 1rem;">toryalaska</h3>
-                            <p style="margin: 0 0 4px 0; font-size: 0.75rem; color: var(--text-muted); font-weight: 500;">其他</p>
-                            <p style="margin: 0; font-size: 0.75rem; color: var(--text-muted);">工作室贡献者，提供支持与帮助。</p>
+                        <div class="about-feature">
+                            <i class="fas fa-code"></i>
+                            <span>开源驱动的开发理念</span>
+                        </div>
+                        <div class="about-feature">
+                            <i class="fas fa-users"></i>
+                            <span>协作共赢的社区文化</span>
+                        </div>
+                        <div class="about-feature">
+                            <i class="fas fa-lightbulb"></i>
+                            <span>持续探索的未来愿景</span>
                         </div>
                     </div>
                 </div>
             </div>
+        </section>
 
-            <!-- 加入我们 -->
-            <div class="masonry-item">
-                <h2 style="margin: 0 0 16px 0; font-size: 1.125rem; font-weight: 600;">
-                    <i class="fas fa-users" style="color: var(--secondary-color); margin-right: 8px;"></i>
-                    加入我们
-                </h2>
-                <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.875rem; color: var(--text-muted);">
-                    <li style="padding: 8px 0; border-bottom: 1px solid var(--border-color);">
-                        <i class="fas fa-check" style="color: var(--secondary-color); margin-right: 8px;"></i>
-                        热爱技术创新
-                    </li>
-                    <li style="padding: 8px 0; border-bottom: 1px solid var(--border-color);">
-                        <i class="fas fa-check" style="color: var(--secondary-color); margin-right: 8px;"></i>
-                        扎实的编程基础
-                    </li>
-                    <li style="padding: 8px 0;">
-                        <i class="fas fa-check" style="color: var(--secondary-color); margin-right: 8px;"></i>
-                        良好的沟通能力
-                    </li>
-                </ul>
-                <div style="text-align: center; margin-top: 16px;">
-                    <a href="mailto:3110197220@qq.com" class="button">
-                        <i class="fas fa-envelope"></i> 联系我们
+        <!-- 第3页：创始人 -->
+        <section class="section founder-section" data-index="2">
+            <div class="section-bg gradient-bg"></div>
+            <div class="section-content">
+                <div class="founder-card">
+                    <div class="founder-avatar-wrapper">
+                        <div class="founder-glow"></div>
+                        <div class="founder-avatar">
+                            <i class="fas fa-crown"></i>
+                        </div>
+                        <div class="founder-name-card">
+                            <h3>dhjs0000</h3>
+                            <span class="role">创始人</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="founder-info">
+                    <h2>创始人</h2>
+                    <h3>dhjs0000</h3>
+                    <p>工作室创始人，负责整体战略规划与技术架构设计。主导开发了 Cavvy 编程语言和 VSENV 开发环境，致力于推动开源技术创新。</p>
+                    <div class="founder-projects">
+                        <div class="project-tag">
+                            <i class="fas fa-code"></i>
+                            Cavvy 编程语言
+                        </div>
+                        <div class="project-tag">
+                            <i class="fas fa-terminal"></i>
+                            VSENV 开发环境
+                        </div>
+                        <div class="project-tag">
+                            <i class="fas fa-cube"></i>
+                            系统工具
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 第4页：团队成员 -->
+        <section class="section team-section" data-index="3">
+            <div class="section-bg gradient-bg">
+                <div class="grid-overlay"></div>
+            </div>
+            <div class="section-content">
+                <h2>核心成员</h2>
+                <p class="subtitle">与我们并肩作战的伙伴们</p>
+                <div class="team-grid">
+                    <div class="team-member">
+                        <div class="team-member-avatar">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <h4>ywhdzrb</h4>
+                        <span class="role">开发者</span>
+                        <p>核心开发成员，参与多个开源项目的开发与维护，专注于代码质量与工程实践。</p>
+                    </div>
+                    <div class="team-member">
+                        <div class="team-member-avatar">
+                            <i class="fas fa-hands-helping"></i>
+                        </div>
+                        <h4>toryalaska</h4>
+                        <span class="role">贡献者</span>
+                        <p>工作室贡献者，提供支持与帮助，积极参与社区建设与项目推广。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 第5页：开源贡献 -->
+        <section class="section opensource-section" data-index="4">
+            <div class="section-bg gradient-bg"></div>
+            <div class="section-content">
+                <div class="opensource-icon">
+                    <i class="fas fa-code-branch"></i>
+                </div>
+                <h2>开源贡献者</h2>
+                <p>感谢所有为 Ethernos Studio 开源项目做出贡献的开发者！<br>您的每一份贡献都推动着技术创新。</p>
+                <div class="repo-cards">
+                    <a href="https://github.com/cavvy-lang/cavvy" class="repo-card" target="_blank">
+                        <div class="repo-card-header">
+                            <div class="repo-icon">
+                                <i class="fab fa-github"></i>
+                            </div>
+                            <h4>Cavvy</h4>
+                        </div>
+                        <p>Cavvy 编程语言项目，一个现代化、高性能的编程语言实现。</p>
+                    </a>
+                    <a href="https://github.com/Ethernos-Studio/vsenv" class="repo-card" target="_blank">
+                        <div class="repo-card-header">
+                            <div class="repo-icon">
+                                <i class="fab fa-github"></i>
+                            </div>
+                            <h4>VSENV</h4>
+                        </div>
+                        <p>VSENV 开发环境，为开发者提供便捷的 Visual Studio 环境配置工具。</p>
                     </a>
                 </div>
             </div>
+        </section>
 
-            <!-- 开源贡献者 -->
-            <div class="masonry-item wide">
-                <h2 style="margin: 0 0 16px 0; font-size: 1.125rem; font-weight: 600;">
-                    <i class="fas fa-code-branch" style="color: var(--primary-color); margin-right: 8px;"></i>
-                    开源贡献者
-                </h2>
-                <p style="color: var(--text-muted); margin: 0 0 16px 0;">
-                    感谢所有为 Ethernos Studio 开源项目做出贡献的开发者！您的每一份贡献都推动着技术创新。
-                </p>
-                <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-                    <a href="https://github.com/dhjs0000/bcc/graphs/contributors" class="button outline">
-                        <i class="fab fa-github"></i> BCC
-                    </a>
-                    <a href="https://github.com/dhjs0000/Blender-VMT-Remastered/graphs/contributors" class="button outline">
-                        <i class="fab fa-github"></i> VMT
-                    </a>
+        <!-- 第6页：鸣谢 -->
+        <section class="section thanks-section" data-index="5">
+            <div class="section-bg gradient-bg">
+                <div class="grid-overlay"></div>
+            </div>
+            <div class="section-content">
+                <div class="thanks-block sponsor">
+                    <div class="thanks-header">
+                        <div class="thanks-icon">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <h3>赞助鸣谢</h3>
+                    </div>
+                    <div class="thanks-list" id="sponsorThanks">
+                        <div class="thanks-item">加载中...</div>
+                    </div>
+                </div>
+                <div class="thanks-block special">
+                    <div class="thanks-header">
+                        <div class="thanks-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <h3>特别鸣谢</h3>
+                    </div>
+                    <div class="thanks-list" id="specialThanks">
+                        <div class="thanks-item">加载中...</div>
+                    </div>
                 </div>
             </div>
+        </section>
 
-            <!-- 赞助鸣谢 -->
-            <div class="masonry-item">
-                <h2 style="margin: 0 0 16px 0; font-size: 1.125rem; font-weight: 600;">
-                    <i class="fas fa-heart" style="color: #f78166; margin-right: 8px;"></i>
-                    赞助鸣谢
-                </h2>
-                <p style="font-size: 0.875rem; color: var(--text-muted); margin: 0 0 16px 0;">
-                    感谢在爱发电平台上支持我们的朋友们！
-                </p>
-                <div id="sponsor-thanks" style="font-size: 0.875rem; color: var(--text-muted);">
-                    <p>正在加载赞助名单...</p>
+        <!-- 第7页：加入我们 -->
+        <section class="section join-section" data-index="6">
+            <div class="section-bg gradient-bg"></div>
+            <div class="section-content">
+                <div class="join-badge">
+                    <i class="fas fa-plus"></i>
+                    开放招募中
+                </div>
+                <h2>加入我们</h2>
+                <p>我们正在寻找能长期参与代码贡献、技术文档编写或硬件测试的协作者。<br>如果你热爱技术，渴望创造，欢迎加入 Ethernos Studio。</p>
+                <button class="join-btn" onclick="openJoinModal()">
+                    <i class="fas fa-paper-plane"></i>
+                    立即申请
+                </button>
+                <div class="join-features">
+                    <div class="join-feature">
+                        <i class="fas fa-check-circle"></i>
+                        <span>远程协作</span>
+                    </div>
+                    <div class="join-feature">
+                        <i class="fas fa-check-circle"></i>
+                        <span>开源项目</span>
+                    </div>
+                    <div class="join-feature">
+                        <i class="fas fa-check-circle"></i>
+                        <span>技术成长</span>
+                    </div>
                 </div>
             </div>
+        </section>
+    </div>
 
-            <!-- 特别鸣谢 -->
-            <div class="masonry-item">
-                <h2 style="margin: 0 0 16px 0; font-size: 1.125rem; font-weight: 600;">
-                    <i class="fas fa-star" style="color: #ffc107; margin-right: 8px;"></i>
-                    特别鸣谢
-                </h2>
-                <p style="font-size: 0.75rem; color: var(--text-muted); margin: 0 0 8px 0;">（排名不分先后）</p>
-                <div id="special-thanks" style="font-size: 0.875rem; color: var(--text-muted);">
-                    <p>正在加载...</p>
-                </div>
+    <!-- 申请表单模态框 -->
+    <div class="modal-overlay" id="joinModal" onclick="closeJoinModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3><i class="fas fa-users" style="color: var(--secondary-color);"></i> 加入 Ethernos Studio</h3>
+                <button class="modal-close" onclick="closeJoinModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <iframe src="https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=DQSIkWdsW0yxEjajBLZtrQAAAAAAAAAAAAO__Tb7ccFUNTMwUEpQUEJZUDJTNFU5RlZGMEVXVEU5MC4u&embed=true"></iframe>
             </div>
         </div>
-    </main>
-
-    <footer class="footer">
-        <div class="footer-container">
-            <div class="footer-links">
-                <div class="footer-section">
-                    <h3>项目</h3>
-                    <a href="https://ethernos.cn/bccWeb/">BCC语言</a>
-                </div>
-                <div class="footer-section">
-                    <h3>资源</h3>
-                    <a href="downloads.html">软件下载</a>
-                    <a href="tools.html">开发工具</a>
-                </div>
-                <div class="footer-section">
-                    <h3>服务</h3>
-                    <a href="blog.html">技术博客</a>
-                    <a href="questions.html">技术支持</a>
-                </div>
-                <div class="footer-section">
-                    <h3>关于</h3>
-                    <a href="team.html">团队</a>
-                    <a href="contact.html">联系我们</a>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>Copyright (C) 2026 Ethernos</p>
-                <p>本程序为自由软件，在自由软件联盟发布的GNU通用公共许可协议的约束下，你可以对其进行再发布及修改。协议版本为第三版或（随你）更新的版本。</p>
-                <p>我们希望发布的这个网站有用，但不保证，甚至不保证它有经济价值和适合特定用途。详情参见GNU通用公共许可协议。</p>
-                
-                <p>This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</p>
-                <p>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</p>
-                <p>You should have received a copy of the GNU General Public License along with this program. If not, see <a href="https://www.gnu.org/licenses/">https://www.gnu.org/licenses/</a>.</p>
-            </div>
-        </div>
-    </footer>
+    </div>
 
     <script src="script.js"></script>
     <script src="cookie-consent.js"></script>
+    <script>
+        // ============================================
+        // 全屏滚动控制
+        // ============================================
+        let currentSection = 0;
+        const sections = document.querySelectorAll('.section');
+        const dots = document.querySelectorAll('.scroll-dot');
+        const totalSections = sections.length;
+        let isScrolling = false;
+        let scrollTimeout;
+
+        function goToSection(index) {
+            if (index < 0 || index >= totalSections || isScrolling) return;
+            
+            isScrolling = true;
+            
+            // 更新当前 section
+            sections.forEach((section, i) => {
+                section.classList.remove('active', 'prev');
+                if (i === index) {
+                    section.classList.add('active');
+                } else if (i < index) {
+                    section.classList.add('prev');
+                }
+            });
+
+            // 更新指示器
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
+
+            // 更新滚动提示
+            const hint = document.getElementById('pageHint');
+            if (index === totalSections - 1) {
+                hint.classList.add('hidden');
+            } else {
+                hint.classList.remove('hidden');
+            }
+
+            currentSection = index;
+
+            setTimeout(() => {
+                isScrolling = false;
+            }, 1000);
+        }
+
+        // 鼠标滚轮事件
+        window.addEventListener('wheel', (e) => {
+            if (isScrolling) return;
+            
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                if (e.deltaY > 0) {
+                    goToSection(currentSection + 1);
+                } else {
+                    goToSection(currentSection - 1);
+                }
+            }, 50);
+        }, { passive: true });
+
+        // 键盘事件
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowDown' || e.key === 'PageDown') {
+                e.preventDefault();
+                goToSection(currentSection + 1);
+            } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+                e.preventDefault();
+                goToSection(currentSection - 1);
+            } else if (e.key === 'Home') {
+                e.preventDefault();
+                goToSection(0);
+            } else if (e.key === 'End') {
+                e.preventDefault();
+                goToSection(totalSections - 1);
+            } else if (e.key === 'Escape') {
+                closeJoinModal();
+            }
+        });
+
+        // 点击指示器
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => goToSection(index));
+        });
+
+        // 触摸滑动支持
+        let touchStartY = 0;
+        let touchEndY = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartY = e.changedTouches[0].screenY;
+        }, { passive: true });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndY = e.changedTouches[0].screenY;
+            handleSwipe();
+        }, { passive: true });
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = touchStartY - touchEndY;
+            
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0) {
+                    goToSection(currentSection + 1);
+                } else {
+                    goToSection(currentSection - 1);
+                }
+            }
+        }
+
+        // ============================================
+        // 模态框控制
+        // ============================================
+        function openJoinModal() {
+            document.getElementById('joinModal').classList.add('active');
+        }
+
+        function closeJoinModal(event) {
+            if (!event || event.target.id === 'joinModal') {
+                document.getElementById('joinModal').classList.remove('active');
+            }
+        }
+
+        // ============================================
+        // 加载鸣谢名单
+        // ============================================
+        async function loadAcknowledgments() {
+            const sponsorThanks = document.getElementById('sponsorThanks');
+            const specialThanks = document.getElementById('specialThanks');
+
+            try {
+                const response = await fetch('Acknowledgments.json');
+                const data = await response.json();
+
+                if (sponsorThanks && data.sponsor) {
+                    const sortedSponsors = data.sponsor.sort((a, b) => parseInt(b.value) - parseInt(a.value));
+                    if (sortedSponsors.length > 0) {
+                        sponsorThanks.innerHTML = sortedSponsors.map(s => 
+                            `<div class="thanks-item">${s.name}</div>`
+                        ).join('');
+                    } else {
+                        sponsorThanks.innerHTML = '<div class="thanks-item">暂无赞助信息</div>';
+                    }
+                }
+
+                if (specialThanks && data.special) {
+                    if (data.special.length > 0) {
+                        specialThanks.innerHTML = data.special.map(name => 
+                            `<div class="thanks-item">${name}</div>`
+                        ).join('');
+                    } else {
+                        specialThanks.innerHTML = '<div class="thanks-item">暂无特别鸣谢</div>';
+                    }
+                }
+            } catch (error) {
+                console.error('加载鸣谢名单失败:', error);
+                if (sponsorThanks) sponsorThanks.innerHTML = '<div class="thanks-item">加载失败</div>';
+                if (specialThanks) specialThanks.innerHTML = '<div class="thanks-item">加载失败</div>';
+            }
+        }
+
+        // ============================================
+        // 页面加载完成后执行
+        // ============================================
+        document.addEventListener('DOMContentLoaded', () => {
+            loadAcknowledgments();
+        });
+    </script>
 </body>
 </html>
