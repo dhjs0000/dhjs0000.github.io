@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AMA: 联想运动架构 - Apocrypha</title>
+    <meta name="description" content="本文提出联想运动架构(AMA)，一种拒绝单一整体函数逼近的人工智能概念框架，转而采用六层神经联邦制。">
+    <meta name="keywords" content="AMA, 联想运动架构, 人工智能, 神经联邦制">
+    <meta name="author" content="dhjs0000">
+    <meta name="robots" content="index, follow">
+    <meta name="date" content="2026-03-30">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="AMA: 联想运动架构">
+    <meta property="og:description" content="本文提出联想运动架构(AMA)，一种拒绝单一整体函数逼近的人工智能概念框架，转而采用六层神经联邦制。">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://ethernos.cn/Apocrypha/papers/AP2026033002.html">
+    <meta property="article:published_time" content="2026-03-30">
+    <meta property="article:author" content="dhjs0000">
+    <meta property="article:section" content="计算机科学">
+    <meta property="article:tag" content="AMA">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="AMA: 联想运动架构">
+    <meta name="twitter:description" content="本文提出联想运动架构(AMA)，一种拒绝单一整体函数逼近的人工智能概念框架。">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://ethernos.cn/Apocrypha/papers/AP2026033002.html">
+    
+    <!-- Schema.org JSON-LD -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "ScholarlyArticle",
+        "headline": "AMA: 联想运动架构",
+        "description": "本文提出联想运动架构(AMA)，一种拒绝单一整体函数逼近的人工智能概念框架，转而采用六层神经联邦制。",
+        "author": {
+            "@type": "Person",
+            "name": "dhjs0000"
+        },
+        "datePublished": "2026-03-30",
+        "publisher": {
+            "@type": "Organization",
+            "name": "Apocrypha"
+        },
+        "keywords": "AMA, 联想运动架构, 人工智能, 神经联邦制",
+        "inLanguage": "zh-CN",
+        "url": "https://ethernos.cn/Apocrypha/papers/AP2026033002.html"
+    }
+    </script>
+    
+    <style>
+        :root {
+            --text-primary: #1a1a1a;
+            --text-secondary: #4a4a4a;
+            --text-muted: #6b6b6b;
+            --border-color: #d1d1d1;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f8f8;
+            --link-color: #1a1a1a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-size: 16px;
+            line-height: 1.7;
+            color: var(--text-primary);
+            background-color: var(--bg-primary);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 24px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 32px;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            color: var(--text-primary);
+        }
+
+        .back-link::before {
+            content: "← ";
+        }
+
+        header {
+            margin-bottom: 48px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        h1 {
+            font-size: 1.75rem;
+            font-weight: 500;
+            line-height: 1.4;
+            margin-bottom: 16px;
+        }
+
+        .paper-meta {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .paper-meta p {
+            margin: 6px 0;
+        }
+
+        .paper-meta .label {
+            color: var(--text-muted);
+            margin-right: 8px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .abstract {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            text-align: justify;
+        }
+
+        .keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .keyword {
+            font-size: 0.875rem;
+            padding: 4px 12px;
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 3px;
+            color: var(--text-secondary);
+        }
+
+        .download-section {
+            background-color: var(--bg-secondary);
+            padding: 24px;
+            border-radius: 4px;
+            margin-bottom: 40px;
+        }
+
+        .download-list {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .download-item {
+            display: inline-block;
+        }
+
+        .download-link {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            text-decoration: none;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-primary);
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+
+        .download-link:hover {
+            background-color: var(--text-primary);
+            color: var(--bg-primary);
+            border-color: var(--text-primary);
+        }
+
+        .citation-box {
+            background-color: var(--bg-secondary);
+            padding: 20px;
+            border-radius: 4px;
+            font-family: "Courier New", monospace;
+            font-size: 0.875rem;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .disclaimer {
+            background-color: var(--bg-secondary);
+            border-left: 3px solid var(--text-primary);
+            padding: 16px 20px;
+            margin-bottom: 32px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        footer {
+            margin-top: 64px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        footer a {
+            color: var(--text-muted);
+            text-decoration: underline;
+        }
+
+        footer a:hover {
+            color: var(--text-primary);
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 40px 20px;
+            }
+
+            h1 {
+                font-size: 1.375rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-link">返回论文列表</a>
+
+        <div class="disclaimer">
+            <strong>声明：</strong>这不是一个真正的学术期刊，也不具备同行评审机制。这里存放的论文是作者完成但选择不投稿到正式期刊的作品。内容仅供存档和参考，不构成正式学术发表。
+        </div>
+
+        <header>
+            <h1>AMA: 联想运动架构</h1>
+            <div class="paper-meta">
+                <p><span class="label">作者:</span> dhjs0000</p>
+                <p><span class="label">日期:</span> 2026-03-30</p>
+                <p><span class="label">分类:</span> 计算机科学</p>
+            </div>
+        </header>
+
+        <div class="download-section">
+            <h2 class="section-title">下载</h2>
+            <ul class="download-list">
+                <li class="download-item">
+                    <a href="../assets/AP2026033002/paper.pdf" class="download-link" download>
+                        PDF
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">摘要</h2>
+            <p class="abstract">本文提出联想运动架构(AMA)，一种拒绝单一整体函数逼近的人工智能概念框架，转而采用六层神经联邦制。AMA借鉴脊椎动物神经生物学，将认知主权分布在不同的时间尺度上：从能够否决更高层级的毫秒级脊髓反射(L0)，到通过单流广播运作的秒级叙事意识(L5)。</p>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">关键词</h2>
+            <div class="keywords">
+                <span class="keyword">AMA</span>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">引用格式</h2>
+            <div class="citation-box">dhjs0000 (2026). AMA: 联想运动架构. Apocrypha.</div>
+        </div>
+
+        <footer>
+            <p><a href="../../team.html">返回团队页面</a></p>
+        </footer>
+    </div>
+</body>
+</html>
