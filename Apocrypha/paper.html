@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index, follow">
+    <title>论文详情 - Apocrypha</title>
+    <style>
+        :root {
+            --text-primary: #1a1a1a;
+            --text-secondary: #4a4a4a;
+            --text-muted: #6b6b6b;
+            --border-color: #d1d1d1;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f8f8;
+            --link-color: #1a1a1a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-size: 16px;
+            line-height: 1.7;
+            color: var(--text-primary);
+            background-color: var(--bg-primary);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 24px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 32px;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            color: var(--text-primary);
+        }
+
+        .back-link::before {
+            content: "← ";
+        }
+
+        header {
+            margin-bottom: 48px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        h1 {
+            font-size: 1.75rem;
+            font-weight: 500;
+            line-height: 1.4;
+            margin-bottom: 16px;
+        }
+
+        .paper-meta {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .paper-meta p {
+            margin: 6px 0;
+        }
+
+        .paper-meta .label {
+            color: var(--text-muted);
+            margin-right: 8px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .abstract {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            text-align: justify;
+        }
+
+        .keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .keyword {
+            font-size: 0.875rem;
+            padding: 4px 12px;
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 3px;
+            color: var(--text-secondary);
+        }
+
+        .download-section {
+            background-color: var(--bg-secondary);
+            padding: 24px;
+            border-radius: 4px;
+            margin-bottom: 40px;
+        }
+
+        .download-list {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .download-item {
+            display: inline-block;
+        }
+
+        .download-link {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            text-decoration: none;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-primary);
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+
+        .download-link:hover {
+            background-color: var(--text-primary);
+            color: var(--bg-primary);
+            border-color: var(--text-primary);
+        }
+
+        .citation-box {
+            background-color: var(--bg-secondary);
+            padding: 20px;
+            border-radius: 4px;
+            font-family: "Courier New", monospace;
+            font-size: 0.875rem;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .not-found {
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .not-found h2 {
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: 16px;
+        }
+
+        .not-found p {
+            color: var(--text-muted);
+        }
+
+        footer {
+            margin-top: 64px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        footer a {
+            color: var(--text-muted);
+            text-decoration: underline;
+        }
+
+        footer a:hover {
+            color: var(--text-primary);
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 40px 20px;
+            }
+
+            h1 {
+                font-size: 1.375rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-link">返回论文列表</a>
+
+        <div id="paperContent">
+            <!-- 论文内容将通过JavaScript动态加载 -->
+        </div>
+
+        <footer>
+            <p><a href="../team.html">返回团队页面</a></p>
+        </footer>
+    </div>
+
+    <script>
+        let papers = [];
+
+        async function loadPapers() {
+            try {
+                const response = await fetch('json/papers.json');
+                papers = await response.json();
+                renderPaper();
+            } catch (error) {
+                console.error('加载论文数据失败:', error);
+                document.getElementById('paperContent').innerHTML = `
+                    <div class="not-found">
+                        <h2>加载失败</h2>
+                        <p>无法加载论文数据，请稍后重试。</p>
+                    </div>
+                `;
+            }
+        }
+
+        function renderPaper() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const paperId = urlParams.get('id');
+
+            if (!paperId) {
+                document.getElementById('paperContent').innerHTML = `
+                    <div class="not-found">
+                        <h2>未指定论文</h2>
+                        <p>请从论文列表中选择一篇论文查看。</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const paper = papers.find(p => p.id === paperId);
+
+            if (!paper) {
+                document.getElementById('paperContent').innerHTML = `
+                    <div class="not-found">
+                        <h2>论文未找到</h2>
+                        <p>指定的论文不存在或已被移除。</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const citationText = generateCitation(paper);
+
+            document.getElementById('paperContent').innerHTML = `
+                <header>
+                    <h1>${paper.title}</h1>
+                    <div class="paper-meta">
+                        <p><span class="label">作者:</span> ${paper.authors.join(', ')}</p>
+                        <p><span class="label">日期:</span> ${paper.date}</p>
+                        ${paper.category ? `<p><span class="label">分类:</span> ${paper.category}</p>` : ''}
+                        ${paper.doi ? `<p><span class="label">DOI:</span> ${paper.doi}</p>` : ''}
+                    </div>
+                </header>
+
+                <div class="download-section">
+                    <h2 class="section-title">下载</h2>
+                    <ul class="download-list">
+                        ${paper.formats.map(format => `
+                            <li class="download-item">
+                                <a href="assets/${paper.id}/${format.file}" class="download-link" download>
+                                    ${format.type}
+                                </a>
+                            </li>
+                        `).join('')}
+                    </ul>
+                </div>
+
+                <div class="section">
+                    <h2 class="section-title">摘要</h2>
+                    <p class="abstract">${paper.abstract}</p>
+                </div>
+
+                ${paper.keywords && paper.keywords.length > 0 ? `
+                    <div class="section">
+                        <h2 class="section-title">关键词</h2>
+                        <div class="keywords">
+                            ${paper.keywords.map(kw => `<span class="keyword">${kw}</span>`).join('')}
+                        </div>
+                    </div>
+                ` : ''}
+
+                <div class="section">
+                    <h2 class="section-title">引用格式</h2>
+                    <div class="citation-box">${citationText}</div>
+                </div>
+            `;
+        }
+
+        function generateCitation(paper) {
+            const authors = paper.authors.join(', ');
+            const year = paper.date.split('-')[0];
+            return `${authors} (${year}). ${paper.title}. Apocrypha.`;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadPapers();
+        });
+    </script>
+</body>
+</html>

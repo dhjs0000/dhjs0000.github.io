@@ -1,0 +1,26 @@
+[
+    {
+        "id": "AP2026033001",
+        "title": "AMA: Associative Motor Architecture",
+        "authors": ["dhjs0000"],
+        "date": "2026-03-30",
+        "category": "计算机科学",
+        "abstract": "We present the Associative Motor Architecture (AMA), a conceptual framework for artificial intelligence that rejects monolithic function approximation in favor of six-layer neural federalism. Drawing from vertebrate neurobiology, AMA distributes cognitive sovereignty across distinct temporal scales: from millisecond-scale spinal reflexes (L0) capable of vetoing higher layers, to second-scale narrative consciousness (L5) operating via single-stream broadcasting.",
+        "keywords": ["AMA"],
+        "formats": [
+            {"type": "PDF", "file": "paper.pdf"}
+        ]
+    },
+    {
+        "id": "AP2026033002",
+        "title": "AMA: 联想运动架构",
+        "authors": ["dhjs0000"],
+        "date": "2026-03-30",
+        "category": "计算机科学",
+        "abstract": "本文提出联想运动架构(AMA)，一种拒绝单一整体函数逼近的人工智能概念框架，转而采用六层神经联邦制。AMA借鉴脊椎动物神经生物学，将认知主权分布在不同的时间尺度上：从能够否决更高层级的毫秒级脊髓反射(L0)，到通过单流广播运作的秒级叙事意识(L5)。",
+        "keywords": ["AMA"],
+        "formats": [
+            {"type": "PDF", "file": "paper.pdf"}
+        ]
+    }
+]

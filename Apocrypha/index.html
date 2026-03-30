@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Apocrypha - 存放未发表学术论文的存档空间。这不是一个真正的期刊，只是一个用来存放写了但不想发的论文的地方。">
+    <meta name="robots" content="index, follow">
+    <title>Apocrypha</title>
+    <style>
+        :root {
+            --text-primary: #1a1a1a;
+            --text-secondary: #4a4a4a;
+            --text-muted: #6b6b6b;
+            --border-color: #d1d1d1;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f8f8;
+            --link-color: #1a1a1a;
+            --link-hover: #000000;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-size: 16px;
+            line-height: 1.7;
+            color: var(--text-primary);
+            background-color: var(--bg-primary);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 24px;
+        }
+
+        header {
+            margin-bottom: 48px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 400;
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        .disclaimer {
+            background-color: var(--bg-secondary);
+            border-left: 3px solid var(--text-primary);
+            padding: 16px 20px;
+            margin-bottom: 48px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .paper-list {
+            list-style: none;
+        }
+
+        .paper-item {
+            padding: 24px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .paper-item:first-child {
+            padding-top: 0;
+        }
+
+        .paper-title {
+            font-size: 1.125rem;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .paper-title a {
+            color: var(--link-color);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s ease;
+        }
+
+        .paper-title a:hover {
+            border-bottom-color: var(--text-primary);
+        }
+
+        .paper-meta {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .paper-meta span {
+            margin-right: 16px;
+        }
+
+        .paper-abstract {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .paper-links {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .paper-link {
+            font-size: 0.875rem;
+            color: var(--text-primary);
+            text-decoration: none;
+            padding: 6px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+
+        .paper-link:hover {
+            background-color: var(--text-primary);
+            color: var(--bg-primary);
+            border-color: var(--text-primary);
+        }
+
+        .paper-link i {
+            margin-right: 6px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: var(--text-muted);
+        }
+
+        .empty-state p {
+            font-size: 1rem;
+        }
+
+        footer {
+            margin-top: 64px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        footer a {
+            color: var(--text-muted);
+            text-decoration: underline;
+        }
+
+        footer a:hover {
+            color: var(--text-primary);
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 40px 20px;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .paper-title {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Apocrypha</h1>
+            <p class="subtitle">Not a journal. Just a place for papers written but not published.</p>
+        </header>
+
+        <div class="disclaimer">
+            <strong>声明：</strong>这不是一个真正的学术期刊，也不具备同行评审机制。这里存放的论文是作者完成但选择不投稿到正式期刊的作品。内容仅供存档和参考，不构成正式学术发表。
+        </div>
+
+        <ul class="paper-list" id="paperList">
+            <!-- 论文列表将通过JavaScript动态加载 -->
+        </ul>
+
+        <footer>
+            <p><a href="../team.html">返回团队页面</a></p>
+        </footer>
+    </div>
+
+    <script>
+        let papers = [];
+
+        async function loadPapers() {
+            try {
+                const response = await fetch('json/papers.json');
+                papers = await response.json();
+                renderPapers();
+            } catch (error) {
+                console.error('加载论文数据失败:', error);
+                document.getElementById('paperList').innerHTML = `
+                    <li class="empty-state">
+                        <p>暂无论文存档</p>
+                    </li>
+                `;
+            }
+        }
+
+        function renderPapers() {
+            const paperList = document.getElementById('paperList');
+            
+            if (papers.length === 0) {
+                paperList.innerHTML = `
+                    <li class="empty-state">
+                        <p>暂无论文存档</p>
+                    </li>
+                `;
+                return;
+            }
+
+            paperList.innerHTML = papers.map(paper => `
+                <li class="paper-item">
+                    <h2 class="paper-title">
+                        <a href="paper.html?id=${paper.id}">${paper.title}</a>
+                    </h2>
+                    <div class="paper-meta">
+                        <span>${paper.authors.join(', ')}</span>
+                        <span>${paper.date}</span>
+                        ${paper.category ? `<span>${paper.category}</span>` : ''}
+                    </div>
+                    <p class="paper-abstract">${paper.abstract}</p>
+                    <div class="paper-links">
+                        ${paper.formats.map(format => `
+                            <a href="assets/${paper.id}/${format.file}" class="paper-link" download>
+                                ${format.type}
+                            </a>
+                        `).join('')}
+                        <a href="paper.html?id=${paper.id}" class="paper-link">
+                            查看详情
+                        </a>
+                    </div>
+                </li>
+            `).join('');
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadPapers();
+        });
+    </script>
+</body>
+</html>
