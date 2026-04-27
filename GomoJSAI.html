@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>五子棋 AI — 战术分析面板 [Debug]</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0f172a;
+            color: #e2e8f0;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            overflow: hidden;
+            height: 100vh;
+        }
+        .container {
+            display: flex;
+            height: 100vh;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .board-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        }
+        .board-wrapper {
+            position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        canvas {
+            display: block;
+            cursor: pointer;
+            background: #d4a574;
+        }
+        .board-controls {
+            margin-top: 16px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .btn {
+            padding: 8px 18px;
+            border: none;
+            border-radius: 6px;
+            background: #3b82f6;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+        .btn:hover { background: #2563eb; transform: translateY(-1px); }
+        .btn:active { transform: translateY(0); }
+        .btn.secondary { background: #475569; }
+        .btn.secondary:hover { background: #334155; }
+        .btn.danger { background: #ef4444; }
+        .btn.danger:hover { background: #dc2626; }
+        select {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid #475569;
+            background: #1e293b;
+            color: #e2e8f0;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .info-panel {
+            width: 420px;
+            background: #1e293b;
+            border-left: 1px solid #334155;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .panel-header {
+            padding: 20px;
+            background: #0f172a;
+            border-bottom: 2px solid #3b82f6;
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .panel-header::before {
+            content: "◉";
+            color: #3b82f6;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .status-bar {
+            padding: 12px 20px;
+            background: #1e293b;
+            border-bottom: 1px solid #334155;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+        }
+        .turn-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .stone-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+        .stone-dot.black { background: #1a1a1a; }
+        .stone-dot.white { background: #f8fafc; }
+        .thinking-log {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 20px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+        .log-entry {
+            margin-bottom: 6px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            border-left: 3px solid transparent;
+            animation: fadeIn 0.3s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        .log-entry.system { color: #94a3b8; border-left-color: #64748b; }
+        .log-entry.think { color: #cbd5e1; border-left-color: #3b82f6; background: rgba(59,130,246,0.05); }
+        .log-entry.warn { color: #fbbf24; border-left-color: #f59e0b; background: rgba(245,158,11,0.05); }
+        .log-entry.critical { color: #f87171; border-left-color: #ef4444; background: rgba(239,68,68,0.05); font-weight: bold; }
+        .log-entry.success { color: #34d399; border-left-color: #10b981; background: rgba(16,185,129,0.05); }
+        .candidates-section {
+            padding: 16px 20px;
+            border-top: 1px solid #334155;
+            background: #0f172a;
+            max-height: 280px;
+            overflow-y: auto;
+        }
+        .section-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #94a3b8;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .candidate-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 10px;
+            margin-bottom: 4px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-family: monospace;
+            transition: background 0.2s;
+        }
+        .candidate-row:hover { background: rgba(59,130,246,0.1); }
+        .candidate-row.best {
+            background: rgba(16,185,129,0.15);
+            border: 1px solid rgba(16,185,129,0.3);
+            color: #34d399;
+            font-weight: 600;
+        }
+        .candidate-row .coord { width: 50px; color: #94a3b8; }
+        .candidate-row .score { width: 70px; text-align: right; }
+        .candidate-row .pattern { flex: 1; text-align: center; color: #64748b; font-size: 11px; }
+        .score-bar {
+            width: 60px;
+            height: 4px;
+            background: #334155;
+            border-radius: 2px;
+            overflow: hidden;
+            margin-left: 8px;
+        }
+        .score-bar-fill {
+            height: 100%;
+            background: #3b82f6;
+            border-radius: 2px;
+            transition: width 0.3s;
+        }
+        .candidate-row.best .score-bar-fill { background: #10b981; }
+        .final-decision {
+            padding: 16px 20px;
+            background: linear-gradient(90deg, rgba(59,130,246,0.1) 0%, transparent 100%);
+            border-top: 2px solid #3b82f6;
+        }
+        .decision-title {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-bottom: 6px;
+        }
+        .decision-move {
+            font-size: 24px;
+            font-weight: 700;
+            color: #60a5fa;
+            font-family: monospace;
+        }
+        .decision-reason {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-top: 4px;
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+        .game-over-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(15,23,42,0.9);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        .game-over-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        .game-over-text {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        .game-over-text.win { color: #34d399; }
+        .game-over-text.lose { color: #f87171; }
+        .game-over-text.draw { color: #fbbf24; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="board-section">
+        <div class="board-wrapper">
+            <canvas id="board" width="600" height="600"></canvas>
+            <div class="game-over-overlay" id="gameOver">
+                <div class="game-over-text" id="gameOverText">游戏结束</div>
+                <button class="btn" onclick="game.restart()">再来一局</button>
+            </div>
+        </div>
+        <div class="board-controls">
+            <button class="btn" onclick="game.restart()">🔄 重新开始</button>
+            <button class="btn secondary" onclick="game.undo()">↩️ 悔棋</button>
+            <select id="aiDepth" onchange="game.setDepth(this.value)">
+                <option value="1">AI 深度: 1层 (快)</option>
+                <option value="2" selected>AI 深度: 2层 (标准)</option>
+                <option value="3">AI 深度: 3层 (地狱)</option>
+            </select>
+            <select id="aiTopK" onchange="game.setTopK(this.value)">
+                <option value="5">候选: Top 5</option>
+                <option value="10" selected>候选: Top 10</option>
+                <option value="15">候选: Top 15</option>
+            </select>
+            <button class="btn secondary" onclick="game.toggleSide()">⚫/⚪ 换边</button>
+        </div>
+        <div style="margin-top:8px;color:#64748b;font-size:12px;">
+            点击棋盘落子 · 黑棋先手 · 五连获胜 · F12看控制台调试
+        </div>
+    </div>
+    
+    <div class="info-panel">
+        <div class="panel-header">AI 战术分析面板</div>
+        <div class="status-bar">
+            <div class="turn-indicator">
+                <div class="stone-dot black" id="turnDot"></div>
+                <span id="turnText">黑棋回合 (玩家)</span>
+            </div>
+            <span id="moveCount">步数: 0</span>
+        </div>
+        
+        <div class="thinking-log" id="thinkingLog">
+            <div class="log-entry system">等待游戏开始... 按 F12 打开控制台查看 AI 调试日志</div>
+        </div>
+        
+        <div class="candidates-section" id="candidatesSection" style="display:none;">
+            <div class="section-title">候选点威胁评估 (Raw Score)</div>
+            <div id="candidatesList"></div>
+        </div>
+        
+        <div class="final-decision" id="finalDecision" style="display:none;">
+            <div class="decision-title">最终决策</div>
+            <div class="decision-move" id="decisionMove">--</div>
+            <div class="decision-reason" id="decisionReason">--</div>
+        </div>
+    </div>
+</div>
+
+<script>
+// ==================== 五子棋 AI 核心引擎（Debug + 急诊修复版） ====================
+class GomokuAI {
+    constructor(size=15) {
+        this.size = size;
+        this.board = Array(size).fill().map(() => Array(size).fill(0));
+        this.dirs = [[0,1], [1,0], [1,1], [1,-1]];
+        this.SCORES = {
+            five: 100000,
+            open_four: 10000,
+            closed_four: 1000,
+            open_three: 500,
+            closed_three: 100,
+            open_two: 50,
+            closed_two: 10,
+        };
+        this.debugMoveCount = 0;
+    }
+
+    // 硬校验：模拟落子后是否立即五连（严格连续扫描）
+    isWinningMove(r, c, color) {
+        if (this.board[r][c] !== 0) return false;
+        this.board[r][c] = color;
+        let won = false;
+        for (let [dr, dc] of this.dirs) {
+            let cnt = 1;
+            let nr = r + dr, nc = c + dc;
+            while (nr >= 0 && nr < this.size && nc >= 0 && nc < this.size && this.board[nr][nc] === color) {
+                cnt++; nr += dr; nc += dc;
+            }
+            nr = r - dr; nc = c - dc;
+            while (nr >= 0 && nr < this.size && nc >= 0 && nc < this.size && this.board[nr][nc] === color) {
+                cnt++; nr -= dr; nc -= dc;
+            }
+            if (cnt >= 5) { won = true; break; }
+        }
+        this.board[r][c] = 0;
+        return won;
+    }
+
+    // 全局扫描：某颜色是否有任何一步能连五
+    findAnyWinningMove(color) {
+        for (let r=0; r<this.size; r++) {
+            for (let c=0; c<this.size; c++) {
+                if (this.board[r][c] === 0 && this.isWinningMove(r, c, color)) {
+                    return [r, c];
+                }
+            }
+        }
+        return null;
+    }
+
+    getPattern(r, c, dr, dc, color) {
+        let cntPos = 0, nr = r + dr, nc = c + dc;
+        while (nr >= 0 && nr < this.size && nc >= 0 && nc < this.size && this.board[nr][nc] === color) {
+            cntPos++; nr += dr; nc += dc;
+        }
+        let openPos = (nr >= 0 && nr < this.size && nc >= 0 && nc < this.size && this.board[nr][nc] === 0);
+
+        let cntNeg = 0; nr = r - dr; nc = c - dc;
+        while (nr >= 0 && nr < this.size && nc >= 0 && nc < this.size && this.board[nr][nc] === color) {
+            cntNeg++; nr -= dr; nc -= dc;
+        }
+        let openNeg = (nr >= 0 && nr < this.size && nc >= 0 && nc < this.size && this.board[nr][nc] === 0);
+
+        let total = cntPos + cntNeg + 1;
+
+        if (total >= 5) return ["five", this.SCORES.five];
+        if (total === 4) {
+            if (openPos && openNeg) return ["open_four", this.SCORES.open_four];
+            else if (openPos || openNeg) return ["closed_four", this.SCORES.closed_four];
+            else return ["dead_four", 0];
+        }
+        if (total === 3) {
+            if (openPos && openNeg) return ["open_three", this.SCORES.open_three];
+            else if (openPos || openNeg) return ["closed_three", this.SCORES.closed_three];
+            else return ["dead_three", 0];
+        }
+        if (total === 2) {
+            if (openPos && openNeg) return ["open_two", this.SCORES.open_two];
+            else if (openPos || openNeg) return ["closed_two", this.SCORES.closed_two];
+            else return ["dead_two", 0];
+        }
+        return ["none", 0];
+    }
+
+    getMoveScore(r, c, color) {
+        if (this.board[r][c] !== 0) return -1;
+        
+        // 1. 直接连五（硬校验）
+        if (this.isWinningMove(r, c, color)) return this.SCORES.five;
+
+        this.board[r][c] = color;
+        let patterns = [];
+        let maxSingle = 0;
+        for (let [dr, dc] of this.dirs) {
+            let [p, s] = this.getPattern(r, c, dr, dc, color);
+            patterns.push(p);
+            maxSingle = Math.max(maxSingle, s);
+        }
+        this.board[r][c] = 0;
+
+        // 2. 组合必杀型
+        let openFour = patterns.filter(p => p === "open_four").length;
+        let closedFour = patterns.filter(p => p === "closed_four").length;
+        let openThree = patterns.filter(p => p === "open_three").length;
+
+        if (openFour >= 1) return this.SCORES.five;        // 活四 = 必胜
+        if (closedFour >= 2) return 90000;                  // 双冲四
+        if (closedFour >= 1 && openThree >= 1) return 80000; // 四三杀
+        if (openThree >= 2) return 70000;                   // 双活三
+
+        return maxSingle;
+    }
+
+    // 启发式：防守绝对优先
+    heuristic(r, c, myColor, oppColor) {
+        let attack = this.getMoveScore(r, c, myColor);   // 我下这里的价值
+        let defense = this.getMoveScore(r, c, oppColor); // 对手下这里的价值（我需要挡）
+
+        // 控制台调试：当发现极高威胁时输出
+        if (defense >= this.SCORES.five || attack >= this.SCORES.five) {
+            console.log(`  💣 heuristic(${this.coordStr(r,c)}): attack=${attack}, defense=${defense}`);
+        }
+
+        // 敌方连五 > 己方连五 > 敌方活四 > 己方活四
+        if (defense >= this.SCORES.five) return defense + 10000;  // 必须挡
+        if (attack >= this.SCORES.five) return attack + 5000;     // 自己赢
+        if (defense >= this.SCORES.open_four) return defense + 3000;
+        if (attack >= this.SCORES.open_four) return attack + 2000;
+
+        return attack + defense * 1.2;
+    }
+
+    getCandidates(radius=2) {
+        let hasStone = false;
+        outer: for (let r=0; r<this.size; r++) {
+            for (let c=0; c<this.size; c++) {
+                if (this.board[r][c] !== 0) { hasStone = true; break outer; }
+            }
+        }
+        if (!hasStone) return [[Math.floor(this.size/2), Math.floor(this.size/2)]];
+        
+        let cands = new Set();
+        for (let r=0; r<this.size; r++) {
+            for (let c=0; c<this.size; c++) {
+                if (this.board[r][c] !== 0) {
+                    for (let dr=-radius; dr<=radius; dr++) {
+                        for (let dc=-radius; dc<=radius; dc++) {
+                            if (dr === 0 && dc === 0) continue;
+                            let nr = r + dr, nc = c + dc;
+                            if (nr >= 0 && nr < this.size && nc >= 0 && nc < this.size && this.board[nr][nc] === 0) {
+                                cands.add(`${nr},${nc}`);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return Array.from(cands).map(s => s.split(',').map(Number));
+    }
+
+    evaluateBoard(aiColor, playerColor) {
+        let cands = this.getCandidates();
+        let aiBest = -Infinity, plBest = -Infinity;
+        for (let [r, c] of cands) {
+            let sAi = this.getMoveScore(r, c, aiColor);
+            let sPl = this.getMoveScore(r, c, playerColor);
+            aiBest = Math.max(aiBest, sAi);
+            plBest = Math.max(plBest, sPl);
+        }
+        return aiBest - plBest * 1.2;
+    }
+
+    minimax(depth, alpha, beta, isAiTurn, aiColor, playerColor, topK) {
+        if (depth === 0) return this.evaluateBoard(aiColor, playerColor);
+        
+        let cands = this.getCandidates();
+        if (cands.length === 0) return 0;
+        
+        // === 全局杀棋快检：不依赖 Top-K，扫描所有候选点 ===
+        if (isAiTurn) {
+            for (let [r, c] of cands) {
+                if (this.isWinningMove(r, c, aiColor)) return 1000000;
+            }
+        } else {
+            for (let [r, c] of cands) {
+                if (this.isWinningMove(r, c, playerColor)) return -1000000;
+            }
+        }
+        
+        // 排序 + TopK
+        if (isAiTurn) {
+            cands.sort((a, b) => this.heuristic(b[0], b[1], aiColor, playerColor) - this.heuristic(a[0], a[1], aiColor, playerColor));
+        } else {
+            // 注意参数交换：对手回合，playerColor 是"我方"，aiColor 是"敌方"
+            cands.sort((a, b) => this.heuristic(b[0], b[1], playerColor, aiColor) - this.heuristic(a[0], a[1], playerColor, aiColor));
+        }
+        cands = cands.slice(0, topK);
+
+        if (isAiTurn) {
+            let maxEval = -Infinity;
+            for (let [r, c] of cands) {
+                this.board[r][c] = aiColor;
+                let val = this.minimax(depth - 1, alpha, beta, false, aiColor, playerColor, topK);
+                this.board[r][c] = 0;
+                maxEval = Math.max(maxEval, val);
+                alpha = Math.max(alpha, val);
+                if (beta <= alpha) break;
+            }
+            return maxEval;
+        } else {
+            let minEval = Infinity;
+            for (let [r, c] of cands) {
+                this.board[r][c] = playerColor;
+                let val = this.minimax(depth - 1, alpha, beta, true, aiColor, playerColor, topK);
+                this.board[r][c] = 0;
+                minEval = Math.min(minEval, val);
+                beta = Math.min(beta, val);
+                if (beta <= alpha) break;
+            }
+            return minEval;
+        }
+    }
+
+    coordStr(r, c) {
+        return `${String.fromCharCode(97+r)}${c+1}`;
+    }
+
+    findBestMove(aiColor, playerColor, depth=2, topK=10, onProgress=null) {
+        this.debugMoveCount++;
+        let moveId = this.debugMoveCount;
+        console.group(`🤖 AI 思考 #${moveId} | depth=${depth} topK=${topK}`);
+        
+        let cands = this.getCandidates();
+        console.log(`候选点生成: ${cands.length} 个 (radius=2)`);
+        
+        if (cands.length === 0) {
+            console.log("棋盘空，占天元");
+            console.groupEnd();
+            return [Math.floor(this.size/2), Math.floor(this.size/2)];
+        }
+        
+        // ========== 急诊 1：对手有连五？立刻挡！ ==========
+        let oppWin = this.findAnyWinningMove(playerColor);
+        if (oppWin) {
+            console.warn(`🚨 急诊：发现对手连五杀招 ${this.coordStr(oppWin[0], oppWin[1])}！直接封堵，不走 minimax`);
+            console.groupEnd();
+            if (onProgress) onProgress({type: 'block', move: oppWin, reason: "封堵对手连五"});
+            return oppWin;
+        }
+        
+        // ========== 急诊 2：自己有连五？立刻下！ ==========
+        let myWin = this.findAnyWinningMove(aiColor);
+        if (myWin) {
+            console.warn(`🎯 急诊：发现自己连五杀招 ${this.coordStr(myWin[0], myWin[1])}！直接秒杀`);
+            console.groupEnd();
+            if (onProgress) onProgress({type: 'instant_win', move: myWin, reason: "直接连五"});
+            return myWin;
+        }
+
+        // 预计算 raw score
+        let candidateInfo = cands.map(([r, c]) => {
+            let attack = this.getMoveScore(r, c, aiColor);
+            let defense = this.getMoveScore(r, c, playerColor);
+            let h = this.heuristic(r, c, aiColor, playerColor);
+            return { move: [r, c], coord: this.coordStr(r,c), attack, defense, heuristic: h };
+        });
+        
+        console.log("Raw 威胁评估 (未排序):");
+        console.table(candidateInfo);
+        
+        // 按 heuristic 排序取 Top-K
+        candidateInfo.sort((a, b) => b.heuristic - a.heuristic);
+        let topCands = candidateInfo.slice(0, topK);
+        cands = topCands.map(d => d.move);
+        
+        console.log(`Top-${topK} 候选 (已排序):`);
+        console.table(topCands.map(d => ({ coord: d.coord, attack: d.attack, defense: d.defense, heuristic: d.heuristic })));
+        
+        if (onProgress) onProgress({type: 'init', candidates: topCands});
+
+        let bestMove = cands[0];
+        let bestScore = -Infinity;
+        let alpha = -Infinity, beta = Infinity;
+
+        for (let i=0; i<cands.length; i++) {
+            let [r, c] = cands[i];
+            this.board[r][c] = aiColor;
+            let score = this.minimax(depth - 1, alpha, beta, false, aiColor, playerColor, topK);
+            this.board[r][c] = 0;
+            
+            let isBest = score > bestScore;
+            let prevBest = bestMove;
+            if (isBest) {
+                bestScore = score;
+                bestMove = [r, c];
+                alpha = Math.max(alpha, score);
+            }
+            
+            console.log(`  [${i+1}/${cands.length}] ${this.coordStr(r,c)}: minimax=${score} ${isBest?'⭐':''} (raw: attack=${topCands[i].attack}, defense=${topCands[i].defense})`);
+            
+            if (onProgress) onProgress({
+                type: 'candidate',
+                index: i,
+                total: cands.length,
+                move: [r,c],
+                score,
+                isBest,
+                currentBest: bestMove,
+                raw: topCands[i]
+            });
+        }
+        
+        console.log(`✅ 最终决策: ${this.coordStr(bestMove[0], bestMove[1])} | minimax=${bestScore}`);
+        console.groupEnd();
+        
+        if (onProgress) onProgress({type: 'done', move: bestMove, score: bestScore});
+        return bestMove;
+    }
+
+    checkWin(r, c, color) {
+        for (let [dr, dc] of this.dirs) {
+            let cnt = 1;
+            let nr = r + dr, nc = c + dc;
+            while (nr >= 0 && nr < this.size && nc >= 0 && nc < this.size && this.board[nr][nc] === color) {
+                cnt++; nr += dr; nc += dc;
+            }
+            nr = r - dr; nc = c - dc;
+            while (nr >= 0 && nr < this.size && nc >= 0 && nc < this.size && this.board[nr][nc] === color) {
+                cnt++; nr -= dr; nc -= dc;
+            }
+            if (cnt >= 5) return true;
+        }
+        return false;
+    }
+
+    isFull() {
+        for (let r=0; r<this.size; r++) {
+            for (let c=0; c<this.size; c++) {
+                if (this.board[r][c] === 0) return false;
+            }
+        }
+        return true;
+    }
+}
+
+// ==================== 界面控制 ====================
+class GameController {
+    constructor() {
+        this.canvas = document.getElementById('board');
+        this.ctx = this.canvas.getContext('2d');
+        this.size = 15;
+        this.cellSize = 40;
+        this.padding = 20;
+        this.ai = new GomokuAI(this.size);
+        this.history = [];
+        this.playerColor = 1;
+        this.aiColor = 2;
+        this.currentTurn = 1;
+        this.moveCount = 0;
+        this.lastMove = null;
+        this.gameOver = false;
+        this.thinking = false;
+        this.aiDepth = 2;
+        this.aiTopK = 10;
+        this.hoverPos = null;
+        
+        this.initCanvas();
+        this.bindEvents();
+        this.render();
+        this.log("系统", "游戏准备就绪。F12 打开控制台查看 AI 调试日志！", "system");
+    }
+    
+    initCanvas() {
+        let dpr = window.devicePixelRatio || 1;
+        this.canvas.width = 600 * dpr;
+        this.canvas.height = 600 * dpr;
+        this.canvas.style.width = '600px';
+        this.canvas.style.height = '600px';
+        this.ctx.scale(dpr, dpr);
+    }
+    
+    bindEvents() {
+        this.canvas.addEventListener('mousemove', (e) => {
+            let rect = this.canvas.getBoundingClientRect();
+            let x = e.clientX - rect.left;
+            let y = e.clientY - rect.top;
+            let c = Math.round((x - this.padding) / this.cellSize);
+            let r = Math.round((y - this.padding) / this.cellSize);
+            if (r >= 0 && r < this.size && c >= 0 && c < this.size && this.ai.board[r][c] === 0 && !this.gameOver && this.currentTurn === this.playerColor) {
+                this.hoverPos = [r, c];
+            } else {
+                this.hoverPos = null;
+            }
+            this.render();
+        });
+        
+        this.canvas.addEventListener('mouseleave', () => {
+            this.hoverPos = null;
+            this.render();
+        });
+        
+        this.canvas.addEventListener('click', (e) => {
+            if (this.gameOver || this.thinking || this.currentTurn !== this.playerColor) return;
+            let rect = this.canvas.getBoundingClientRect();
+            let x = e.clientX - rect.left;
+            let y = e.clientY - rect.top;
+            let c = Math.round((x - this.padding) / this.cellSize);
+            let r = Math.round((y - this.padding) / this.cellSize);
+            this.playerMove(r, c);
+        });
+    }
+    
+    coordToStr(r, c) {
+        return `${String.fromCharCode(97+r)}${c+1}`;
+    }
+    
+    playerMove(r, c) {
+        if (r < 0 || r >= this.size || c < 0 || c >= this.size) return;
+        if (this.ai.board[r][c] !== 0) {
+            this.log("错误", "该位置已有棋子", "warn");
+            return;
+        }
+        
+        this.placeStone(r, c, this.playerColor);
+        this.log("玩家", `落子 ${this.coordToStr(r,c)}`, "success");
+        
+        if (this.ai.checkWin(r, c, this.playerColor)) {
+            this.endGame("win");
+            return;
+        }
+        if (this.ai.isFull()) {
+            this.endGame("draw");
+            return;
+        }
+        
+        this.currentTurn = this.aiColor;
+        this.updateStatus();
+        this.render();
+        setTimeout(() => this.aiMove(), 100);
+    }
+    
+    aiMove() {
+        this.thinking = true;
+        this.log("AI", `开始思考... 深度=${this.aiDepth}, TopK=${this.aiTopK}`, "system");
+        document.getElementById('candidatesSection').style.display = 'block';
+        document.getElementById('finalDecision').style.display = 'none';
+        
+        let startTime = performance.now();
+        
+        let [r, c] = this.ai.findBestMove(this.aiColor, this.playerColor, this.aiDepth, this.aiTopK, (ev) => {
+            if (ev.type === 'init') {
+                this.log("AI", `候选点 ${ev.candidates.length} 个，Raw 威胁评估：`, "think");
+                this.renderCandidates(ev.candidates, null);
+            }
+            else if (ev.type === 'block') {
+                this.log("AI", `🚨 急诊挡杀！${this.coordToStr(ev.move[0], ev.move[1])} | ${ev.reason}`, "critical");
+            }
+            else if (ev.type === 'instant_win') {
+                this.log("AI", `🎯 秒杀！${this.coordToStr(ev.move[0], ev.move[1])} | ${ev.reason}`, "critical");
+            }
+            else if (ev.type === 'candidate') {
+                let [rr, cc] = ev.move;
+                if (ev.isBest) {
+                    this.log("AI", `新最佳: ${this.coordToStr(rr,cc)} = ${Math.round(ev.score)}`, "think");
+                }
+            }
+            else if (ev.type === 'done') {
+                let elapsed = ((performance.now() - startTime) / 1000).toFixed(2);
+                this.log("AI", `决策完成，耗时 ${elapsed}s`, "success");
+            }
+        });
+        
+        this.thinking = false;
+        
+        document.getElementById('finalDecision').style.display = 'block';
+        document.getElementById('decisionMove').textContent = this.coordToStr(r, c);
+        
+        let attack = this.ai.getMoveScore(r, c, this.aiColor);
+        let defense = this.ai.getMoveScore(r, c, this.playerColor);
+        let reason = [];
+        if (attack >= 100000) reason.push("直接连五");
+        else if (attack >= 90000) reason.push("双冲四杀");
+        else if (attack >= 80000) reason.push("四三杀");
+        else if (attack >= 70000) reason.push("双活三杀");
+        else if (attack >= 10000) reason.push("活四攻势");
+        else {
+            if (defense >= 100000) reason.push("封堵敌方连五");
+            else if (defense >= 10000) reason.push("封堵敌方活四");
+            else {
+                if (attack > 0) reason.push(`进攻 ${attack}`);
+                if (defense > 0) reason.push(`防守 ${defense}`);
+            }
+        }
+        document.getElementById('decisionReason').textContent = reason.join(" + ") || "均衡控制";
+        
+        this.placeStone(r, c, this.aiColor);
+        this.log("AI", `落子 ${this.coordToStr(r,c)}`, "success");
+        
+        if (this.ai.checkWin(r, c, this.aiColor)) {
+            this.endGame("lose");
+            return;
+        }
+        if (this.ai.isFull()) {
+            this.endGame("draw");
+            return;
+        }
+        
+        this.currentTurn = this.playerColor;
+        this.updateStatus();
+        this.render();
+    }
+    
+    placeStone(r, c, color) {
+        this.ai.board[r][c] = color;
+        this.history.push([r, c, color]);
+        this.lastMove = [r, c];
+        this.moveCount++;
+        this.updateStatus();
+    }
+    
+    renderCandidates(candidates, bestMove) {
+        let html = '';
+        let maxScore = Math.max(...candidates.map(d => d.heuristic), 1);
+        
+        let sorted = [...candidates].sort((a, b) => b.heuristic - a.heuristic);
+        
+        for (let i=0; i<sorted.length; i++) {
+            let d = sorted[i];
+            let isBest = bestMove && d.move[0] === bestMove[0] && d.move[1] === bestMove[1];
+            let pct = Math.min(100, Math.abs(d.heuristic) / maxScore * 100);
+            
+            let patternStr = "";
+            if (d.attack >= 100000) patternStr = "己方连五";
+            else if (d.attack >= 90000) patternStr = "双冲四";
+            else if (d.attack >= 80000) patternStr = "四三杀";
+            else if (d.attack >= 70000) patternStr = "双活三";
+            else if (d.attack >= 10000) patternStr = "己方活四";
+            else if (d.attack >= 500) patternStr = "己方活三";
+            else if (d.defense >= 100000) patternStr = "敌方连五!";
+            else if (d.defense >= 10000) patternStr = "敌方活四!";
+            else if (d.defense >= 500) patternStr = "敌方活三";
+            else patternStr = "弱威胁";
+            
+            html += `
+            <div class="candidate-row ${isBest ? 'best' : ''}">
+                <span class="coord">${d.coord}</span>
+                <span class="pattern">${patternStr}</span>
+                <span class="score">${Math.round(d.heuristic)}</span>
+                <div class="score-bar"><div class="score-bar-fill" style="width:${pct}%"></div></div>
+            </div>`;
+        }
+        document.getElementById('candidatesList').innerHTML = html;
+    }
+    
+    log(who, msg, type="think") {
+        let logEl = document.getElementById('thinkingLog');
+        let entry = document.createElement('div');
+        entry.className = `log-entry ${type}`;
+        let time = new Date().toLocaleTimeString('zh-CN', {hour12:false, hour:'2-digit', minute:'2-digit', second:'2-digit'});
+        entry.innerHTML = `<span style="color:#64748b">[${time}]</span> <b>${who}</b>: ${msg}`;
+        logEl.appendChild(entry);
+        logEl.scrollTop = logEl.scrollHeight;
+    }
+    
+    updateStatus() {
+        let isBlackTurn = this.currentTurn === 1;
+        document.getElementById('turnDot').className = `stone-dot ${isBlackTurn ? 'black' : 'white'}`;
+        document.getElementById('turnText').textContent = isBlackTurn ? '黑棋回合 (玩家)' : '白棋回合 (AI)';
+        document.getElementById('moveCount').textContent = `步数: ${this.moveCount}`;
+    }
+    
+    endGame(result) {
+        this.gameOver = true;
+        let overlay = document.getElementById('gameOver');
+        let text = document.getElementById('gameOverText');
+        overlay.classList.add('active');
+        
+        if (result === 'win') {
+            text.textContent = '🎉 玩家获胜！';
+            text.className = 'game-over-text win';
+            this.log("系统", "玩家达成五连，游戏结束", "success");
+        } else if (result === 'lose') {
+            text.textContent = '💀 AI 获胜';
+            text.className = 'game-over-text lose';
+            this.log("系统", "AI 达成五连，游戏结束", "critical");
+        } else {
+            text.textContent = '🤝 平局';
+            text.className = 'game-over-text draw';
+            this.log("系统", "棋盘已满，平局", "warn");
+        }
+    }
+    
+    clearPanel() {
+        document.getElementById('candidatesSection').style.display = 'none';
+        document.getElementById('finalDecision').style.display = 'none';
+        document.getElementById('candidatesList').innerHTML = '';
+    }
+    
+    restart() {
+        this.ai = new GomokuAI(this.size);
+        this.history = [];
+        this.currentTurn = 1;
+        this.moveCount = 0;
+        this.lastMove = null;
+        this.gameOver = false;
+        this.thinking = false;
+        this.hoverPos = null;
+        document.getElementById('gameOver').classList.remove('active');
+        document.getElementById('thinkingLog').innerHTML = '<div class="log-entry system">新局开始... F12 查看控制台</div>';
+        this.clearPanel();
+        this.updateStatus();
+        this.render();
+        
+        if (this.aiColor === 1) {
+            setTimeout(() => this.aiMove(), 300);
+        }
+    }
+    
+    undo() {
+        if (this.thinking || this.history.length < 2 || this.gameOver) return;
+        for (let i=0; i<2; i++) {
+            if (this.history.length > 0) {
+                let [r, c, col] = this.history.pop();
+                this.ai.board[r][c] = 0;
+                this.moveCount--;
+            }
+        }
+        this.lastMove = this.history.length > 0 ? [this.history[this.history.length-1][0], this.history[this.history.length-1][1]] : null;
+        this.currentTurn = this.playerColor;
+        this.gameOver = false;
+        document.getElementById('gameOver').classList.remove('active');
+        this.log("系统", "悔棋成功，回到玩家回合", "system");
+        this.clearPanel();
+        this.updateStatus();
+        this.render();
+    }
+    
+    toggleSide() {
+        [this.playerColor, this.aiColor] = [this.aiColor, this.playerColor];
+        this.restart();
+        this.log("系统", `已换边，你现在执 ${this.playerColor===1?'黑':'白'} 棋`, "system");
+    }
+    
+    setDepth(d) { this.aiDepth = parseInt(d); }
+    setTopK(k) { this.aiTopK = parseInt(k); }
+    
+    render() {
+        let ctx = this.ctx;
+        let cs = this.cellSize;
+        let pad = this.padding;
+        let total = pad * 2 + cs * (this.size - 1);
+        
+        ctx.fillStyle = '#d4a574';
+        ctx.fillRect(0, 0, total, total);
+        
+        ctx.strokeStyle = 'rgba(0,0,0,0.03)';
+        ctx.lineWidth = 1;
+        for (let i=0; i<20; i++) {
+            ctx.beginPath();
+            ctx.moveTo(0, i * total/20);
+            ctx.lineTo(total, i * total/20 + Math.random()*10);
+            ctx.stroke();
+        }
+        
+        ctx.strokeStyle = '#5c4033';
+        ctx.lineWidth = 1;
+        for (let i=0; i<this.size; i++) {
+            let pos = pad + i * cs;
+            ctx.beginPath();
+            ctx.moveTo(pad, pos);
+            ctx.lineTo(total - pad, pos);
+            ctx.stroke();
+            
+            ctx.beginPath();
+            ctx.moveTo(pos, pad);
+            ctx.lineTo(pos, total - pad);
+            ctx.stroke();
+        }
+        
+        let stars = [[3,3], [3,11], [7,7], [11,3], [11,11]];
+        ctx.fillStyle = '#5c4033';
+        for (let [sr, sc] of stars) {
+            ctx.beginPath();
+            ctx.arc(pad + sc*cs, pad + sr*cs, 3, 0, Math.PI*2);
+            ctx.fill();
+        }
+        
+        ctx.fillStyle = '#5c4033';
+        ctx.font = '10px sans-serif';
+        ctx.textAlign = 'center';
+        for (let i=0; i<this.size; i++) {
+            ctx.fillText(String.fromCharCode(97+i), pad + i*cs, pad - 8);
+            ctx.fillText(i+1, pad - 12, pad + i*cs + 3);
+        }
+        
+        for (let r=0; r<this.size; r++) {
+            for (let c=0; c<this.size; c++) {
+                let color = this.ai.board[r][c];
+                if (color === 0) continue;
+                let x = pad + c * cs;
+                let y = pad + r * cs;
+                
+                ctx.beginPath();
+                ctx.arc(x+1, y+1, 14, 0, Math.PI*2);
+                ctx.fillStyle = 'rgba(0,0,0,0.2)';
+                ctx.fill();
+                
+                let grad = ctx.createRadialGradient(x-4, y-4, 2, x, y, 14);
+                if (color === 1) {
+                    grad.addColorStop(0, '#4a4a4a');
+                    grad.addColorStop(1, '#1a1a1a');
+                } else {
+                    grad.addColorStop(0, '#ffffff');
+                    grad.addColorStop(1, '#d1d5db');
+                }
+                ctx.beginPath();
+                ctx.arc(x, y, 14, 0, Math.PI*2);
+                ctx.fillStyle = grad;
+                ctx.fill();
+                
+                ctx.beginPath();
+                ctx.arc(x-4, y-4, 4, 0, Math.PI*2);
+                ctx.fillStyle = color === 1 ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.8)';
+                ctx.fill();
+            }
+        }
+        
+        if (this.lastMove) {
+            let [lr, lc] = this.lastMove;
+            let x = pad + lc * cs;
+            let y = pad + lr * cs;
+            ctx.strokeStyle = '#ef4444';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(x-6, y-6, 12, 12);
+        }
+        
+        if (this.hoverPos && !this.gameOver && this.currentTurn === this.playerColor) {
+            let [hr, hc] = this.hoverPos;
+            let x = pad + hc * cs;
+            let y = pad + hr * cs;
+            ctx.beginPath();
+            ctx.arc(x, y, 14, 0, Math.PI*2);
+            ctx.fillStyle = this.playerColor === 1 ? 'rgba(0,0,0,0.3)' : 'rgba(255,255,255,0.3)';
+            ctx.fill();
+            ctx.strokeStyle = this.playerColor === 1 ? '#000' : '#fff';
+            ctx.lineWidth = 1;
+            ctx.stroke();
+        }
+    }
+}
+
+let game = new GameController();
+</script>
+
+</body>
+</html>
