@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GomoEGF - 五子棋 EGF 对局管理器</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0f172a;
+            color: #e2e8f0;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .container {
+            display: flex;
+            height: 100vh;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        .left-panel {
+            width: 320px;
+            background: #1e293b;
+            border-right: 1px solid #334155;
+            display: flex;
+            flex-direction: column;
+        }
+        .panel-header {
+            padding: 20px;
+            background: #0f172a;
+            border-bottom: 2px solid #3b82f6;
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .panel-header::before {
+            content: "◉";
+            color: #3b82f6;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .server-config {
+            padding: 16px;
+            border-bottom: 1px solid #334155;
+        }
+        .section-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #94a3b8;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .input-group {
+            margin-bottom: 10px;
+        }
+        .input-group label {
+            display: block;
+            font-size: 12px;
+            color: #64748b;
+            margin-bottom: 4px;
+        }
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #475569;
+            border-radius: 6px;
+            background: #0f172a;
+            color: #e2e8f0;
+            font-size: 14px;
+            font-family: monospace;
+        }
+        .input-group input:focus, .input-group select:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            background: #3b82f6;
+            color: white;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+        .btn:hover { background: #2563eb; transform: translateY(-1px); }
+        .btn:active { transform: translateY(0); }
+        .btn.secondary { background: #475569; }
+        .btn.secondary:hover { background: #334155; }
+        .btn.success { background: #10b981; }
+        .btn.success:hover { background: #059669; }
+        .btn.danger { background: #ef4444; }
+        .btn.danger:hover { background: #dc2626; }
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .btn-group {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: #0f172a;
+            border-radius: 6px;
+            margin-top: 10px;
+            font-size: 12px;
+        }
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #64748b;
+        }
+        .status-dot.connected { background: #10b981; box-shadow: 0 0 8px #10b981; }
+        .status-dot.error { background: #ef4444; box-shadow: 0 0 8px #ef4444; }
+        .status-dot.connecting { background: #f59e0b; animation: blink 1s infinite; }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        .saved-servers {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+        }
+        .server-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 12px;
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .server-item:hover {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+        }
+        .server-item.active {
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.1);
+        }
+        .server-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .server-name {
+            font-size: 13px;
+            font-weight: 500;
+            color: #e2e8f0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .server-url {
+            font-size: 11px;
+            color: #64748b;
+            font-family: monospace;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .server-actions {
+            display: flex;
+            gap: 4px;
+        }
+        .icon-btn {
+            width: 24px;
+            height: 24px;
+            border: none;
+            border-radius: 4px;
+            background: transparent;
+            color: #64748b;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+        .icon-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+        }
+        .icon-btn.delete:hover {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .toolbar {
+            padding: 12px 20px;
+            background: #1e293b;
+            border-bottom: 1px solid #334155;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .toolbar-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #e2e8f0;
+        }
+        .toolbar-spacer {
+            flex: 1;
+        }
+        .content-area {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+        .board-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        }
+        .board-wrapper {
+            position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        canvas {
+            display: block;
+            cursor: pointer;
+            background: #d4a574;
+        }
+        .board-controls {
+            margin-top: 16px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        select {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid #475569;
+            background: #1e293b;
+            color: #e2e8f0;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .info-panel {
+            width: 380px;
+            background: #1e293b;
+            border-left: 1px solid #334155;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .status-bar {
+            padding: 12px 20px;
+            background: #0f172a;
+            border-bottom: 1px solid #334155;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+        }
+        .turn-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .stone-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+        .stone-dot.black { background: #1a1a1a; }
+        .stone-dot.white { background: #f8fafc; }
+        .thinking-log {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 20px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+        .log-entry {
+            margin-bottom: 6px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            border-left: 3px solid transparent;
+            animation: fadeIn 0.3s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        .log-entry.system { color: #94a3b8; border-left-color: #64748b; }
+        .log-entry.info { color: #cbd5e1; border-left-color: #3b82f6; background: rgba(59,130,246,0.05); }
+        .log-entry.warn { color: #fbbf24; border-left-color: #f59e0b; background: rgba(245,158,11,0.05); }
+        .log-entry.error { color: #f87171; border-left-color: #ef4444; background: rgba(239,68,68,0.05); font-weight: bold; }
+        .log-entry.success { color: #34d399; border-left-color: #10b981; background: rgba(16,185,129,0.05); }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+        .game-over-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(15,23,42,0.9);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        .game-over-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        .game-over-text {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        .game-over-text.win { color: #34d399; }
+        .game-over-text.lose { color: #f87171; }
+        .game-over-text.draw { color: #fbbf24; }
+        .empty-state {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #64748b;
+            padding: 40px;
+            text-align: center;
+        }
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+        .empty-state-text {
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .session-info {
+            padding: 12px 16px;
+            background: #0f172a;
+            border-top: 1px solid #334155;
+            font-size: 12px;
+        }
+        .session-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 4px;
+        }
+        .session-label {
+            color: #64748b;
+        }
+        .session-value {
+            color: #e2e8f0;
+            font-family: monospace;
+        }
+        .move-history {
+            max-height: 120px;
+            overflow-y: auto;
+            padding: 8px;
+            background: #0f172a;
+            border-radius: 4px;
+            margin-top: 8px;
+            font-family: monospace;
+            font-size: 11px;
+        }
+        .move-item {
+            display: inline-block;
+            padding: 2px 6px;
+            margin: 2px;
+            background: #1e293b;
+            border-radius: 3px;
+            color: #94a3b8;
+        }
+        .move-item.black { color: #e2e8f0; }
+        .move-item.white { color: #94a3b8; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="left-panel">
+        <div class="panel-header">服务器配置</div>
+        <div class="server-config">
+            <div class="section-title">目标服务器</div>
+            <div class="input-group">
+                <label>服务器名称</label>
+                <input type="text" id="serverName" placeholder="例如: 本地测试服务器">
+            </div>
+            <div class="input-group">
+                <label>服务器地址</label>
+                <input type="text" id="serverUrl" placeholder="例如: http://localhost:8000">
+            </div>
+            <div class="btn-group">
+                <button class="btn" onclick="app.connectServer()">连接</button>
+                <button class="btn secondary" onclick="app.saveServer()">保存</button>
+            </div>
+            <div class="status-indicator" id="statusIndicator">
+                <span class="status-dot" id="statusDot"></span>
+                <span id="statusText">未连接</span>
+            </div>
+        </div>
+        <div class="saved-servers">
+            <div class="section-title">已保存的服务器</div>
+            <div id="savedServersList"></div>
+        </div>
+    </div>
+    <div class="main-content">
+        <div class="toolbar">
+            <span class="toolbar-title">EGF 对局管理</span>
+            <div class="toolbar-spacer"></div>
+            <select id="boardSize" onchange="app.setBoardSize(this.value)">
+                <option value="15" selected>15x15</option>
+                <option value="19">19x19</option>
+            </select>
+            <select id="gameRule" onchange="app.setRule(this.value)">
+                <option value="freestyle" selected>自由规则</option>
+                <option value="standard">标准规则</option>
+                <option value="renju">连珠规则</option>
+            </select>
+            <button class="btn success" onclick="app.createSession()" id="btnNewGame">新建对局</button>
+            <button class="btn secondary" onclick="app.undoMove()">悔棋</button>
+            <button class="btn danger" onclick="app.endSession()">结束对局</button>
+        </div>
+        <div class="content-area">
+            <div class="board-section" id="boardSection">
+                <div class="empty-state" id="emptyState">
+                    <div class="empty-state-icon">🎮</div>
+                    <div class="empty-state-text">
+                        请先配置并连接服务器<br>
+                        然后点击"新建对局"开始游戏
+                    </div>
+                </div>
+                <div class="board-wrapper" id="boardWrapper" style="display:none;">
+                    <canvas id="board" width="600" height="600"></canvas>
+                    <div class="game-over-overlay" id="gameOver">
+                        <div class="game-over-text" id="gameOverText">游戏结束</div>
+                        <button class="btn" onclick="app.createSession()">再来一局</button>
+                    </div>
+                </div>
+                <div class="board-controls" id="boardControls" style="display:none;">
+                    <button class="btn secondary" onclick="app.toggleSide()">⚫/⚪ 换边</button>
+                    <select id="playerColor" onchange="app.setPlayerColor(this.value)">
+                        <option value="1" selected>玩家执黑</option>
+                        <option value="2">玩家执白</option>
+                    </select>
+                </div>
+            </div>
+            <div class="info-panel">
+                <div class="status-bar">
+                    <div class="turn-indicator">
+                        <div class="stone-dot black" id="turnDot"></div>
+                        <span id="turnText">等待开始</span>
+                    </div>
+                    <span id="moveCount">步数: 0</span>
+                </div>
+                <div class="thinking-log" id="thinkingLog">
+                    <div class="log-entry system">系统就绪。请先连接服务器。</div>
+                </div>
+                <div class="session-info" id="sessionInfo" style="display:none;">
+                    <div class="session-row">
+                        <span class="session-label">会话ID:</span>
+                        <span class="session-value" id="sessionId">-</span>
+                    </div>
+                    <div class="session-row">
+                        <span class="session-label">棋盘:</span>
+                        <span class="session-value" id="sessionBoard">-</span>
+                    </div>
+                    <div class="session-row">
+                        <span class="session-label">规则:</span>
+                        <span class="session-value" id="sessionRule">-</span>
+                    </div>
+                    <div class="move-history" id="moveHistory"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+/**
+ * GomoEGF - 五子棋 EGF 对局管理器
+ * 复杂度: O(1) 本地存储操作, O(n) 服务器列表渲染
+ */
+
+const STORAGE_KEY = 'gomoegf_servers';
+const STORAGE_LAST_SERVER = 'gomoegf_last_server';
+
+class GomoEGFApp {
+    constructor() {
+        this.serverUrl = '';
+        this.serverName = '';
+        this.sessionId = null;
+        this.boardSize = 15;
+        this.rule = 'freestyle';
+        this.playerColor = 1;
+        this.currentTurn = 1;
+        this.moveCount = 0;
+        this.moveHistory = [];
+        this.gameOver = false;
+        this.isConnected = false;
+        this.board = [];
+        this.canvas = null;
+        this.ctx = null;
+        this.cellSize = 36;
+        this.padding = 20;
+        this.hoverPos = null;
+        
+        this.init();
+    }
+    
+    init() {
+        this.loadSavedServers();
+        this.loadLastServer();
+        this.parseUrlParams();
+        this.initCanvas();
+        this.updateStatus('disconnected');
+        this.setupBeforeUnload();
+    }
+    
+    /**
+     * 解析 URL 参数，支持从 EGFM 跳转
+     */
+    parseUrlParams() {
+        const params = new URLSearchParams(window.location.search);
+        const serverUrl = params.get('server');
+        const sessionId = params.get('session');
+        
+        if (serverUrl) {
+            this.serverUrl = serverUrl;
+            document.getElementById('serverUrl').value = serverUrl;
+            
+            if (sessionId) {
+                this.sessionId = sessionId;
+                this.log('信息', `从 EGFM 加载: ${serverUrl}, 会话: ${sessionId.substring(0, 16)}...`);
+                setTimeout(() => this.connectAndJoinSession(), 500);
+            }
+        }
+    }
+    
+    /**
+     * 连接服务器并加入指定会话
+     */
+    async connectAndJoinSession() {
+        await this.connectServer();
+        if (this.isConnected && this.sessionId) {
+            await this.loadSessionInfo();
+        }
+    }
+    
+    /**
+     * 加载现有会话信息
+     */
+    async loadSessionInfo() {
+        try {
+            const response = await fetch(`${this.serverUrl}/sessions/${this.sessionId}`, {
+                headers: { 'Accept': 'application/json' }
+            });
+            
+            if (response.ok) {
+                const data = await response.json();
+                this.boardSize = data.board_size;
+                this.rule = data.rule;
+                this.moveCount = data.move_count || 0;
+                this.moveHistory = data.position_history || [];
+                this.board = Array(this.boardSize).fill().map(() => Array(this.boardSize).fill(0));
+                
+                // 重建棋盘状态
+                this.rebuildBoardFromHistory();
+                
+                this.showBoard();
+                this.updateCanvasSize();
+                this.updateSessionInfo();
+                this.updateStatusBar();
+                this.render();
+                this.log('成功', `已加入会话: ${this.sessionId.substring(0, 16)}...`);
+            } else {
+                throw new Error(`HTTP ${response.status}`);
+            }
+        } catch (e) {
+            this.log('错误', `加载会话失败: ${e.message}`, 'error');
+            this.sessionId = null;
+        }
+    }
+    
+    /**
+     * 根据走子历史重建棋盘
+     */
+    rebuildBoardFromHistory() {
+        for (let i = 0; i < this.moveHistory.length; i++) {
+            const [r, c] = this.strToCoord(this.moveHistory[i]);
+            const color = (i % 2 === 0) ? 1 : 2;
+            if (r >= 0 && r < this.boardSize && c >= 0 && c < this.boardSize) {
+                this.board[r][c] = color;
+            }
+        }
+        this.currentTurn = (this.moveHistory.length % 2 === 0) ? 1 : 2;
+    }
+    
+    /**
+     * 设置页面关闭前销毁会话
+     */
+    setupBeforeUnload() {
+        window.addEventListener('beforeunload', (e) => {
+            if (this.sessionId && this.serverUrl) {
+                navigator.sendBeacon(`${this.serverUrl}/sessions/${this.sessionId}/end`, '');
+            }
+        });
+        
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'hidden' && this.sessionId && this.serverUrl) {
+                navigator.sendBeacon(`${this.serverUrl}/sessions/${this.sessionId}/end`, '');
+            }
+        });
+    }
+    
+    /**
+     * 从 localStorage 加载保存的服务器列表
+     * 时间复杂度: O(1)
+     */
+    loadSavedServers() {
+        try {
+            const data = localStorage.getItem(STORAGE_KEY);
+            this.servers = data ? JSON.parse(data) : [];
+        } catch (e) {
+            console.error('加载服务器列表失败:', e);
+            this.servers = [];
+        }
+        this.renderSavedServers();
+    }
+    
+    /**
+     * 保存服务器列表到 localStorage
+     * 时间复杂度: O(1)
+     */
+    saveServersToStorage() {
+        try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(this.servers));
+        } catch (e) {
+            console.error('保存服务器列表失败:', e);
+            this.log('错误', '保存服务器列表失败: ' + e.message, 'error');
+        }
+    }
+    
+    /**
+     * 加载上次使用的服务器
+     * 时间复杂度: O(1)
+     */
+    loadLastServer() {
+        try {
+            const lastServer = localStorage.getItem(STORAGE_LAST_SERVER);
+            if (lastServer) {
+                const server = JSON.parse(lastServer);
+                document.getElementById('serverName').value = server.name || '';
+                document.getElementById('serverUrl').value = server.url || '';
+            }
+        } catch (e) {
+            console.error('加载上次服务器失败:', e);
+        }
+    }
+    
+    /**
+     * 保存当前服务器为上次使用
+     * 时间复杂度: O(1)
+     */
+    saveLastServer(name, url) {
+        try {
+            localStorage.setItem(STORAGE_LAST_SERVER, JSON.stringify({ name, url }));
+        } catch (e) {
+            console.error('保存上次服务器失败:', e);
+        }
+    }
+    
+    /**
+     * 渲染已保存的服务器列表
+     * 时间复杂度: O(n), n为服务器数量
+     */
+    renderSavedServers() {
+        const container = document.getElementById('savedServersList');
+        if (this.servers.length === 0) {
+            container.innerHTML = '<div style="color:#64748b;font-size:12px;padding:10px;">暂无保存的服务器</div>';
+            return;
+        }
+        
+        container.innerHTML = this.servers.map((server, index) => `
+            <div class="server-item ${server.url === this.serverUrl ? 'active' : ''}" onclick="app.selectServer(${index})">
+                <div class="server-info">
+                    <div class="server-name">${this.escapeHtml(server.name)}</div>
+                    <div class="server-url">${this.escapeHtml(server.url)}</div>
+                </div>
+                <div class="server-actions" onclick="event.stopPropagation()">
+                    <button class="icon-btn" onclick="app.loadServerConfig(${index})" title="加载">⚡</button>
+                    <button class="icon-btn delete" onclick="app.deleteServer(${index})" title="删除">✕</button>
+                </div>
+            </div>
+        `).join('');
+    }
+    
+    escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+    
+    /**
+     * 保存当前服务器配置
+     */
+    saveServer() {
+        const name = document.getElementById('serverName').value.trim();
+        const url = document.getElementById('serverUrl').value.trim();
+        
+        if (!name || !url) {
+            this.log('错误', '请输入服务器名称和地址', 'error');
+            return;
+        }
+        
+        if (!this.isValidUrl(url)) {
+            this.log('错误', '服务器地址格式无效', 'error');
+            return;
+        }
+        
+        const existingIndex = this.servers.findIndex(s => s.url === url);
+        if (existingIndex >= 0) {
+            this.servers[existingIndex].name = name;
+            this.log('信息', '已更新服务器配置', 'info');
+        } else {
+            this.servers.push({ name, url, createdAt: new Date().toISOString() });
+            this.log('成功', '已保存服务器配置', 'success');
+        }
+        
+        this.saveServersToStorage();
+        this.renderSavedServers();
+        this.saveLastServer(name, url);
+    }
+    
+    /**
+     * 删除服务器配置
+     */
+    deleteServer(index) {
+        if (confirm('确定要删除此服务器配置吗？')) {
+            const server = this.servers[index];
+            this.servers.splice(index, 1);
+            this.saveServersToStorage();
+            this.renderSavedServers();
+            this.log('信息', `已删除服务器: ${server.name}`, 'info');
+        }
+    }
+    
+    /**
+     * 加载服务器配置到输入框
+     */
+    loadServerConfig(index) {
+        const server = this.servers[index];
+        document.getElementById('serverName').value = server.name;
+        document.getElementById('serverUrl').value = server.url;
+        this.log('信息', `已加载: ${server.name}`, 'info');
+    }
+    
+    /**
+     * 选择并连接服务器
+     */
+    selectServer(index) {
+        const server = this.servers[index];
+        document.getElementById('serverName').value = server.name;
+        document.getElementById('serverUrl').value = server.url;
+        this.connectServer();
+    }
+    
+    isValidUrl(url) {
+        try {
+            new URL(url);
+            return true;
+        } catch {
+            return false;
+        }
+    }
+    
+    /**
+     * 连接服务器
+     */
+    async connectServer() {
+        const url = document.getElementById('serverUrl').value.trim();
+        const name = document.getElementById('serverName').value.trim();
+        
+        if (!url) {
+            this.log('错误', '请输入服务器地址', 'error');
+            return;
+        }
+        
+        if (!this.isValidUrl(url)) {
+            this.log('错误', '服务器地址格式无效', 'error');
+            return;
+        }
+        
+        this.serverUrl = url.replace(/\/$/, '');
+        this.serverName = name || this.serverUrl;
+        
+        this.updateStatus('connecting');
+        this.log('信息', `正在连接: ${this.serverUrl}...`, 'info');
+        
+        try {
+            const response = await fetch(`${this.serverUrl}/health`, {
+                method: 'GET',
+                headers: { 'Accept': 'application/json' }
+            });
+            
+            if (response.ok) {
+                const data = await response.json();
+                this.isConnected = true;
+                this.updateStatus('connected');
+                this.log('成功', `已连接到服务器 | 活跃会话: ${data.active_sessions || 0}`, 'success');
+                this.saveLastServer(this.serverName, this.serverUrl);
+                this.renderSavedServers();
+            } else {
+                throw new Error(`HTTP ${response.status}`);
+            }
+        } catch (error) {
+            this.isConnected = false;
+            this.updateStatus('error');
+            this.log('错误', `连接失败: ${error.message}`, 'error');
+        }
+    }
+    
+    updateStatus(status) {
+        const dot = document.getElementById('statusDot');
+        const text = document.getElementById('statusText');
+        
+        dot.className = 'status-dot';
+        
+        switch (status) {
+            case 'connected':
+                dot.classList.add('connected');
+                text.textContent = '已连接';
+                document.getElementById('btnNewGame').disabled = false;
+                break;
+            case 'connecting':
+                dot.classList.add('connecting');
+                text.textContent = '连接中...';
+                break;
+            case 'error':
+                dot.classList.add('error');
+                text.textContent = '连接失败';
+                document.getElementById('btnNewGame').disabled = true;
+                break;
+            default:
+                text.textContent = '未连接';
+                document.getElementById('btnNewGame').disabled = true;
+        }
+    }
+    
+    /**
+     * 创建新会话
+     */
+    async createSession() {
+        if (!this.isConnected) {
+            this.log('错误', '请先连接服务器', 'error');
+            return;
+        }
+        
+        this.log('信息', '正在创建新会话...', 'info');
+        
+        try {
+            const response = await fetch(`${this.serverUrl}/sessions`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    board_size: parseInt(this.boardSize),
+                    rule: this.rule,
+                    timeout_turn: 5000,
+                    timeout_match: 300000,
+                    max_memory: 4096
+                })
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
+            
+            const data = await response.json();
+            this.sessionId = data.session_id;
+            this.moveCount = 0;
+            this.moveHistory = [];
+            this.gameOver = false;
+            this.currentTurn = 1;
+            this.board = Array(this.boardSize).fill().map(() => Array(this.boardSize).fill(0));
+            
+            this.log('成功', `会话创建成功: ${this.sessionId.substring(0, 16)}...`, 'success');
+            
+            this.showBoard();
+            this.updateCanvasSize();
+            this.updateSessionInfo();
+            this.updateStatusBar();
+            this.render();
+            
+            if (this.playerColor === 2) {
+                setTimeout(() => this.engineMove(), 500);
+            }
+        } catch (error) {
+            this.log('错误', `创建会话失败: ${error.message}`, 'error');
+        }
+    }
+    
+    /**
+     * 结束会话
+     */
+    async endSession() {
+        if (!this.sessionId) {
+            this.log('错误', '没有活跃会话', 'error');
+            return;
+        }
+        
+        try {
+            const response = await fetch(`${this.serverUrl}/sessions/${this.sessionId}/end`, {
+                method: 'POST',
+                headers: { 'Accept': 'application/json' }
+            });
+            
+            if (response.ok) {
+                this.log('信息', '会话已结束', 'info');
+            }
+        } catch (error) {
+            console.error('结束会话失败:', error);
+        }
+        
+        this.sessionId = null;
+        this.hideBoard();
+        this.log('信息', '对局已结束', 'system');
+    }
+    
+    showBoard() {
+        document.getElementById('emptyState').style.display = 'none';
+        document.getElementById('boardWrapper').style.display = 'block';
+        document.getElementById('boardControls').style.display = 'flex';
+        document.getElementById('sessionInfo').style.display = 'block';
+        document.getElementById('gameOver').classList.remove('active');
+    }
+    
+    hideBoard() {
+        document.getElementById('emptyState').style.display = 'flex';
+        document.getElementById('boardWrapper').style.display = 'none';
+        document.getElementById('boardControls').style.display = 'none';
+        document.getElementById('sessionInfo').style.display = 'none';
+    }
+    
+    updateSessionInfo() {
+        document.getElementById('sessionId').textContent = this.sessionId ? this.sessionId.substring(0, 16) + '...' : '-';
+        document.getElementById('sessionBoard').textContent = `${this.boardSize}x${this.boardSize}`;
+        document.getElementById('sessionRule').textContent = this.rule;
+        this.updateMoveHistory();
+    }
+    
+    updateMoveHistory() {
+        const container = document.getElementById('moveHistory');
+        if (this.moveHistory.length === 0) {
+            container.innerHTML = '<span style="color:#64748b;">暂无走子记录</span>';
+            return;
+        }
+        
+        container.innerHTML = this.moveHistory.map((move, index) => {
+            const isBlack = index % 2 === 0;
+            return `<span class="move-item ${isBlack ? 'black' : 'white'}">${index + 1}. ${move}</span>`;
+        }).join('');
+        container.scrollTop = container.scrollHeight;
+    }
+    
+    initCanvas() {
+        this.canvas = document.getElementById('board');
+        if (!this.canvas) return;
+        
+        this.updateCanvasSize();
+        
+        this.canvas.addEventListener('mousemove', (e) => this.onMouseMove(e));
+        this.canvas.addEventListener('mouseleave', () => this.onMouseLeave());
+        this.canvas.addEventListener('click', (e) => this.onClick(e));
+    }
+    
+    updateCanvasSize() {
+        const dpr = window.devicePixelRatio || 1;
+        const total = this.padding * 2 + this.cellSize * (this.boardSize - 1);
+        this.canvas.width = total * dpr;
+        this.canvas.height = total * dpr;
+        this.canvas.style.width = total + 'px';
+        this.canvas.style.height = total + 'px';
+        
+        this.ctx = this.canvas.getContext('2d');
+        this.ctx.scale(dpr, dpr);
+    }
+    
+    onMouseMove(e) {
+        if (this.gameOver || this.currentTurn !== this.playerColor || !this.sessionId) return;
+        
+        const rect = this.canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const c = Math.round((x - this.padding) / this.cellSize);
+        const r = Math.round((y - this.padding) / this.cellSize);
+        
+        if (r >= 0 && r < this.boardSize && c >= 0 && c < this.boardSize && this.board[r][c] === 0) {
+            this.hoverPos = [r, c];
+        } else {
+            this.hoverPos = null;
+        }
+        this.render();
+    }
+    
+    onMouseLeave() {
+        this.hoverPos = null;
+        this.render();
+    }
+    
+    onClick(e) {
+        if (this.gameOver || this.currentTurn !== this.playerColor || !this.sessionId) return;
+        
+        const rect = this.canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const c = Math.round((x - this.padding) / this.cellSize);
+        const r = Math.round((y - this.padding) / this.cellSize);
+        
+        this.playerMove(r, c);
+    }
+    
+    async playerMove(r, c) {
+        if (r < 0 || r >= this.boardSize || c < 0 || c >= this.boardSize) return;
+        if (this.board[r][c] !== 0) {
+            this.log('错误', '该位置已有棋子', 'error');
+            return;
+        }
+        
+        const coord = this.coordToStr(r, c);
+        this.log('玩家', `落子 ${coord}`, 'success');
+        
+        try {
+            const response = await fetch(`${this.serverUrl}/sessions/${this.sessionId}/move`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ x: c, y: r })
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
+            
+            const data = await response.json();
+            
+            this.board[r][c] = this.playerColor;
+            this.moveHistory.push(coord);
+            this.moveCount++;
+            this.updateMoveHistory();
+            this.updateStatusBar();
+            this.render();
+            
+            if (data.engine_move) {
+                const [ex, ey] = data.engine_move.split(',').map(Number);
+                setTimeout(() => this.enginePlaceStone(ey, ex), 300);
+            }
+        } catch (error) {
+            this.log('错误', `走子失败: ${error.message}`, 'error');
+        }
+    }
+    
+    async engineMove() {
+        if (!this.sessionId || this.gameOver) return;
+        
+        this.log('AI', '思考中...', 'info');
+        
+        try {
+            const response = await fetch(`${this.serverUrl}/sessions/${this.sessionId}/gomocup`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ command: 'BEGIN' })
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
+            
+            const data = await response.json();
+            
+            if (data.best_move) {
+                const [ex, ey] = data.best_move.split(',').map(Number);
+                this.enginePlaceStone(ey, ex);
+                
+                if (data.thinking_info) {
+                    const info = data.thinking_info;
+                    this.log('AI', `深度: ${info.depths?.[0] || '-'} | 评估: ${info.evaluations?.[0] || '-'} | 节点: ${info.nodes?.[0] || '-'}`, 'info');
+                }
+            }
+        } catch (error) {
+            this.log('错误', `引擎走子失败: ${error.message}`, 'error');
+        }
+    }
+    
+    enginePlaceStone(r, c) {
+        if (r < 0 || r >= this.boardSize || c < 0 || c >= this.boardSize) return;
+        if (this.board[r][c] !== 0) return;
+        
+        const coord = this.coordToStr(r, c);
+        this.board[r][c] = this.playerColor === 1 ? 2 : 1;
+        this.moveHistory.push(coord);
+        this.moveCount++;
+        
+        this.log('AI', `落子 ${coord}`, 'info');
+        this.updateMoveHistory();
+        this.updateStatusBar();
+        this.render();
+        this.currentTurn = this.playerColor;
+    }
+    
+    async undoMove() {
+        if (!this.sessionId || this.moveHistory.length < 2) {
+            this.log('错误', '无法悔棋', 'error');
+            return;
+        }
+        
+        this.log('信息', '悔棋功能需要重新创建会话', 'warn');
+    }
+    
+    coordToStr(r, c) {
+        return `${String.fromCharCode(97 + c)}${r + 1}`;
+    }
+    
+    strToCoord(str) {
+        const c = str.charCodeAt(0) - 97;
+        const r = parseInt(str.substring(1)) - 1;
+        return [r, c];
+    }
+    
+    updateStatusBar() {
+        const isBlackTurn = this.currentTurn === 1;
+        document.getElementById('turnDot').className = `stone-dot ${isBlackTurn ? 'black' : 'white'}`;
+        document.getElementById('turnText').textContent = this.sessionId 
+            ? (isBlackTurn ? '黑棋回合' : '白棋回合')
+            : '等待开始';
+        document.getElementById('moveCount').textContent = `步数: ${this.moveCount}`;
+    }
+    
+    render() {
+        if (!this.ctx) return;
+        
+        const ctx = this.ctx;
+        const cs = this.cellSize;
+        const pad = this.padding;
+        const total = pad * 2 + cs * (this.boardSize - 1);
+        
+        ctx.fillStyle = '#d4a574';
+        ctx.fillRect(0, 0, total, total);
+        
+        ctx.strokeStyle = '#5c4033';
+        ctx.lineWidth = 1;
+        for (let i = 0; i < this.boardSize; i++) {
+            const pos = pad + i * cs;
+            ctx.beginPath();
+            ctx.moveTo(pad, pos);
+            ctx.lineTo(total - pad, pos);
+            ctx.stroke();
+            
+            ctx.beginPath();
+            ctx.moveTo(pos, pad);
+            ctx.lineTo(pos, total - pad);
+            ctx.stroke();
+        }
+        
+        const stars = this.boardSize === 15 
+            ? [[3,3], [3,11], [7,7], [11,3], [11,11]]
+            : [[3,3], [3,9], [3,15], [9,3], [9,9], [9,15], [15,3], [15,9], [15,15]];
+        
+        ctx.fillStyle = '#5c4033';
+        for (const [sr, sc] of stars) {
+            if (sr < this.boardSize && sc < this.boardSize) {
+                ctx.beginPath();
+                ctx.arc(pad + sc * cs, pad + sr * cs, 3, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+        
+        ctx.fillStyle = '#5c4033';
+        ctx.font = '10px sans-serif';
+        ctx.textAlign = 'center';
+        for (let i = 0; i < this.boardSize; i++) {
+            ctx.fillText(String.fromCharCode(97 + i), pad + i * cs, pad - 8);
+        }
+        ctx.textAlign = 'right';
+        for (let i = 0; i < this.boardSize; i++) {
+            ctx.fillText(i + 1, pad - 8, pad + i * cs + 3);
+        }
+        
+        for (let r = 0; r < this.boardSize; r++) {
+            for (let c = 0; c < this.boardSize; c++) {
+                const color = this.board[r][c];
+                if (color === 0) continue;
+                
+                const x = pad + c * cs;
+                const y = pad + r * cs;
+                
+                ctx.beginPath();
+                ctx.arc(x + 1, y + 1, 14, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(0,0,0,0.2)';
+                ctx.fill();
+                
+                const grad = ctx.createRadialGradient(x - 4, y - 4, 2, x, y, 14);
+                if (color === 1) {
+                    grad.addColorStop(0, '#4a4a4a');
+                    grad.addColorStop(1, '#1a1a1a');
+                } else {
+                    grad.addColorStop(0, '#ffffff');
+                    grad.addColorStop(1, '#d1d5db');
+                }
+                ctx.beginPath();
+                ctx.arc(x, y, 14, 0, Math.PI * 2);
+                ctx.fillStyle = grad;
+                ctx.fill();
+                
+                ctx.beginPath();
+                ctx.arc(x - 4, y - 4, 4, 0, Math.PI * 2);
+                ctx.fillStyle = color === 1 ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.8)';
+                ctx.fill();
+            }
+        }
+        
+        if (this.moveHistory.length > 0) {
+            const lastMove = this.moveHistory[this.moveHistory.length - 1];
+            const [lr, lc] = this.strToCoord(lastMove);
+            const x = pad + lc * cs;
+            const y = pad + lr * cs;
+            ctx.strokeStyle = '#ef4444';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(x - 6, y - 6, 12, 12);
+        }
+        
+        if (this.hoverPos && !this.gameOver && this.currentTurn === this.playerColor) {
+            const [hr, hc] = this.hoverPos;
+            const x = pad + hc * cs;
+            const y = pad + hr * cs;
+            ctx.beginPath();
+            ctx.arc(x, y, 14, 0, Math.PI * 2);
+            ctx.fillStyle = this.playerColor === 1 ? 'rgba(0,0,0,0.3)' : 'rgba(255,255,255,0.3)';
+            ctx.fill();
+            ctx.strokeStyle = this.playerColor === 1 ? '#000' : '#fff';
+            ctx.lineWidth = 1;
+            ctx.stroke();
+        }
+    }
+    
+    log(who, msg, type = 'info') {
+        const logEl = document.getElementById('thinkingLog');
+        const entry = document.createElement('div');
+        entry.className = `log-entry ${type}`;
+        const time = new Date().toLocaleTimeString('zh-CN', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        entry.innerHTML = `<span style="color:#64748b">[${time}]</span> <b>${who}</b>: ${msg}`;
+        logEl.appendChild(entry);
+        logEl.scrollTop = logEl.scrollHeight;
+    }
+    
+    setBoardSize(size) {
+        this.boardSize = parseInt(size);
+        this.cellSize = size === '19' ? 28 : 36;
+        if (this.sessionId) {
+            this.log('信息', '棋盘大小已更改，请创建新对局', 'warn');
+        }
+    }
+    
+    setRule(rule) {
+        this.rule = rule;
+        if (this.sessionId) {
+            this.log('信息', '规则已更改，请创建新对局', 'warn');
+        }
+    }
+    
+    setPlayerColor(color) {
+        this.playerColor = parseInt(color);
+        if (this.sessionId) {
+            this.log('信息', '玩家颜色已更改，请创建新对局', 'warn');
+        }
+    }
+    
+    toggleSide() {
+        this.playerColor = this.playerColor === 1 ? 2 : 1;
+        document.getElementById('playerColor').value = this.playerColor;
+        this.createSession();
+    }
+}
+
+const app = new GomoEGFApp();
+</script>
+</body>
+</html>

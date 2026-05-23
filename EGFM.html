@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EGFM - EGF 服务器管理器</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0f172a;
+            color: #e2e8f0;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+        .sidebar {
+            width: 280px;
+            background: #1e293b;
+            border-right: 1px solid #334155;
+            display: flex;
+            flex-direction: column;
+        }
+        .sidebar-header {
+            padding: 20px;
+            background: #0f172a;
+            border-bottom: 2px solid #3b82f6;
+            font-size: 16px;
+            font-weight: 700;
+        }
+        .sidebar-header::before {
+            content: "◉ ";
+            color: #3b82f6;
+        }
+        .server-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px;
+        }
+        .server-item {
+            padding: 12px;
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .server-item:hover {
+            border-color: #3b82f6;
+        }
+        .server-item.active {
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.1);
+        }
+        .server-item.error {
+            border-color: #ef4444;
+        }
+        .server-name {
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+        .server-url {
+            font-size: 11px;
+            color: #64748b;
+            font-family: monospace;
+        }
+        .server-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 8px;
+            font-size: 11px;
+        }
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+        }
+        .status-dot.online { background: #10b981; box-shadow: 0 0 6px #10b981; }
+        .status-dot.offline { background: #64748b; }
+        .status-dot.error { background: #ef4444; }
+        .add-server-btn {
+            margin: 12px;
+            padding: 10px;
+            background: #3b82f6;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .add-server-btn:hover { background: #2563eb; }
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .toolbar {
+            padding: 16px 24px;
+            background: #1e293b;
+            border-bottom: 1px solid #334155;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .toolbar h1 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        .toolbar-spacer { flex: 1; }
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            background: #3b82f6;
+            color: white;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn:hover { background: #2563eb; }
+        .btn.secondary { background: #475569; }
+        .btn.secondary:hover { background: #334155; }
+        .btn.success { background: #10b981; }
+        .btn.success:hover { background: #059669; }
+        .btn.danger { background: #ef4444; }
+        .btn.danger:hover { background: #dc2626; }
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .content-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .stat-card {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 16px;
+        }
+        .stat-label {
+            font-size: 12px;
+            color: #64748b;
+            margin-bottom: 8px;
+        }
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #e2e8f0;
+        }
+        .stat-value.success { color: #10b981; }
+        .stat-value.warning { color: #f59e0b; }
+        .stat-value.error { color: #ef4444; }
+        .section {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .section-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid #334155;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .section-content {
+            padding: 20px;
+        }
+        .instance-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .instance-table th,
+        .instance-table td {
+            padding: 12px;
+            text-align: left;
+            font-size: 13px;
+            border-bottom: 1px solid #334155;
+        }
+        .instance-table th {
+            color: #64748b;
+            font-weight: 500;
+            background: #0f172a;
+        }
+        .instance-table tr:hover {
+            background: rgba(59, 130, 246, 0.05);
+        }
+        .instance-table tr:last-child td {
+            border-bottom: none;
+        }
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+        .badge.active {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+        .badge.inactive {
+            background: rgba(100, 116, 139, 0.2);
+            color: #64748b;
+        }
+        .action-btns {
+            display: flex;
+            gap: 8px;
+        }
+        .icon-btn {
+            width: 28px;
+            height: 28px;
+            border: none;
+            border-radius: 4px;
+            background: transparent;
+            color: #64748b;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+        }
+        .icon-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+        }
+        .icon-btn.delete:hover {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+        .icon-btn.play:hover {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        .modal {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            width: 480px;
+            max-width: 90%;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid #334155;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        .modal-body {
+            padding: 20px;
+        }
+        .modal-footer {
+            padding: 16px 20px;
+            border-top: 1px solid #334155;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+        .form-group {
+            margin-bottom: 16px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            color: #64748b;
+            margin-bottom: 6px;
+        }
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #475569;
+            border-radius: 6px;
+            background: #0f172a;
+            color: #e2e8f0;
+            font-size: 14px;
+        }
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #64748b;
+        }
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+        .log-panel {
+            background: #0f172a;
+            border-top: 1px solid #334155;
+            height: 200px;
+            display: flex;
+            flex-direction: column;
+        }
+        .log-header {
+            padding: 8px 16px;
+            background: #1e293b;
+            border-bottom: 1px solid #334155;
+            font-size: 12px;
+            font-weight: 500;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .log-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px 16px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+        .log-entry {
+            margin-bottom: 4px;
+            color: #94a3b8;
+        }
+        .log-entry.error { color: #f87171; }
+        .log-entry.success { color: #34d399; }
+        .log-entry.warn { color: #fbbf24; }
+        .log-time {
+            color: #64748b;
+            margin-right: 8px;
+        }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+        .refresh-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border: 2px solid #3b82f6;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 8px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="sidebar">
+        <div class="sidebar-header">EGF 服务器列表</div>
+        <div class="server-list" id="serverList"></div>
+        <button class="add-server-btn" onclick="app.showAddServerModal()">+ 添加服务器</button>
+    </div>
+    <div class="main-content">
+        <div class="toolbar">
+            <h1 id="currentServerName">未选择服务器</h1>
+            <div class="toolbar-spacer"></div>
+            <button class="btn" onclick="app.refreshAll()" id="btnRefresh">刷新</button>
+            <button class="btn success" onclick="app.createInstance()" id="btnCreate">新建实例</button>
+            <button class="btn secondary" onclick="window.open('GomoEGF.html', '_blank')">打开对局</button>
+        </div>
+        <div class="content-area" id="contentArea">
+            <div class="empty-state">
+                <div class="empty-state-icon">🖥️</div>
+                <div>请从左侧选择一个服务器<br>或添加新的 EGF 服务器</div>
+            </div>
+        </div>
+        <div class="log-panel">
+            <div class="log-header">
+                <span>系统日志</span>
+                <button class="icon-btn" onclick="app.clearLogs()" title="清空">🗑️</button>
+            </div>
+            <div class="log-content" id="logContent">
+                <div class="log-entry">系统就绪</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="addServerModal">
+    <div class="modal">
+        <div class="modal-header">添加 EGF 服务器</div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>服务器名称</label>
+                <input type="text" id="newServerName" placeholder="例如: 本地开发服务器">
+            </div>
+            <div class="form-group">
+                <label>服务器地址</label>
+                <input type="text" id="newServerUrl" placeholder="例如: http://localhost:8000">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn secondary" onclick="app.hideModal('addServerModal')">取消</button>
+            <button class="btn" onclick="app.addServer()">添加</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="createInstanceModal">
+    <div class="modal">
+        <div class="modal-header">新建游戏实例</div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>棋盘大小</label>
+                <select id="instanceBoardSize">
+                    <option value="15" selected>15x15</option>
+                    <option value="19">19x19</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>游戏规则</label>
+                <select id="instanceRule">
+                    <option value="freestyle" selected>自由规则</option>
+                    <option value="standard">标准规则</option>
+                    <option value="renju">连珠规则</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>每步超时 (毫秒)</label>
+                <input type="number" id="instanceTimeout" value="5000" min="1000" step="1000">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn secondary" onclick="app.hideModal('createInstanceModal')">取消</button>
+            <button class="btn success" onclick="app.confirmCreateInstance()">创建</button>
+        </div>
+    </div>
+</div>
+
+<script>
+/**
+ * EGFM - EGF 服务器实例管理器
+ * 复杂度: O(1) 本地存储, O(n) 列表渲染, O(n*m) 批量状态检查
+ */
+
+const STORAGE_SERVERS = 'egfm_servers';
+const STORAGE_LAST_SERVER = 'egfm_last_server';
+
+class EGFManager {
+    constructor() {
+        this.servers = [];
+        this.currentServer = null;
+        this.instances = [];
+        this.logs = [];
+        this.autoRefreshInterval = null;
+        
+        this.init();
+    }
+    
+    init() {
+        this.loadServers();
+        this.renderServerList();
+        this.startAutoRefresh();
+        this.log('系统', 'EGF 管理器已启动');
+        
+        const lastServer = localStorage.getItem(STORAGE_LAST_SERVER);
+        if (lastServer) {
+            const index = this.servers.findIndex(s => s.url === lastServer);
+            if (index >= 0) {
+                this.selectServer(index);
+            }
+        }
+    }
+    
+    /**
+     * 从 localStorage 加载服务器列表
+     * 时间复杂度: O(1)
+     */
+    loadServers() {
+        try {
+            const data = localStorage.getItem(STORAGE_SERVERS);
+            this.servers = data ? JSON.parse(data) : [];
+        } catch (e) {
+            this.log('错误', '加载服务器列表失败: ' + e.message, 'error');
+            this.servers = [];
+        }
+    }
+    
+    /**
+     * 保存服务器列表到 localStorage
+     * 时间复杂度: O(1)
+     */
+    saveServers() {
+        try {
+            localStorage.setItem(STORAGE_SERVERS, JSON.stringify(this.servers));
+        } catch (e) {
+            this.log('错误', '保存服务器列表失败: ' + e.message, 'error');
+        }
+    }
+    
+    /**
+     * 渲染服务器列表
+     * 时间复杂度: O(n)
+     */
+    renderServerList() {
+        const container = document.getElementById('serverList');
+        if (this.servers.length === 0) {
+            container.innerHTML = '<div style="padding:20px;color:#64748b;text-align:center;font-size:12px;">暂无服务器<br>点击下方按钮添加</div>';
+            return;
+        }
+        
+        container.innerHTML = this.servers.map((server, index) => `
+            <div class="server-item ${server.status === 'online' ? '' : 'error'} ${this.currentServer?.url === server.url ? 'active' : ''}" 
+                 onclick="app.selectServer(${index})">
+                <div class="server-name">${this.escapeHtml(server.name)}</div>
+                <div class="server-url">${this.escapeHtml(server.url)}</div>
+                <div class="server-status">
+                    <span class="status-dot ${server.status === 'online' ? 'online' : server.status === 'error' ? 'error' : 'offline'}"></span>
+                    <span>${server.status === 'online' ? '在线' : server.status === 'error' ? '错误' : '离线'}</span>
+                    ${server.instances !== undefined ? `· ${server.instances} 实例` : ''}
+                </div>
+            </div>
+        `).join('');
+    }
+    
+    escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+    
+    /**
+     * 检查单个服务器状态
+     * 时间复杂度: O(1) 网络请求
+     */
+    async checkServerStatus(server) {
+        try {
+            const controller = new AbortController();
+            const timeout = setTimeout(() => controller.abort(), 5000);
+            
+            const response = await fetch(`${server.url}/health`, {
+                method: 'GET',
+                headers: { 'Accept': 'application/json' },
+                signal: controller.signal
+            });
+            
+            clearTimeout(timeout);
+            
+            if (response.ok) {
+                const data = await response.json();
+                server.status = 'online';
+                server.instances = data.active_sessions || 0;
+                return true;
+            } else {
+                server.status = 'error';
+                server.instances = 0;
+                return false;
+            }
+        } catch (e) {
+            server.status = 'offline';
+            server.instances = 0;
+            return false;
+        }
+    }
+    
+    /**
+     * 批量检查所有服务器状态
+     * 时间复杂度: O(n) 并行请求
+     */
+    async refreshAllServersStatus() {
+        const promises = this.servers.map(s => this.checkServerStatus(s));
+        await Promise.all(promises);
+        this.renderServerList();
+    }
+    
+    /**
+     * 选择服务器
+     */
+    async selectServer(index) {
+        this.currentServer = this.servers[index];
+        localStorage.setItem(STORAGE_LAST_SERVER, this.currentServer.url);
+        
+        document.getElementById('currentServerName').textContent = this.currentServer.name;
+        this.renderServerList();
+        
+        await this.loadInstances();
+        this.renderDashboard();
+    }
+    
+    /**
+     * 加载服务器实例列表
+     * 时间复杂度: O(1) 网络请求
+     */
+    async loadInstances() {
+        if (!this.currentServer) return;
+        
+        try {
+            const response = await fetch(`${this.currentServer.url}/sessions`, {
+                headers: { 'Accept': 'application/json' }
+            });
+            
+            if (response.ok) {
+                this.instances = await response.json();
+            } else {
+                this.instances = [];
+                this.log('错误', '获取实例列表失败', 'error');
+            }
+        } catch (e) {
+            this.instances = [];
+            this.log('错误', '连接服务器失败: ' + e.message, 'error');
+        }
+    }
+    
+    /**
+     * 渲染主面板
+     */
+    renderDashboard() {
+        const container = document.getElementById('contentArea');
+        const activeCount = this.instances.filter(i => i.is_active).length;
+        const totalMoves = this.instances.reduce((sum, i) => sum + (i.move_count || 0), 0);
+        
+        container.innerHTML = `
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">总实例数</div>
+                    <div class="stat-value">${this.instances.length}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">活跃对局</div>
+                    <div class="stat-value success">${activeCount}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">已完成对局</div>
+                    <div class="stat-value">${this.instances.length - activeCount}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">总步数</div>
+                    <div class="stat-value warning">${totalMoves}</div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-title">游戏实例列表</span>
+                    <button class="btn" onclick="app.refreshAll()">刷新</button>
+                </div>
+                <div class="section-content">
+                    ${this.instances.length === 0 ? 
+                        '<div style="text-align:center;padding:40px;color:#64748b;">暂无游戏实例</div>' :
+                        `<table class="instance-table">
+                            <thead>
+                                <tr>
+                                    <th>会话ID</th>
+                                    <th>棋盘</th>
+                                    <th>规则</th>
+                                    <th>步数</th>
+                                    <th>状态</th>
+                                    <th>最后活动</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${this.instances.map(inst => `
+                                    <tr>
+                                        <td><code>${inst.session_id.substring(0, 16)}...</code></td>
+                                        <td>${inst.board_size}x${inst.board_size}</td>
+                                        <td>${inst.rule}</td>
+                                        <td>${inst.move_count}</td>
+                                        <td><span class="badge ${inst.is_active ? 'active' : 'inactive'}">${inst.is_active ? '进行中' : '已结束'}</span></td>
+                                        <td>${this.formatTime(inst.last_activity)}</td>
+                                        <td>
+                                            <div class="action-btns">
+                                                <button class="icon-btn play" onclick="app.playInstance('${inst.session_id}')" title="开始对局">▶</button>
+                                                <button class="icon-btn" onclick="app.viewInstance('${inst.session_id}')" title="查看详情">👁</button>
+                                                <button class="icon-btn delete" onclick="app.deleteInstance('${inst.session_id}')" title="删除">✕</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>`
+                    }
+                </div>
+            </div>
+        `;
+    }
+    
+    formatTime(isoTime) {
+        if (!isoTime) return '-';
+        const date = new Date(isoTime);
+        return date.toLocaleString('zh-CN', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+    }
+    
+    /**
+     * 显示添加服务器模态框
+     */
+    showAddServerModal() {
+        document.getElementById('newServerName').value = '';
+        document.getElementById('newServerUrl').value = '';
+        this.showModal('addServerModal');
+    }
+    
+    /**
+     * 添加服务器
+     */
+    async addServer() {
+        const name = document.getElementById('newServerName').value.trim();
+        const url = document.getElementById('newServerUrl').value.trim();
+        
+        if (!name || !url) {
+            alert('请输入服务器名称和地址');
+            return;
+        }
+        
+        try {
+            new URL(url);
+        } catch {
+            alert('服务器地址格式无效');
+            return;
+        }
+        
+        const normalizedUrl = url.replace(/\/$/, '');
+        
+        if (this.servers.some(s => s.url === normalizedUrl)) {
+            alert('该服务器已存在');
+            return;
+        }
+        
+        const server = {
+            name,
+            url: normalizedUrl,
+            status: 'offline',
+            instances: 0,
+            addedAt: new Date().toISOString()
+        };
+        
+        this.servers.push(server);
+        this.saveServers();
+        this.renderServerList();
+        this.hideModal('addServerModal');
+        this.log('成功', `已添加服务器: ${name}`);
+        
+        await this.checkServerStatus(server);
+        this.renderServerList();
+    }
+    
+    /**
+     * 删除服务器
+     */
+    deleteServer(index) {
+        if (!confirm('确定要删除此服务器配置吗？')) return;
+        
+        const server = this.servers[index];
+        this.servers.splice(index, 1);
+        this.saveServers();
+        
+        if (this.currentServer?.url === server.url) {
+            this.currentServer = null;
+            document.getElementById('currentServerName').textContent = '未选择服务器';
+            document.getElementById('contentArea').innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">🖥️</div>
+                    <div>请从左侧选择一个服务器<br>或添加新的 EGF 服务器</div>
+                </div>
+            `;
+        }
+        
+        this.renderServerList();
+        this.log('信息', `已删除服务器: ${server.name}`);
+    }
+    
+    /**
+     * 创建游戏实例
+     */
+    createInstance() {
+        if (!this.currentServer) {
+            alert('请先选择一个服务器');
+            return;
+        }
+        this.showModal('createInstanceModal');
+    }
+    
+    /**
+     * 确认创建实例
+     */
+    async confirmCreateInstance() {
+        const boardSize = parseInt(document.getElementById('instanceBoardSize').value);
+        const rule = document.getElementById('instanceRule').value;
+        const timeout = parseInt(document.getElementById('instanceTimeout').value);
+        
+        try {
+            const response = await fetch(`${this.currentServer.url}/sessions`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    board_size: boardSize,
+                    rule: rule,
+                    timeout_turn: timeout,
+                    timeout_match: 300000,
+                    max_memory: 4096
+                })
+            });
+            
+            if (response.ok) {
+                const data = await response.json();
+                this.log('成功', `实例创建成功: ${data.session_id.substring(0, 16)}...`);
+                this.hideModal('createInstanceModal');
+                await this.loadInstances();
+                this.renderDashboard();
+            } else {
+                throw new Error(`HTTP ${response.status}`);
+            }
+        } catch (e) {
+            this.log('错误', '创建实例失败: ' + e.message, 'error');
+        }
+    }
+    
+    /**
+     * 删除实例
+     */
+    async deleteInstance(sessionId) {
+        if (!confirm('确定要删除此游戏实例吗？')) return;
+        
+        try {
+            const response = await fetch(`${this.currentServer.url}/sessions/${sessionId}`, {
+                method: 'DELETE',
+                headers: { 'Accept': 'application/json' }
+            });
+            
+            if (response.ok) {
+                this.log('成功', '实例已删除');
+                await this.loadInstances();
+                this.renderDashboard();
+            } else {
+                throw new Error(`HTTP ${response.status}`);
+            }
+        } catch (e) {
+            this.log('错误', '删除实例失败: ' + e.message, 'error');
+        }
+    }
+    
+    /**
+     * 查看实例详情
+     */
+    async viewInstance(sessionId) {
+        try {
+            const response = await fetch(`${this.currentServer.url}/sessions/${sessionId}`, {
+                headers: { 'Accept': 'application/json' }
+            });
+            
+            if (response.ok) {
+                const data = await response.json();
+                alert(`会话详情:\nID: ${data.session_id}\n棋盘: ${data.board_size}x${data.board_size}\n规则: ${data.rule}\n步数: ${data.move_count}\n状态: ${data.is_active ? '进行中' : '已结束'}\n创建时间: ${this.formatTime(data.created_at)}`);
+            }
+        } catch (e) {
+            this.log('错误', '获取实例详情失败: ' + e.message, 'error');
+        }
+    }
+    
+    /**
+     * 在 GomoEGF 中打开实例
+     */
+    playInstance(sessionId) {
+        const url = `GomoEGF.html?server=${encodeURIComponent(this.currentServer.url)}&session=${sessionId}`;
+        window.open(url, '_blank');
+    }
+    
+    /**
+     * 刷新所有数据
+     */
+    async refreshAll() {
+        const btn = document.getElementById('btnRefresh');
+        btn.innerHTML = '刷新<span class="refresh-indicator"></span>';
+        btn.disabled = true;
+        
+        await this.refreshAllServersStatus();
+        
+        if (this.currentServer) {
+            await this.loadInstances();
+            this.renderDashboard();
+        }
+        
+        btn.innerHTML = '刷新';
+        btn.disabled = false;
+        this.log('信息', '刷新完成');
+    }
+    
+    /**
+     * 启动自动刷新
+     */
+    startAutoRefresh() {
+        this.refreshAllServersStatus();
+        this.autoRefreshInterval = setInterval(() => {
+            this.refreshAllServersStatus();
+            if (this.currentServer) {
+                this.loadInstances().then(() => this.renderDashboard());
+            }
+        }, 30000);
+    }
+    
+    /**
+     * 显示模态框
+     */
+    showModal(id) {
+        document.getElementById(id).classList.add('active');
+    }
+    
+    /**
+     * 隐藏模态框
+     */
+    hideModal(id) {
+        document.getElementById(id).classList.remove('active');
+    }
+    
+    /**
+     * 添加日志
+     */
+    log(source, message, type = 'info') {
+        const time = new Date().toLocaleTimeString('zh-CN');
+        const entry = { time, source, message, type };
+        this.logs.push(entry);
+        
+        if (this.logs.length > 100) {
+            this.logs.shift();
+        }
+        
+        this.renderLogs();
+    }
+    
+    renderLogs() {
+        const container = document.getElementById('logContent');
+        container.innerHTML = this.logs.map(log => `
+            <div class="log-entry ${log.type}">
+                <span class="log-time">[${log.time}]</span>
+                <b>${log.source}</b>: ${log.message}
+            </div>
+        `).join('');
+        container.scrollTop = container.scrollHeight;
+    }
+    
+    clearLogs() {
+        this.logs = [];
+        this.renderLogs();
+    }
+}
+
+const app = new EGFManager();
+</script>
+</body>
+</html>
