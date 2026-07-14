@@ -21,7 +21,7 @@
         "description": "内核级VSCode实例隔离工具，所有插件信息全部完全隔离。",
         "repo_url": "https://github.com/Ethernos-Studio/vsenv",
         "relatively_url": "Ethernos-Studio/vsenv",
-        "web_url": "https://ethernos.cn/VSenvWeb/",
+        "web_url": "https://ethernos.net/VSenvWeb/",
         "icon": "fa-code",
         "features": ["内核级实例隔离", "完全隔离插件", "多版本管理"],
         "asset_config": {
@@ -56,7 +56,7 @@
         "description": "简单、现代的编程语言，为开发者提供更好的编程体验。",
         "repo_url": "https://github.com/dhjs0000/bcc",
         "relatively_url": "dhjs0000/bcc",
-        "web_url": "https://ethernos.cn/bccWeb/",
+        "web_url": "https://ethernos.net/bccWeb/",
         "icon": "fa-code",
         "features": ["简单语法", "强大功能", "完整工具链"],
         "asset_config": {
@@ -74,7 +74,7 @@
         "description": "Blender Version Manager Tool",
         "repo_url": "https://github.com/dhjs0000/Blender-VMT",
         "relatively_url": "dhjs0000/Blender-VMT",
-        "web_url": "https://ethernos.cn/Blender-VMT/",
+        "web_url": "https://ethernos.net/Blender-VMT/",
         "icon": "fa-cube",
         "features": ["版本管理", "用户友好", "项目追踪"],
         "asset_config": {
@@ -92,7 +92,7 @@
         "description": "Blender Version Manager Tool - Remastered Edition",
         "repo_url": "https://github.com/dhjs0000/Blender-VMT-Remastered",
         "relatively_url": "dhjs0000/Blender-VMT-Remastered",
-        "web_url": "https://ethernos.cn/Blender-VMT",
+        "web_url": "https://ethernos.net/Blender-VMT",
         "icon": "fa-cubes",
         "features": ["高效版本管理", "直观界面", "完整项目追踪"],
         "asset_config": {

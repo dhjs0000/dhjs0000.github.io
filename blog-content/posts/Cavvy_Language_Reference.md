@@ -44,7 +44,7 @@ blog_number: 19
 
 ### 1.1 什么是Cavvy
 
-Cavvy (文件扩展名 `.cay`) 是一个静态类型的面向对象编程语言，由 Ethernos Studio 开发。它是 Ethernos 编程语言工具链中的里程碑，是 Ethernos 发布的所有编程语言中第一个编译型编程语言。
+Cavvy (文件扩展名 `.cay`) 是一个静态类型的面向对象编程语言，由 Ethernos 开发。它是 Ethernos 编程语言工具链中的里程碑，是 Ethernos 发布的所有编程语言中第一个编译型编程语言。
 
 ### 1.2 设计哲学
 

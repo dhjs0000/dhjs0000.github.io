@@ -379,7 +379,7 @@ async function loadAcknowledgments() {
                 ).join('');
                 
                 specialThanks.innerHTML = `
-                    <p>感谢所有支持和帮助过Ethernos Studio的朋友们：</p>
+                    <p>感谢所有支持和帮助过Ethernos的朋友们：</p>
                     <div class="special-list">${specialList}</div>
                 `;
             } else {

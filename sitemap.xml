@@ -9,7 +9,7 @@
 
   <!-- 首页 - 最高优先级 -->
   <url>
-    <loc>https://ethernos.cn/</loc>
+    <loc>https://ethernos.net/</loc>
     <lastmod>2026-01-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
@@ -17,7 +17,7 @@
 
   <!-- 主页 -->
   <url>
-    <loc>https://ethernos.cn/home.html</loc>
+    <loc>https://ethernos.net/home.html</loc>
     <lastmod>2026-01-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
@@ -25,7 +25,7 @@
 
   <!-- 博客页面 -->
   <url>
-    <loc>https://ethernos.cn/blog.html</loc>
+    <loc>https://ethernos.net/blog.html</loc>
     <lastmod>2026-01-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
@@ -33,7 +33,7 @@
 
   <!-- 关于我们 -->
   <url>
-    <loc>https://ethernos.cn/about.html</loc>
+    <loc>https://ethernos.net/about.html</loc>
     <lastmod>2026-01-31</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -41,7 +41,7 @@
 
   <!-- 团队介绍 -->
   <url>
-    <loc>https://ethernos.cn/team.html</loc>
+    <loc>https://ethernos.net/team.html</loc>
     <lastmod>2026-01-31</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -49,7 +49,7 @@
 
   <!-- 联系我们 -->
   <url>
-    <loc>https://ethernos.cn/contact.html</loc>
+    <loc>https://ethernos.net/contact.html</loc>
     <lastmod>2026-01-31</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -57,7 +57,7 @@
 
   <!-- 软件下载 -->
   <url>
-    <loc>https://ethernos.cn/downloads.html</loc>
+    <loc>https://ethernos.net/downloads.html</loc>
     <lastmod>2026-01-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -65,7 +65,7 @@
 
   <!-- 文档中心 -->
   <url>
-    <loc>https://ethernos.cn/docs.html</loc>
+    <loc>https://ethernos.net/docs.html</loc>
     <lastmod>2026-01-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -73,7 +73,7 @@
 
   <!-- 工具集合 -->
   <url>
-    <loc>https://ethernos.cn/tools.html</loc>
+    <loc>https://ethernos.net/tools.html</loc>
     <lastmod>2026-01-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -81,7 +81,7 @@
 
   <!-- 开发指南 -->
   <url>
-    <loc>https://ethernos.cn/development-guide.html</loc>
+    <loc>https://ethernos.net/development-guide.html</loc>
     <lastmod>2026-01-31</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -89,7 +89,7 @@
 
   <!-- 常见问题 -->
   <url>
-    <loc>https://ethernos.cn/questions.html</loc>
+    <loc>https://ethernos.net/questions.html</loc>
     <lastmod>2026-01-31</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -97,7 +97,7 @@
 
   <!-- 致谢页面 -->
   <url>
-    <loc>https://ethernos.cn/Acknowledgments.json</loc>
+    <loc>https://ethernos.net/Acknowledgments.json</loc>
     <lastmod>2026-01-31</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
@@ -105,7 +105,7 @@
 
   <!-- VSenv 帮助文档 -->
   <url>
-    <loc>https://ethernos.cn/VSenv/helps.html</loc>
+    <loc>https://ethernos.net/VSenv/helps.html</loc>
     <lastmod>2026-01-31</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -113,7 +113,7 @@
 
   <!-- SCC 查询 -->
   <url>
-    <loc>https://ethernos.cn/SCC/query.html</loc>
+    <loc>https://ethernos.net/SCC/query.html</loc>
     <lastmod>2026-01-31</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -121,7 +121,7 @@
 
   <!-- RMC 成绩查询 -->
   <url>
-    <loc>https://ethernos.cn/RMC/score.html</loc>
+    <loc>https://ethernos.net/RMC/score.html</loc>
     <lastmod>2026-01-31</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -129,7 +129,7 @@
 
   <!-- EP 查询 -->
   <url>
-    <loc>https://ethernos.cn/EP/query.html</loc>
+    <loc>https://ethernos.net/EP/query.html</loc>
     <lastmod>2026-01-31</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -137,7 +137,7 @@
 
   <!-- EP 发布 -->
   <url>
-    <loc>https://ethernos.cn/EP/release.html</loc>
+    <loc>https://ethernos.net/EP/release.html</loc>
     <lastmod>2026-01-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>

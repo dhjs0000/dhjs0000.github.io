@@ -1,8 +1,8 @@
-# Ethernos Studio 以太诺斯工作室
+# Ethernos 以太诺斯
 
 ## 项目概述
 
-Ethernos Studio 是一个专注于开源技术创新和数字内容创作的工作室。我们致力于通过技术创新推动数字时代的发展，为开发者和创作者提供优质的技术解决方案和创作平台。
+Ethernos 是一个专注于开源技术创新和数字内容创作的工作室。我们致力于通过技术创新推动数字时代的发展，为开发者和创作者提供优质的技术解决方案和创作平台。
 
 ### 核心特色
 
@@ -243,7 +243,7 @@ Ethernos Studio 是一个专注于开源技术创新和数字内容创作的工�
 
 ## 版权信息
 
-Copyright © 2025 Ethernos Studio. All rights reserved.
+Copyright © 2025 Ethernos. All rights reserved.
 
 ## 更新日志
 

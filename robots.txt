@@ -1,5 +1,5 @@
-# robots.txt for Ethernos Studio
-# https://ethernos.cn/robots.txt
+# robots.txt for Ethernos
+# https://ethernos.net/robots.txt
 
 # 允许所有搜索引擎爬虫访问
 User-agent: *
@@ -20,7 +20,7 @@ Disallow: /*.txt$
 Disallow: /*.md$
 
 # 网站地图位置
-Sitemap: https://ethernos.cn/sitemap.xml
+Sitemap: https://ethernos.net/sitemap.xml
 
 # 爬取速率限制（礼貌性建议）
 # Crawl-delay: 10
