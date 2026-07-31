@@ -60,6 +60,24 @@
                 </div>
             </div>
             <a href="Clarity_setting.html">设置</a>
+            
+            <!-- GitHub 登录状态 -->
+            <div class="nav-auth" id="navAuth">
+                <!-- 未登录状态 -->
+                <button class="nav-auth-btn login-btn" id="navLoginBtn" onclick="GitHubAuth.login()">
+                    <i class="fab fa-github"></i> 登录
+                </button>
+                <!-- 已登录状态 -->
+                <div class="nav-auth-user" id="navAuthUser" style="display: none;">
+                    <img id="navUserAvatar" src="" alt="avatar" class="nav-user-avatar">
+                    <span id="navUserName" class="nav-user-name"></span>
+                    <div class="nav-user-dropdown">
+                        <a href="Clarity_setting.html"><i class="fas fa-cog"></i> 账户设置</a>
+                        <a href="#" onclick="handleNavLogout(event)"><i class="fas fa-sign-out-alt"></i> 退出登录</a>
+                    </div>
+                </div>
+            </div>
+            
             <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
                 <i class="fas fa-moon"></i>
                 <i class="fas fa-sun"></i>
@@ -68,4 +86,188 @@
     </div>
 </nav>
 
-    <script src="cookie-consent.js"></script>
+<!-- 导航栏登录样式 -->
+<style>
+.nav-auth {
+    position: relative;
+}
+
+.nav-auth-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: #24292e;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.nav-auth-btn:hover {
+    background: #2f363d;
+}
+
+.nav-auth-user {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: background-color 0.2s;
+}
+
+.nav-auth-user:hover {
+    background: var(--hover-bg, rgba(0,0,0,0.1));
+}
+
+.nav-user-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px solid var(--border-color, #ddd);
+}
+
+.nav-user-name {
+    font-size: 0.875rem;
+    max-width: 80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.nav-user-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 8px;
+    background: var(--card-bg, white);
+    border: 1px solid var(--border-color, #ddd);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    min-width: 160px;
+    z-index: 1000;
+    overflow: hidden;
+}
+
+.nav-user-dropdown.show {
+    display: block;
+}
+
+.nav-user-dropdown a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    color: var(--text-color, #333);
+    text-decoration: none;
+    font-size: 0.875rem;
+    transition: background-color 0.2s;
+}
+
+.nav-user-dropdown a:hover {
+    background: var(--hover-bg, rgba(0,0,0,0.05));
+}
+
+.nav-user-dropdown i {
+    width: 16px;
+    text-align: center;
+    color: var(--text-muted, #666);
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+    .nav-user-name {
+        display: none;
+    }
+    
+    .nav-auth-btn span {
+        display: none;
+    }
+}
+</style>
+
+<!-- 导航栏登录逻辑 -->
+<script src="config.js"></script>
+<script src="github-oauth.js"></script>
+<script>
+// 初始化导航栏登录状态
+function initNavAuth() {
+    var navAuthUser = document.getElementById('navAuthUser');
+    var navLoginBtn = document.getElementById('navLoginBtn');
+    
+    if (!navAuthUser || !navLoginBtn) return;
+    
+    if (GitHubAuth.isLoggedIn()) {
+        navLoginBtn.style.display = 'none';
+        navAuthUser.style.display = 'inline-flex';
+        loadNavUserInfo();
+    } else {
+        navLoginBtn.style.display = 'inline-flex';
+        navAuthUser.style.display = 'none';
+    }
+}
+
+// 加载导航栏用户信息
+function loadNavUserInfo() {
+    var navAuthUser = document.getElementById('navAuthUser');
+    var navUserAvatar = document.getElementById('navUserAvatar');
+    var navUserName = document.getElementById('navUserName');
+    
+    GitHubAuth.getUser()
+        .then(function(user) {
+            if (user) {
+                navUserAvatar.src = user.avatarUrl;
+                navUserName.textContent = user.name || user.login;
+            } else {
+                // 获取失败，显示未登录状态
+                navAuthUser.style.display = 'none';
+                document.getElementById('navLoginBtn').style.display = 'inline-flex';
+            }
+        })
+        .catch(function() {
+            // 获取失败
+            navAuthUser.style.display = 'none';
+            document.getElementById('navLoginBtn').style.display = 'inline-flex';
+        });
+    
+    // 添加下拉菜单切换
+    navAuthUser.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var dropdown = document.querySelector('.nav-user-dropdown');
+        if (dropdown) {
+            dropdown.classList.toggle('show');
+        }
+    });
+    
+    // 点击其他地方关闭下拉菜单
+    document.addEventListener('click', function() {
+        var dropdown = document.querySelector('.nav-user-dropdown');
+        if (dropdown) {
+            dropdown.classList.remove('show');
+        }
+    });
+}
+
+// 导航栏退出登录
+function handleNavLogout(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    GitHubAuth.logout();
+    initNavAuth();
+    window.location.href = 'home.html';
+}
+
+// DOM加载完成后初始化
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initNavAuth);
+} else {
+    initNavAuth();
+}
+</script>
+
+<script src="cookie-consent.js"></script>

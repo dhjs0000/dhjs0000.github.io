@@ -710,6 +710,90 @@
                 height: 60%;
             }
         }
+
+        /* GitHub API 限额提示 */
+        .rate-limit-notice {
+            background: linear-gradient(135deg, #f59e0b20 0%, #f9731620 100%);
+            border: 1px solid #f59e0b;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 24px;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .rate-limit-content {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .rate-limit-content > i {
+            font-size: 2rem;
+            color: #f59e0b;
+            flex-shrink: 0;
+        }
+
+        .rate-limit-text {
+            flex: 1;
+        }
+
+        .rate-limit-text strong {
+            display: block;
+            color: var(--text-color, #e4e4e7);
+            font-size: 1rem;
+            margin-bottom: 4px;
+        }
+
+        .rate-limit-text p {
+            margin: 0;
+            color: var(--text-muted, #a1a1aa);
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+
+        .rate-limit-login {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: #24292e;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .rate-limit-login:hover {
+            background: #2f363d;
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 768px) {
+            .rate-limit-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .rate-limit-login {
+                width: 100%;
+                justify-content: center;
+            }
+        }
     </style>
 </head>
 <body>
@@ -717,6 +801,21 @@
 
     <main class="content">
         <h1 class="page-title">软件下载</h1>
+
+        <!-- GitHub API 限额提示 -->
+        <div id="rateLimitNotice" class="rate-limit-notice" style="display: none;">
+            <div class="rate-limit-content">
+                <i class="fas fa-exclamation-triangle"></i>
+                <div class="rate-limit-text">
+                    <strong>GitHub API 请求限额</strong>
+                    <p>已达到未登录用户的请求限额 (60次/小时)。<br>
+                    登录 GitHub 可获得更高限额 (5000次/小时)</p>
+                </div>
+                <button class="rate-limit-login" onclick="GitHubAuth.login()">
+                    <i class="fab fa-github"></i> 使用 GitHub 登录
+                </button>
+            </div>
+        </div>
 
         <div class="asymmetric-layout">
             <!-- 左侧主要内容 -->
@@ -1135,6 +1234,12 @@
 
                 clearTimeout(timeoutId);
 
+                // 检测 API 限额 (403)
+                if (response.status === 403) {
+                    showRateLimitNotice();
+                    throw new Error('GitHub API rate limit exceeded');
+                }
+
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
                 const data = await response.json();
@@ -1178,6 +1283,18 @@
                         无法获取最新版本信息，请前往 GitHub 查看详情。
                     </p>
                 `;
+            }
+        }
+
+        // 显示 API 限额提示
+        let rateLimitNoticeShown = false;
+        function showRateLimitNotice() {
+            if (rateLimitNoticeShown) return;
+            rateLimitNoticeShown = true;
+            
+            const notice = document.getElementById('rateLimitNotice');
+            if (notice) {
+                notice.style.display = 'block';
             }
         }
 
