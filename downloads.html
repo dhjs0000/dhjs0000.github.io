@@ -852,6 +852,7 @@
 
     <script src="script.js"></script>
     <script src="config.js"></script>
+    <script src="github-oauth.js"></script>
     <script>
         // 全局软件配置存储
         let softwareConfigs = {};
@@ -1025,11 +1026,23 @@
             const headers = {
                 'Accept': 'application/vnd.github.v3+json'
             };
+            
+            // 优先使用 OAuth 登录的 token (有 5000 次/小时的限额)
+            if (typeof GitHubAuth !== 'undefined' && GitHubAuth.isLoggedIn()) {
+                const auth = GitHubAuth.getAuth();
+                if (auth && auth.accessToken) {
+                    headers.Authorization = `Bearer ${auth.accessToken}`;
+                    return headers;
+                }
+            }
+            
+            // 回退到 config.githubToken (PAT)
             if (typeof config !== 'undefined' && config.githubToken &&
                 config.githubToken !== 'ghp_YOUR_TOKEN_HERE' &&
                 config.githubToken.startsWith('ghp_')) {
                 headers.Authorization = `token ${config.githubToken}`;
             }
+            
             return headers;
         }
 
