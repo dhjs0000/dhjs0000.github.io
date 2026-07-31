@@ -230,6 +230,108 @@
                 margin-bottom: 24px;
             }
         }
+
+        /* 账户相关样式 */
+        .btn-github {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: #24292e;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-github:hover {
+            background: #2f363d;
+        }
+
+        .account-profile {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+            margin-top: 16px;
+        }
+
+        .account-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            border: 2px solid var(--border-color);
+            flex-shrink: 0;
+        }
+
+        .account-info {
+            flex: 1;
+        }
+
+        .account-name {
+            font-weight: 600;
+            font-size: 1.125rem;
+            margin: 0 0 4px 0;
+        }
+
+        .account-login {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            margin: 0 0 4px 0;
+        }
+
+        .account-email {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            margin: 0 0 8px 0;
+        }
+
+        .account-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 0.875rem;
+        }
+
+        .account-link:hover {
+            text-decoration: underline;
+        }
+
+        .account-stats {
+            display: flex;
+            gap: 24px;
+            margin-top: 16px;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 12px 24px;
+            background: var(--bg-color);
+            border-radius: 6px;
+        }
+
+        .stat-value {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .account-expiry {
+            margin-top: 12px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
     </style>
 </head>
 <body>
@@ -258,6 +360,12 @@
                         <button class="settings-nav-link" data-section="personalization">
                             <i class="fas fa-palette"></i>
                             个性化设置
+                        </button>
+                    </li>
+                    <li class="settings-nav-item">
+                        <button class="settings-nav-link" data-section="account">
+                            <i class="fas fa-user"></i>
+                            账户设置
                         </button>
                     </li>
                 </ul>
@@ -384,6 +492,66 @@
                         </div>
                     </div>
                 </section>
+
+                <!-- 账户设置 -->
+                <section id="account" class="settings-section">
+                    <h2>账户设置</h2>
+                    <p class="section-desc">管理您的 GitHub 账户连接</p>
+
+                    <!-- 未登录状态 -->
+                    <div id="accountLoggedOut" class="setting-item">
+                        <div class="setting-item-header">
+                            <div>
+                                <h3 class="setting-item-title">GitHub 账户</h3>
+                                <p class="setting-item-desc">登录 GitHub 以同步您的数据和偏好设置</p>
+                            </div>
+                        </div>
+                        <button class="btn-github" onclick="GitHubAuth.login()" style="margin-top: 16px;">
+                            <i class="fab fa-github"></i> 使用 GitHub 登录
+                        </button>
+                    </div>
+
+                    <!-- 已登录状态 -->
+                    <div id="accountLoggedIn" style="display: none;">
+                        <div class="setting-item">
+                            <h3 class="setting-item-title">账户信息</h3>
+                            <div class="account-profile">
+                                <img id="accountAvatar" src="" alt="Avatar" class="account-avatar">
+                                <div class="account-info">
+                                    <div class="account-name" id="accountName">加载中...</div>
+                                    <div class="account-login" id="accountLogin">@...</div>
+                                    <div class="account-email" id="accountEmail"></div>
+                                    <a id="accountUrl" href="#" target="_blank" class="account-link">
+                                        <i class="fas fa-external-link-alt"></i> 查看 GitHub 主页
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <h3 class="setting-item-title">登录状态</h3>
+                            <div class="account-stats" id="accountStats">
+                                <div class="stat-item">
+                                    <span class="stat-value" id="accountFollowers">-</span>
+                                    <span class="stat-label">关注者</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-value" id="accountFollowing">-</span>
+                                    <span class="stat-label">正在关注</span>
+                                </div>
+                            </div>
+                            <div class="account-expiry" id="accountExpiry"></div>
+                        </div>
+
+                        <div class="setting-item">
+                            <h3 class="setting-item-title">断开连接</h3>
+                            <p class="setting-item-desc">退出登录并清除所有本地存储的账户信息</p>
+                            <button class="btn-danger" onclick="handleLogout()" style="margin-top: 16px;">
+                                <i class="fas fa-sign-out-alt"></i> 退出登录
+                            </button>
+                        </div>
+                    </div>
+                </section>
             </div>
         </div>
     </main>
@@ -425,6 +593,8 @@
 
     <script src="script.js"></script>
     <script src="cookie-consent.js"></script>
+    <script src="config.js"></script>
+    <script src="github-oauth.js"></script>
     <script>
         // 标签切换
         document.querySelectorAll('.settings-nav-link').forEach(link => {
@@ -603,7 +773,69 @@
         document.addEventListener('DOMContentLoaded', function() {
             calculateStorage();
             updateCurrentSettings();
+            initAccountSettings();
         });
+
+        // 账户设置初始化
+        function initAccountSettings() {
+            var accountLoggedIn = document.getElementById('accountLoggedIn');
+            var accountLoggedOut = document.getElementById('accountLoggedOut');
+
+            if (GitHubAuth.isLoggedIn()) {
+                accountLoggedIn.style.display = 'block';
+                accountLoggedOut.style.display = 'none';
+                loadAccountInfo();
+            } else {
+                accountLoggedIn.style.display = 'none';
+                accountLoggedOut.style.display = 'block';
+            }
+        }
+
+        // 加载账户信息
+        function loadAccountInfo() {
+            GitHubAuth.getUser()
+                .then(function(user) {
+                    if (user) {
+                        document.getElementById('accountAvatar').src = user.avatarUrl;
+                        document.getElementById('accountName').textContent = user.name || user.login;
+                        document.getElementById('accountLogin').textContent = '@' + user.login;
+                        document.getElementById('accountEmail').textContent = user.email || '未设置公开邮箱';
+                        document.getElementById('accountUrl').href = user.url;
+                        document.getElementById('accountFollowers').textContent = user.followers;
+                        document.getElementById('accountFollowing').textContent = user.following;
+
+                        // 显示 token 过期时间
+                        var expiryStr = localStorage.getItem(config.storageKeys.authExpiry);
+                        if (expiryStr) {
+                            var expiryTime = parseInt(expiryStr, 10);
+                            var remainingMs = expiryTime - Date.now();
+                            if (remainingMs > 0) {
+                                var remainingHours = Math.floor(remainingMs / (1000 * 60 * 60));
+                                var remainingMinutes = Math.floor((remainingMs % (1000 * 60 * 60)) / (1000 * 60));
+                                document.getElementById('accountExpiry').textContent = 
+                                    '登录状态将在 ' + remainingHours + ' 小时 ' + remainingMinutes + ' 分钟后过期';
+                            }
+                        }
+                    } else {
+                        // 如果获取用户失败，显示登出状态
+                        initAccountSettings();
+                    }
+                })
+                .catch(function(error) {
+                    console.error('加载账户信息失败:', error);
+                    // 如果出错，可能是 token 过期，显示登出状态
+                    initAccountSettings();
+                });
+        }
+
+        // 处理登出
+        function handleLogout() {
+            if (confirm('确定要退出登录吗？这将清除所有本地存储的账户信息。')) {
+                GitHubAuth.logout();
+                initAccountSettings();
+                alert('已成功退出登录');
+            }
+        }
     </script>
 </body>
 </html>

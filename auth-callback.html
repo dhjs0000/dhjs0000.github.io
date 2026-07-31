@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub 登录中... - Ethernos</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .auth-callback-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .auth-callback-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2.5rem;
+            max-width: 480px;
+            width: 100%;
+            margin-bottom: 1.5rem;
+        }
+
+        .auth-icon {
+            font-size: 4rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .auth-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .auth-message {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .auth-loading {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            border: 3px solid var(--border-color);
+            border-top-color: var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .auth-user {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: var(--bg-color);
+            border-radius: 8px;
+        }
+
+        .auth-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 2px solid var(--border-color);
+        }
+
+        .auth-user-info {
+            text-align: left;
+            flex: 1;
+        }
+
+        .auth-user-name {
+            font-weight: 600;
+            margin: 0 0 0.25rem 0;
+        }
+
+        .auth-user-login {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            margin: 0;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+        }
+
+        .auth-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+
+        .auth-btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .auth-btn-primary:hover {
+            opacity: 0.9;
+        }
+
+        .auth-btn-secondary {
+            background: var(--bg-color);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+        }
+
+        .auth-btn-secondary:hover {
+            background: var(--hover-bg);
+        }
+
+        .auth-error {
+            color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-callback-container">
+        <div class="auth-callback-card" id="authCard">
+            <!-- 加载状态 -->
+            <div id="authLoading">
+                <i class="fab fa-github auth-icon"></i>
+                <div class="auth-loading"></div>
+                <h2 class="auth-title">正在登录...</h2>
+                <p class="auth-message">正在与 GitHub 验证您的身份</p>
+            </div>
+
+            <!-- 成功状态 -->
+            <div id="authSuccess" style="display: none;">
+                <i class="fas fa-check-circle auth-icon" style="color: #22c55e;"></i>
+                <h2 class="auth-title">登录成功!</h2>
+                <p class="auth-message">欢迎回到 Ethernos</p>
+                <div class="auth-user" id="authUser"></div>
+                <div class="auth-buttons">
+                    <a href="Clarity_setting.html" class="auth-btn auth-btn-primary">
+                        <i class="fas fa-cog"></i> 前往设置
+                    </a>
+                    <a href="home.html" class="auth-btn auth-btn-secondary">
+                        <i class="fas fa-home"></i> 返回首页
+                    </a>
+                </div>
+            </div>
+
+            <!-- 错误状态 -->
+            <div id="authError" style="display: none;">
+                <i class="fas fa-exclamation-circle auth-icon" style="color: #ef4444;"></i>
+                <h2 class="auth-title">登录失败</h2>
+                <div class="auth-error" id="authErrorMessage"></div>
+                <div class="auth-buttons">
+                    <a href="Clarity_setting.html" class="auth-btn auth-btn-primary">
+                        <i class="fas fa-arrow-left"></i> 返回设置
+                    </a>
+                    <a href="home.html" class="auth-btn auth-btn-secondary">
+                        <i class="fas fa-home"></i> 返回首页
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="github-oauth.js"></script>
+    <script>
+        // 自动处理 OAuth 回调
+        document.addEventListener('DOMContentLoaded', function() {
+            var params = GitHubAuth.getUrlParams();
+            
+            // 检查是否有 code 或 error 参数
+            if (!params.code && !params.error) {
+                // 没有授权参数，直接返回设置页
+                window.location.href = 'Clarity_setting.html';
+                return;
+            }
+
+            // 处理回调
+            GitHubAuth.handleCallback(params)
+                .then(function(result) {
+                    // 显示成功状态
+                    var authLoading = document.getElementById('authLoading');
+                    var authSuccess = document.getElementById('authSuccess');
+                    var authUser = document.getElementById('authUser');
+                    
+                    authLoading.style.display = 'none';
+                    authSuccess.style.display = 'block';
+                    
+                    var user = result.user;
+                    authUser.innerHTML = 
+                        '<img src="' + user.avatarUrl + '" alt="avatar" class="auth-avatar">' +
+                        '<div class="auth-user-info">' +
+                            '<h3 class="auth-user-name">' + (user.name || user.login) + '</h3>' +
+                            '<p class="auth-user-login">@' + user.login + '</p>' +
+                        '</div>';
+                })
+                .catch(function(error) {
+                    // 显示错误状态
+                    var authLoading = document.getElementById('authLoading');
+                    var authError = document.getElementById('authError');
+                    var authErrorMessage = document.getElementById('authErrorMessage');
+                    
+                    authLoading.style.display = 'none';
+                    authError.style.display = 'block';
+                    authErrorMessage.textContent = error.message || '未知错误';
+                    
+                    console.error('GitHub OAuth callback error:', error);
+                });
+        });
+    </script>
+</body>
+</html>
