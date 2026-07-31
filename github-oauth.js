@@ -230,7 +230,8 @@ var GitHubAuth = (function() {
             body: JSON.stringify({
                 code: code,
                 code_verifier: codeVerifier,
-                client_id: config.githubOAuth.clientId
+                client_id: config.githubOAuth.clientId,
+                redirect_uri: config.githubOAuth.redirectUri
             })
         })
         .then(function(response) {
