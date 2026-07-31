@@ -140,7 +140,35 @@ document.addEventListener('DOMContentLoaded', async function() {
             
             navPlaceholder.innerHTML = modifiedContent;
             
-            // 设置当前页面的导航链接为激活状态
+            // 按顺序执行 nav.html 中的脚本
+            const navScripts = navPlaceholder.querySelectorAll('script');
+            let scriptIndex = 0;
+            
+            function loadNextScript() {
+                if (scriptIndex >= navScripts.length) {
+                    return;
+                }
+                
+                const script = navScripts[scriptIndex];
+                scriptIndex++;
+                
+                if (script.src) {
+                    // 外部脚本：需要等待加载完成后再加载下一个
+                    const newScript = document.createElement('script');
+                    newScript.src = script.src;
+                    newScript.onload = loadNextScript;
+                    newScript.onerror = loadNextScript;
+                    document.body.appendChild(newScript);
+                } else {
+                    // 内联脚本：立即执行
+                    const newScript = document.createElement('script');
+                    newScript.textContent = script.textContent;
+                    document.body.appendChild(newScript);
+                    loadNextScript();
+                }
+            }
+            
+            loadNextScript();
             // 处理 GitHub Pages 省略 .html 后缀的情况
             const pathParts = window.location.pathname.split('/');
             let currentPage = pathParts.pop() || 'home.html';
