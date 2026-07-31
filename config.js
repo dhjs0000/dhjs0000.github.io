@@ -45,7 +45,7 @@ var config = {
     // GitHub OAuth 2.0 with PKCE 配置
     githubOAuth: {
         // 从 https://github.com/settings/developers 获取的 Client ID
-        clientId: 'Iv23liAToHUoCaTGWWBL',
+        clientId: 'Ov23lixwcY8Jm0iwODQ8',
         
         // OAuth 回调地址 - 必须与 GitHub 中配置的完全一致
         // 注意：GitHub 要求使用 HTTPS (localhost 除外)
