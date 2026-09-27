@@ -16,7 +16,7 @@ RVC与GPT-SoVITS软件的作者为**花儿不哭**，下载链接：
 - RVC: https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI/releases
 - GPT-SoVITS: https://github.com/RVC-Boss/GPT-SoVITS/releases
 
-RVC模型使用：需要将模型文件拖动到对应文件夹，以我的RVC1006Nvidia举例
+## RVC模型使用：需要将模型文件拖动到对应文件夹，以我的RVC1006Nvidia举例
 
 <img width="685" height="612" alt="image" src="https://github.com/user-attachments/assets/fa3183be-7210-4964-8f20-284ddabfef60" />
 
@@ -28,7 +28,7 @@ RVC模型使用：需要将模型文件拖动到对应文件夹，以我的RVC10
 
 RVC变声器的使用可以在B站上搜索，还是比较简单的。
 
-GPT-SoVITS模型使用：需要将模型文件拖动到对应文件夹，以我的GPT-SoVITS-v2pro-20250604举例
+## GPT-SoVITS模型使用：需要将模型文件拖动到对应文件夹，以我的GPT-SoVITS-v2pro-20250604举例
 
 <img width="624" height="575" alt="image" src="https://github.com/user-attachments/assets/e30083d4-7848-4c08-be72-9facda3f50cb" />
 
