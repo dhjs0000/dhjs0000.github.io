@@ -1,3 +1,13 @@
+---
+title: ArkEcho系列模型说明（持续更新）
+date: 2026-09-27
+category: 说明
+author: dhjs0000
+tags: ["ArkEcho", "RVC", "GPT-SoVITS"]
+excerpt: ArkEcho系列模型说明（持续更新）
+blog_number: 20
+---
+
 # ArkEcho系列模型说明（持续更新）
 
 ArkEcho系列目前提供适用于**RVC**与**GPT-SoVITS**的模型，需要用户自行安装RVC与GPT-SoVITS。
