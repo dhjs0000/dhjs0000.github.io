@@ -5,6 +5,17 @@
   },
   "posts": [
     {
+      "id": "arkecho_model_shuoming",
+      "file": "blog-content/posts/arkecho_model_shuoming.md",
+      "title": "ArkEcho系列模型说明（持续更新）",
+      "date": "2026-09-27",
+      "category": "说明",
+      "author": "dhjs0000",
+      "tags": ["ArkEcho", "RVC","GPT-SoVITS"],
+      "excerpt": "ArkEcho系列模型说明（持续更新）",
+      "blog_number": 20
+    },
+    {
       "id": "Cavvy_Language_Reference",
       "file": "blog-content/posts/Cavvy_Language_Reference.md",
       "title": "Cavvy 语言参考文档",
