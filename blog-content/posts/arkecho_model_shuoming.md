@@ -69,5 +69,5 @@ https://prts.wiki/w/可露希尔/语音记录
 - Q: RVC与So-VITS模型通用吗
   - 不通用
 - Q: 我还有问题怎么办
-  - 私信我QQ3110197220或在https://github.com/dhjs0000/dhjs0000.github.io/issues提出
+  - 私信我QQ3110197220或在 https://github.com/Ethernos-Studio/Models 提出
   
